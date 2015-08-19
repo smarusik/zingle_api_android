@@ -1,5 +1,7 @@
 package me.zingle.api.sdk.model;
 
+import java.awt.Color;
+
 /**
  * Created by SLAVA 08 2015.
  */
@@ -7,8 +9,8 @@ public class ZingleLabel {
     private int id;
     private ZingleService service;
     private String displayName;
-    private int backgroundColor;
-    private int textColor;
+    private Color backgroundColor;
+    private Color textColor;
     private boolean isAutomation;
     private boolean isGlobal;
     private boolean active;
@@ -16,7 +18,7 @@ public class ZingleLabel {
     public ZingleLabel() {
     }
 
-    public ZingleLabel(int id, ZingleService service, String displayName, int backgroundColor, int textColor, boolean isAutomation, boolean isGlobal, boolean active) {
+    public ZingleLabel(int id, ZingleService service, String displayName, Color backgroundColor, Color textColor, boolean isAutomation, boolean isGlobal, boolean active) {
         this.id = id;
         this.service = service;
         this.displayName = displayName;
@@ -51,19 +53,19 @@ public class ZingleLabel {
         this.displayName = displayName;
     }
 
-    public int getBackgroundColor() {
+    public Color getBackgroundColor() {
         return backgroundColor;
     }
 
-    public void setBackgroundColor(int backgroundColor) {
+    public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
 
-    public int getTextColor() {
+    public Color getTextColor() {
         return textColor;
     }
 
-    public void setTextColor(int textColor) {
+    public void setTextColor(Color textColor) {
         this.textColor = textColor;
     }
 

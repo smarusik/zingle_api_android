@@ -26,13 +26,25 @@ public class ZingleConnection {
     private HttpsURLConnection connection = null;
 
     public ZingleConnection(String apiPath, String apiVersion) {
+        System.setProperty("jsse.enableSNIExtension", "false");
+
+        if(apiPath.charAt(apiPath.length()-1)=='/'){
+            apiPath=apiPath.substring(0,apiPath.length()-1);
+        }
         this.apiPath = apiPath;
-        this.apiVersion = apiVersion;
+
+        if(apiVersion.charAt(apiVersion.length()-1)=='/'){
+            apiVersion=apiVersion.substring(0,apiVersion.length()-1);
+        }
+
+        if(apiVersion.charAt(0)!='/')
+            this.apiVersion="/"+apiVersion;
+        else
+            this.apiVersion = apiVersion;
     }
 
     public ZingleConnection(String apiPath, String apiVersion, String token, String key) {
-        this.apiPath = apiPath;
-        this.apiVersion = apiVersion;
+        this(apiPath,apiVersion);
         setEncryptedAuthString(token, key);
     }
 
@@ -76,9 +88,16 @@ public class ZingleConnection {
     public ResponseDTO send() {
         ResponseDTO result=new ResponseDTO();
 
-        try{
+        try {
 
             url = new URL(apiPath + apiVersion + query.getResourcePath() + query.getQueryStr());
+        }catch (MalformedURLException e){
+            result.setErrorStackTrace(e.getStackTrace().toString());
+            result.setErrorString(e.getMessage());
+            return result;
+        }
+
+        try{
             connection = (HttpsURLConnectionImpl) url.openConnection();
             connection.setRequestProperty("Authorization", "Basic " + encryptedAuthString);
             connection.setRequestProperty("Content-Type", "application/json");
@@ -87,9 +106,9 @@ public class ZingleConnection {
             connection.setDoInput(true);
 
             if(query.getRequestMethod()==RequestMethods.PUT || query.getRequestMethod()==RequestMethods.POST)
-                connection.setDoInput(true);
+                connection.setDoOutput(true);
             else
-                connection.setDoInput(false);
+                connection.setDoOutput(false);
 
             connection.connect();
 
@@ -127,8 +146,6 @@ public class ZingleConnection {
             return result;
 
 
-        }catch (MalformedURLException e){
-            e.printStackTrace();
         }catch (ProtocolException e){
             e.printStackTrace();
         }catch (SocketTimeoutException e){

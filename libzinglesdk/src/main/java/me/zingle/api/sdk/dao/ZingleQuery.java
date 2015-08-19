@@ -1,7 +1,10 @@
 package me.zingle.api.sdk.dao;
 
-import java.util.List;
 import org.json.JSONObject;
+
+import java.util.List;
+
+import me.zingle.api.sdk.dto.RequestDTO;
 
 /**
  * Created by SLAVA 08 2015.
@@ -11,23 +14,20 @@ public class ZingleQuery {
     private String resourcePath;
     private List<QueryPart> query;
 
-    private JSONObject payload;
+    private RequestDTO payload;
 
     public ZingleQuery(RequestMethods requestMethod, String resourcePath) {
         this.requestMethod = requestMethod;
-        this.resourcePath = resourcePath;
+        setResourcePath(resourcePath);
     }
 
     public ZingleQuery(RequestMethods requestMethod, String resourcePath, List<QueryPart> query) {
-        this.requestMethod = requestMethod;
-        this.resourcePath = resourcePath;
+        this(requestMethod,resourcePath);
         this.query = query;
     }
 
-    public ZingleQuery(RequestMethods requestMethod, String resourcePath, List<QueryPart> query, JSONObject payload) {
-        this.requestMethod = requestMethod;
-        this.resourcePath = resourcePath;
-        this.query = query;
+    public ZingleQuery(RequestMethods requestMethod, String resourcePath, List<QueryPart> query, RequestDTO payload) {
+        this(requestMethod,resourcePath,query);
         this.payload = payload;
     }
 
@@ -50,6 +50,8 @@ public class ZingleQuery {
     public void setResourcePath(String resourcePath) {
         if(resourcePath.charAt(0)!='/')
             this.resourcePath="/";
+        else
+            this.resourcePath="";
 
         if(resourcePath.charAt(resourcePath.length()-1)=='/'){
             resourcePath=resourcePath.substring(0,resourcePath.length()-1);
@@ -63,12 +65,15 @@ public class ZingleQuery {
     }
 
     public String getQueryStr(){
-        StringBuilder res=new StringBuilder();
-
-        for(QueryPart part: query){
-            res.append("?").append(part.key).append("=").append(part.value);
+        if(query!=null) {
+            StringBuilder res = new StringBuilder();
+            for (QueryPart part : query) {
+                res.append("?").append(part.key).append("=").append(part.value);
+            }
+            return res.toString();
         }
-        return res.toString();
+        else
+            return new String();
     }
 
     public void setQuery(List<QueryPart> query) {
@@ -76,10 +81,13 @@ public class ZingleQuery {
     }
 
     public JSONObject getPayload() {
-        return payload;
+        if(payload!=null)
+            return payload.getData();
+        else
+            return null;
     }
 
-    public void setPayload(JSONObject payload) {
+    public void setPayload(RequestDTO payload) {
         this.payload = payload;
     }
 
