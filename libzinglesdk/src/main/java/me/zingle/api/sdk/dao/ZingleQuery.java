@@ -2,6 +2,7 @@ package me.zingle.api.sdk.dao;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.zingle.api.sdk.dto.RequestDTO;
@@ -12,7 +13,7 @@ import me.zingle.api.sdk.dto.RequestDTO;
 public class ZingleQuery {
     private RequestMethods requestMethod;
     private String resourcePath;
-    private List<QueryPart> query;
+    private List<QueryPart> params;
 
     private RequestDTO payload;
 
@@ -21,13 +22,13 @@ public class ZingleQuery {
         setResourcePath(resourcePath);
     }
 
-    public ZingleQuery(RequestMethods requestMethod, String resourcePath, List<QueryPart> query) {
+    public ZingleQuery(RequestMethods requestMethod, String resourcePath, List<QueryPart> params) {
         this(requestMethod,resourcePath);
-        this.query = query;
+        this.params = params;
     }
 
-    public ZingleQuery(RequestMethods requestMethod, String resourcePath, List<QueryPart> query, RequestDTO payload) {
-        this(requestMethod,resourcePath,query);
+    public ZingleQuery(RequestMethods requestMethod, String resourcePath, List<QueryPart> params, RequestDTO payload) {
+        this(requestMethod,resourcePath, params);
         this.payload = payload;
     }
 
@@ -60,14 +61,14 @@ public class ZingleQuery {
             this.resourcePath += resourcePath;
     }
 
-    public List<QueryPart> getQuery() {
-        return query;
+    public List<QueryPart> getParams() {
+        return params;
     }
 
     public String getQueryStr(){
-        if(query!=null) {
+        if(params !=null) {
             StringBuilder res = new StringBuilder();
-            for (QueryPart part : query) {
+            for (QueryPart part : params) {
                 res.append("?").append(part.key).append("=").append(part.value);
             }
             return res.toString();
@@ -76,8 +77,23 @@ public class ZingleQuery {
             return new String();
     }
 
-    public void setQuery(List<QueryPart> query) {
-        this.query = query;
+    public void setParams(List<QueryPart> params) {
+        this.params = params;
+    }
+
+    public void addParam(QueryPart param){
+        if(this.params==null)
+            this.params=new ArrayList<>();
+
+        this.params.add(param);
+    }
+
+    public void addParam(String key,String value){
+        addParam(new QueryPart(key, value));
+    }
+
+    public void addParam(String key,int value){
+        addParam(new QueryPart(key,value));
     }
 
     public JSONObject getPayload() {

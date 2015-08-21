@@ -6,27 +6,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.Scanner;
 
-import javax.net.ssl.HttpsURLConnection;
-
+import me.zingle.api.sdk.Exceptions.UninitializedConnectionEx;
 import me.zingle.api.sdk.dto.ResponseDTO;
 import sun.net.www.protocol.https.HttpsURLConnectionImpl;
 
 public class ZingleConnection {
     private final String apiPath;
     private final String apiVersion;
-    private String encryptedAuthString;
-    private ZingleQuery query;
+    private final String encryptedAuthString;
 
-    private URL url;
-    private HttpsURLConnection connection = null;
+    private static ZingleConnection instance;
 
-    public ZingleConnection(String apiPath, String apiVersion) {
-        System.setProperty("jsse.enableSNIExtension", "false");
+    private ZingleConnection(String apiPath, String apiVersion, String encryptedAuthString) {
 
         if(apiPath.charAt(apiPath.length()-1)=='/'){
             apiPath=apiPath.substring(0,apiPath.length()-1);
@@ -41,19 +35,39 @@ public class ZingleConnection {
             this.apiVersion="/"+apiVersion;
         else
             this.apiVersion = apiVersion;
+
+        this.encryptedAuthString=encryptedAuthString;
     }
 
-    public ZingleConnection(String apiPath, String apiVersion, String token, String key) {
-        this(apiPath,apiVersion);
-        setEncryptedAuthString(token, key);
-    }
 
-    @Override
-    protected void finalize() throws Throwable {
-        if(connection!=null){
-            connection.disconnect();
+    public static ZingleConnection getInstance() throws UninitializedConnectionEx {
+        if(instance!=null){
+            return instance;
         }
+        else
+            throw new UninitializedConnectionEx();
     }
+
+    public static boolean init (String apiPath, String apiVersion, String token, String key){
+
+        if(instance!=null) return false;
+
+        System.setProperty("jsse.enableSNIExtension", "false");
+
+        ZingleConnection temp = new ZingleConnection(apiPath, apiVersion, generateEncryptedAuthString(token, key));
+
+        try {
+            URL url = new URL(temp.apiPath + temp.apiVersion);
+        } catch (MalformedURLException e) {
+            return false;
+        }
+
+        //Authorization check must be here
+
+        instance = temp;
+        return true;
+    }
+
 
     public String getApiPath() {
         return apiPath;
@@ -67,29 +81,17 @@ public class ZingleConnection {
         return encryptedAuthString;
     }
 
-    public void setEncryptedAuthString(String encryptedAuthString) {
-        this.encryptedAuthString = encryptedAuthString;
-    }
-
-    public void setEncryptedAuthString(String token, String key) {
+    public static String generateEncryptedAuthString(String token, String key) {
         String authString = token + ":" + key;
         byte[] authEncBytes = Base64.encodeBase64(authString.getBytes());
-        encryptedAuthString = new String(authEncBytes);
+        return new String(authEncBytes);
     }
 
-    public ZingleQuery getQuery() {
-        return query;
-    }
-
-    public void setQuery(ZingleQuery query) {
-        this.query = query;
-    }
-
-    public ResponseDTO send() {
+    public ResponseDTO send(ZingleQuery query) {
         ResponseDTO result=new ResponseDTO();
+        URL url;
 
         try {
-
             url = new URL(apiPath + apiVersion + query.getResourcePath() + query.getQueryStr());
         }catch (MalformedURLException e){
             result.setErrorStackTrace(e.getStackTrace().toString());
@@ -97,8 +99,11 @@ public class ZingleConnection {
             return result;
         }
 
+        HttpsURLConnectionImpl connection=null;
+
         try{
             connection = (HttpsURLConnectionImpl) url.openConnection();
+
             connection.setRequestProperty("Authorization", "Basic " + encryptedAuthString);
             connection.setRequestProperty("Content-Type", "application/json");
 
@@ -139,23 +144,20 @@ public class ZingleConnection {
                 dataStream.close();
                 channel.close();
 
-
             }
 
             connection.disconnect();
             return result;
 
 
-        }catch (ProtocolException e){
-            e.printStackTrace();
-        }catch (SocketTimeoutException e){
-            e.printStackTrace();
         }catch (IOException e){
-            e.printStackTrace();
+            result.setErrorStackTrace(e.getStackTrace().toString());
+            result.setErrorString(e.getMessage());
+            return result;
         }
         finally {
-            connection.disconnect();
-            return result;
+            if(connection!=null)
+                connection.disconnect();
         }
     }
 }

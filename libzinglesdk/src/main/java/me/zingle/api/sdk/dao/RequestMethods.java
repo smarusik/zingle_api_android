@@ -18,5 +18,4 @@ public enum RequestMethods {
     public String method(){
         return methodStr;
     }
-
 }
