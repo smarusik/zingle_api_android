@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +13,7 @@ import me.zingle.api.sdk.dao.ZingleConnection;
 import me.zingle.api.sdk.dao.ZingleQuery;
 import me.zingle.api.sdk.dto.RequestDTO;
 import me.zingle.api.sdk.dto.ResponseDTO;
-import me.zingle.api.sdk.model.ZingleContactCustomField;
-import me.zingle.api.sdk.model.ZingleContactCustomFieldOption;
+import me.zingle.api.sdk.model.ZingleLabel;
 import me.zingle.api.sdk.model.ZingleService;
 
 import static me.zingle.api.sdk.dao.RequestMethods.DELETE;
@@ -24,31 +24,31 @@ import static me.zingle.api.sdk.dao.RequestMethods.PUT;
 /**
  * Created by SLAVA 08 2015.
  */
-public class ZingleContactCustomFieldServices {
+public class ZingleLabelServices {
     private static final String resoursePrefixPath="/services";
     //private final String serviceID;
-    private static final String resoursePath="contact-custom-fields";
+    private static final String resoursePath="contact-labels";
     //private static String customFieldID;
 
-    private ServiceDelegate<List<ZingleContactCustomField>> listDelegate;
-    private ServiceDelegate<ZingleContactCustomField> getDelegate;
-    private ServiceDelegate<ZingleContactCustomField> createDelegate;
-    private ServiceDelegate<ZingleContactCustomField> updateDelegate;
+    private ServiceDelegate<List<ZingleLabel>> listDelegate;
+    private ServiceDelegate<ZingleLabel> getDelegate;
+    private ServiceDelegate<ZingleLabel> createDelegate;
+    private ServiceDelegate<ZingleLabel> updateDelegate;
     private ServiceDelegate<Boolean> deleteDelegate;
 
-    public void setListDelegate(ServiceDelegate<List<ZingleContactCustomField>> listDelegate) {
+    public void setListDelegate(ServiceDelegate<List<ZingleLabel>> listDelegate) {
         this.listDelegate = listDelegate;
     }
 
-    public void setGetDelegate(ServiceDelegate<ZingleContactCustomField> getDelegate) {
+    public void setGetDelegate(ServiceDelegate<ZingleLabel> getDelegate) {
         this.getDelegate = getDelegate;
     }
 
-    public void setCreateDelegate(ServiceDelegate<ZingleContactCustomField> createDelegate) {
+    public void setCreateDelegate(ServiceDelegate<ZingleLabel> createDelegate) {
         this.createDelegate = createDelegate;
     }
 
-    public void setUpdateDelegate(ServiceDelegate<ZingleContactCustomField> updateDelegate) {
+    public void setUpdateDelegate(ServiceDelegate<ZingleLabel> updateDelegate) {
         this.updateDelegate = updateDelegate;
     }
 
@@ -56,35 +56,30 @@ public class ZingleContactCustomFieldServices {
         this.deleteDelegate = deleteDelegate;
     }
 
-    static ZingleContactCustomField mapper(JSONObject source,ZingleService service) throws JSONException {
-        ZingleContactCustomField mapResult=new ZingleContactCustomField();
+    static ZingleLabel mapper(JSONObject source, ZingleService service) throws JSONException{
+        ZingleLabel result=new ZingleLabel();
 
-        mapResult.setId(source.getInt("id"));
-        mapResult.setDisplayName(source.getString("display_name"));
-        mapResult.setIsGlobal(source.getInt("is_global") == 0 ? false : true);
-        mapResult.setService(service);
+        result.setId(source.getInt("id"));
+        result.setDisplayName(source.getString("display_name"));
+        result.setIsGlobal(source.getInt("is_global") == 0 ? false : true);
+        result.setIsAutomation(source.getInt("is_automatic") == 0 ? false : true);
 
-        JSONArray optionsJS=source.getJSONArray("options");
+        if(!source.get("background_color").equals(null))
+            result.setBackgroundColor(new Color(Integer.parseInt(source.getString("background_color").substring(1), 16)));
 
-        int i=0;
-        JSONObject optionJS=optionsJS.optJSONObject(i++);
-        List<ZingleContactCustomFieldOption> options=new ArrayList<>();
+        if(!source.get("text_color").equals(null))
+            result.setTextColor(new Color(Integer.parseInt(source.getString("text_color").substring(1), 16)));
 
-        while(optionJS!=null){
-            options.add(new ZingleContactCustomFieldOption(optionJS.getString("display_name"),optionJS.getString("value"),optionJS.getInt("sort_order")));
-            optionJS=optionsJS.optJSONObject(i++);
-        }
+        result.setService(service);
 
-        mapResult.setOptions(options);
-
-        return mapResult;
+        return result;
     }
 
-    static List<ZingleContactCustomField> arrayMapper(JSONArray source, ZingleService service) throws JSONException {
+    static List<ZingleLabel> arrayMapper(JSONArray source, ZingleService service) throws JSONException {
         int i=0;
         JSONObject temp=source.optJSONObject(i++);
 
-        List<ZingleContactCustomField> retList=new ArrayList<>();
+        List<ZingleLabel> retList=new ArrayList<>();
 
         while(temp!=null){
             retList.add(mapper(temp,service));
@@ -94,7 +89,7 @@ public class ZingleContactCustomFieldServices {
         return retList;
     }
 
-    public static List<ZingleContactCustomField> listForService(ZingleService service){
+    public static List<ZingleLabel> listForService(ZingleService service){
         ZingleQuery query = new ZingleQuery(GET, resoursePrefixPath+"/"+service.getId()+"/"+resoursePath);
 
         ResponseDTO response = ZingleConnection.getInstance().send(query);
@@ -125,14 +120,14 @@ public class ZingleContactCustomFieldServices {
         return true;
     }
 
-    public static ZingleContactCustomField getForServiceWithId(ZingleService service, int id){
+    public static ZingleLabel getForServiceWithId(ZingleService service, int id){
         ZingleQuery query = new ZingleQuery(GET, resoursePrefixPath+"/"+service.getId()+"/"+resoursePath+"/"+id);
 
         ResponseDTO response = ZingleConnection.getInstance().send(query);
 
         if(response.getResponseCode()==200){
             JSONObject result=response.getData().getJSONObject("result");
-            return mapper(result,service);
+            return mapper(result, service);
         }
         else
             throw new UnsuccessfullRequestEx("Error list()",response.getResponseCode(),response.getResponseStr());
@@ -155,19 +150,19 @@ public class ZingleContactCustomFieldServices {
         return true;
     }
 
-    public static ZingleContactCustomField createForService(ZingleService service, String displayName,
-                                                    List<ZingleContactCustomFieldOption> options){
+    public static ZingleLabel createForService(ZingleService service, String displayName, Color backgroundColor, Color textColor){
 
-        ZingleContactCustomField newCCField=new ZingleContactCustomField();
-        newCCField.setDisplayName(displayName);
-        newCCField.setOptions(options);
+        ZingleLabel label=new ZingleLabel();
+        label.setDisplayName(displayName);
+        label.setBackgroundColor(backgroundColor);
+        label.setTextColor(textColor);
 
         ZingleQuery query = new ZingleQuery(POST, resoursePrefixPath+"/"+service.getId()+"/"+resoursePath);
 
-        RequestDTO ccField=new RequestDTO();
-        ccField.fromContactCustomField(newCCField);
+        RequestDTO payload=new RequestDTO();
+        payload.fromLabel(label);
 
-        query.setPayload(ccField);
+        query.setPayload(payload);
 
         ResponseDTO response = ZingleConnection.getInstance().send(query);
 
@@ -179,13 +174,12 @@ public class ZingleContactCustomFieldServices {
             throw new UnsuccessfullRequestEx("Error list()",response.getResponseCode(),response.getResponseStr());
     }
 
-    public boolean createForServiceAsync(final ZingleService service, final String displayName,
-                                                            final List<ZingleContactCustomFieldOption> options){
+    public boolean createForServiceAsync(final ZingleService service, final String displayName, final Color backgroundColor, final Color textColor){
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
-                    createDelegate.processResult(createForService(service,displayName,options));
+                    createDelegate.processResult(createForService(service, displayName, backgroundColor, textColor));
                 }catch (UnsuccessfullRequestEx e){
                     createDelegate.processError(e.getResponceCode(),e.getResponceStr());
                 }
@@ -198,12 +192,12 @@ public class ZingleContactCustomFieldServices {
 
     }
 
-    public static ZingleContactCustomField update(ZingleContactCustomField ccFieldUpd){
+    public static ZingleLabel update(ZingleLabel labelUpd){
 
-        ZingleQuery query = new ZingleQuery(PUT, resoursePrefixPath+"/"+ccFieldUpd.getService().getId()+"/"+resoursePath+"/"+ccFieldUpd.getId());
+        ZingleQuery query = new ZingleQuery(PUT, resoursePrefixPath+"/"+labelUpd.getService().getId()+"/"+resoursePath+"/"+labelUpd.getId());
 
         RequestDTO payload=new RequestDTO();
-        payload.fromContactCustomField(ccFieldUpd);
+        payload.fromLabel(labelUpd);
 
         query.setPayload(payload);
 
@@ -211,18 +205,18 @@ public class ZingleContactCustomFieldServices {
 
         if(response.getResponseCode()==200){
             JSONObject result=response.getData().getJSONObject("result");
-            return mapper(result,ccFieldUpd.getService());
+            return mapper(result,labelUpd.getService());
         }
         else
             throw new UnsuccessfullRequestEx("Error list()",response.getResponseCode(),response.getResponseStr());
     }
 
-    public boolean updateAsync(final ZingleContactCustomField ccFieldUpd){
+    public boolean updateAsync(final ZingleLabel labelUpd){
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
-                    updateDelegate.processResult(update(ccFieldUpd));
+                    updateDelegate.processResult(update(labelUpd));
                 }catch (UnsuccessfullRequestEx e){
                     updateDelegate.processError(e.getResponceCode(),e.getResponceStr());
                 }
@@ -235,8 +229,8 @@ public class ZingleContactCustomFieldServices {
 
     }
 
-    public boolean delete(ZingleContactCustomField ccField){
-        ZingleQuery query = new ZingleQuery(DELETE, resoursePrefixPath+"/"+ccField.getService().getId()+"/"+resoursePath+"/"+ccField.getId());
+    public boolean delete(ZingleLabel label){
+        ZingleQuery query = new ZingleQuery(DELETE, resoursePrefixPath+"/"+label.getService().getId()+"/"+resoursePath+"/"+label.getId());
 
         ResponseDTO response = ZingleConnection.getInstance().send(query);
 
@@ -248,12 +242,12 @@ public class ZingleContactCustomFieldServices {
 
     }
 
-    public boolean deleteAsync(final ZingleContactCustomField ccField){
+    public boolean deleteAsync(final ZingleLabel label){
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
-                    deleteDelegate.processResult(delete(ccField));
+                    deleteDelegate.processResult(delete(label));
                 }catch (UnsuccessfullRequestEx e){
                     deleteDelegate.processError(e.getResponceCode(),e.getResponceStr());
                 }
@@ -265,4 +259,5 @@ public class ZingleContactCustomFieldServices {
         return true;
 
     }
+
 }
