@@ -15,7 +15,8 @@ public class ZingleService {
     public ZingleService() {
     }
 
-    public ZingleService(int id, String displayName, ZinglePhoneNumber phoneNumber, ZingleTimeZone timeZone, ZinglePlan plan, ZingleAddress address, boolean active) {
+    public ZingleService(int id, String displayName, ZinglePhoneNumber phoneNumber, ZingleTimeZone timeZone,
+                         ZinglePlan plan, ZingleAddress address, boolean active) {
         this.id = id;
         this.displayName = displayName;
         this.phoneNumber = phoneNumber;
@@ -24,6 +25,8 @@ public class ZingleService {
         this.address = address;
         this.active = active;
     }
+
+
 
     public int getId() {
         return id;
