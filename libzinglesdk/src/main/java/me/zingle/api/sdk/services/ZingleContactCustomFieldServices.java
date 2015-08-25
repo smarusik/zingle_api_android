@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.zingle.api.sdk.Exceptions.UndefinedServiceDelegateEx;
 import me.zingle.api.sdk.Exceptions.UnsuccessfullRequestEx;
 import me.zingle.api.sdk.dao.ZingleConnection;
 import me.zingle.api.sdk.dao.ZingleQuery;
@@ -109,6 +110,10 @@ public class ZingleContactCustomFieldServices {
     }
 
     public boolean listForServiceAsync(final ZingleService service){
+        if(listDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
+
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
@@ -139,6 +144,10 @@ public class ZingleContactCustomFieldServices {
     }
 
     public boolean getForServiceWithIdAsync(final ZingleService service, final int id){
+        if(getDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
+
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
@@ -181,6 +190,10 @@ public class ZingleContactCustomFieldServices {
 
     public boolean createForServiceAsync(final ZingleService service, final String displayName,
                                                             final List<ZingleContactCustomFieldOption> options){
+        if(createDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
+
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
@@ -218,6 +231,10 @@ public class ZingleContactCustomFieldServices {
     }
 
     public boolean updateAsync(final ZingleContactCustomField ccFieldUpd){
+        if(updateDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
+
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
@@ -232,7 +249,6 @@ public class ZingleContactCustomFieldServices {
         th.start();
 
         return true;
-
     }
 
     public boolean delete(ZingleContactCustomField ccField){
@@ -249,6 +265,10 @@ public class ZingleContactCustomFieldServices {
     }
 
     public boolean deleteAsync(final ZingleContactCustomField ccField){
+        if(deleteDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
+
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
@@ -263,6 +283,5 @@ public class ZingleContactCustomFieldServices {
         th.start();
 
         return true;
-
     }
 }

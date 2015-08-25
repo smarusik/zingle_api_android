@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.zingle.api.sdk.Exceptions.UndefinedServiceDelegateEx;
 import me.zingle.api.sdk.Exceptions.UnsuccessfullRequestEx;
 import me.zingle.api.sdk.dao.ZingleConnection;
 import me.zingle.api.sdk.dao.ZingleQuery;
@@ -22,14 +23,14 @@ public class ZinglePhoneNumberServices {
 
     static final String resoursePath="/available-phone-numbers";
 
-    private ServiceDelegate<List<ZinglePhoneNumber>> delegate;
+    private ServiceDelegate<List<ZinglePhoneNumber>> searchDelegate;
 
     public ZinglePhoneNumberServices(ServiceDelegate<List<ZinglePhoneNumber>> delegate) {
-        this.delegate = delegate;
+        this.searchDelegate = delegate;
     }
 
     public void setDelegate(ServiceDelegate<List<ZinglePhoneNumber>> delegate) {
-        this.delegate = delegate;
+        this.searchDelegate = delegate;
     }
 
     static ZinglePhoneNumber mapper(JSONObject source) throws JSONException {
@@ -69,14 +70,17 @@ public class ZinglePhoneNumberServices {
     }
 
     public boolean searchAvailableForCountryCodeAsync(final String countryCode){
+        if(searchDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
 
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
-                    delegate.processResult(searchAvailableForCountryCode(countryCode));
+                    searchDelegate.processResult(searchAvailableForCountryCode(countryCode));
                 }catch (UnsuccessfullRequestEx e){
-                    delegate.processError(e.getResponceCode(),e.getResponceStr());
+                    searchDelegate.processError(e.getResponceCode(),e.getResponceStr());
                 }
             }
         });
@@ -103,14 +107,17 @@ public class ZinglePhoneNumberServices {
     }
 
     public boolean searchAvailableForCountryCodeAreaCodeAsync(final String countryCode,final String areaCode){
+        if(searchDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
 
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
-                    delegate.processResult(searchAvailableForCountryCodeAreaCode(countryCode, areaCode));
+                    searchDelegate.processResult(searchAvailableForCountryCodeAreaCode(countryCode, areaCode));
                 }catch (UnsuccessfullRequestEx e){
-                    delegate.processError(e.getResponceCode(),e.getResponceStr());
+                    searchDelegate.processError(e.getResponceCode(),e.getResponceStr());
                 }
             }
         });

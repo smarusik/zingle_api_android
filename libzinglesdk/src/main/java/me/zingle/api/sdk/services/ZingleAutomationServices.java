@@ -12,61 +12,69 @@ import me.zingle.api.sdk.Exceptions.UnsuccessfullRequestEx;
 import me.zingle.api.sdk.dao.ZingleConnection;
 import me.zingle.api.sdk.dao.ZingleQuery;
 import me.zingle.api.sdk.dto.ResponseDTO;
-import me.zingle.api.sdk.model.ZinglePlan;
+import me.zingle.api.sdk.model.ZingleAutomation;
+import me.zingle.api.sdk.model.ZingleService;
 
 import static me.zingle.api.sdk.dao.RequestMethods.GET;
 
 /**
  * Created by SLAVA 08 2015.
  */
-public class ZinglePlanServices {
-    static final String resoursePath="/plans";
+public class ZingleAutomationServices {
+    private static final String resoursePrefixPath="/services";
+    private static final String resoursePath="automations";
 
-    private ServiceDelegate<List<ZinglePlan>> listDelegate;
+    private ServiceDelegate<List<ZingleAutomation>> listDelegate;
 
-    public ZinglePlanServices(ServiceDelegate<List<ZinglePlan>> listDelegate) {
+    public ZingleAutomationServices(ServiceDelegate<List<ZingleAutomation>> listDelegate) {
         this.listDelegate = listDelegate;
     }
 
-    public void setDelegate(ServiceDelegate<List<ZinglePlan>> listDelegate) {
+    public void setListDelegate(ServiceDelegate<List<ZingleAutomation>> listDelegate) {
         this.listDelegate = listDelegate;
     }
 
-    static ZinglePlan mapper(JSONObject source) throws JSONException {
-        return new ZinglePlan(source.getInt("id"),source.getInt("term_months"), (float) source.getDouble("monthly_or_unit_price"),
-                (float)source.getDouble("setup_price"),source.getString("display_name"),
-                source.getInt("is_printer_plan")==0?false:true);
+    static ZingleAutomation mapper(JSONObject source, ZingleService service) throws JSONException {
+        ZingleAutomation result=new ZingleAutomation();
+
+        result.setId(source.getInt("id"));
+        result.setDisplayName(source.getString("display_name"));
+        result.setIsGlobal(source.getInt("is_global") == 0 ? false : true);
+
+        result.setService(service);
+
+        return result;
     }
 
-    static List<ZinglePlan> arrayMapper(JSONArray source) throws JSONException {
+    static List<ZingleAutomation> arrayMapper(JSONArray source, ZingleService service) throws JSONException {
         int i=0;
         JSONObject temp=source.optJSONObject(i++);
 
-        List<ZinglePlan> retList=new ArrayList<>();
+        List<ZingleAutomation> retList=new ArrayList<>();
 
         while(temp!=null){
-            retList.add(mapper(temp));
+            retList.add(mapper(temp,service));
             temp=source.optJSONObject(i++);
         }
 
         return retList;
     }
 
-    public static List<ZinglePlan> list() throws UnsuccessfullRequestEx {
-
-        ZingleQuery query = new ZingleQuery(GET, resoursePath);
+    public static List<ZingleAutomation> listForService(ZingleService service){
+        ZingleQuery query = new ZingleQuery(GET, resoursePrefixPath+"/"+service.getId()+"/"+resoursePath);
 
         ResponseDTO response = ZingleConnection.getInstance().send(query);
 
         if(response.getResponseCode()==200){
             JSONArray result=response.getData().getJSONArray("result");
-            return arrayMapper(result);
+            return arrayMapper(result,service);
         }
         else
             throw new UnsuccessfullRequestEx("Error list()",response.getResponseCode(),response.getResponseStr());
+
     }
 
-    public boolean listAsync(){
+    public boolean listForServiceAsync(final ZingleService service){
         if(listDelegate==null){
             throw new UndefinedServiceDelegateEx();
         }
@@ -74,8 +82,8 @@ public class ZinglePlanServices {
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
-                try{
-                    listDelegate.processResult(list());
+                try {
+                    listDelegate.processResult(listForService(service));
                 }catch (UnsuccessfullRequestEx e){
                     listDelegate.processError(e.getResponceCode(),e.getResponceStr());
                 }
@@ -86,6 +94,5 @@ public class ZinglePlanServices {
 
         return true;
     }
-
 
 }

@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.zingle.api.sdk.Exceptions.UndefinedServiceDelegateEx;
 import me.zingle.api.sdk.Exceptions.UnsuccessfullRequestEx;
 import me.zingle.api.sdk.dao.ZingleConnection;
 import me.zingle.api.sdk.dao.ZingleQuery;
@@ -21,14 +22,14 @@ import static me.zingle.api.sdk.dao.RequestMethods.GET;
 public class ZingleTimeZoneServices {
     static final String resoursePath="/time-zones";
 
-    private ServiceDelegate<List<ZingleTimeZone>> delegate;
+    private ServiceDelegate<List<ZingleTimeZone>> listDelegate;
 
-    public ZingleTimeZoneServices(ServiceDelegate<List<ZingleTimeZone>> delegate) {
-        this.delegate = delegate;
+    public ZingleTimeZoneServices(ServiceDelegate<List<ZingleTimeZone>> listDelegate) {
+        this.listDelegate = listDelegate;
     }
 
-    public void setDelegate(ServiceDelegate<List<ZingleTimeZone>> delegate) {
-        this.delegate = delegate;
+    public void setDelegate(ServiceDelegate<List<ZingleTimeZone>> listDelegate) {
+        this.listDelegate = listDelegate;
     }
 
     static ZingleTimeZone mapper(JSONObject source) throws JSONException {
@@ -64,14 +65,17 @@ public class ZingleTimeZoneServices {
     }
 
     public boolean listAsync(){
+        if(listDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
 
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
-                    delegate.processResult(list());
+                    listDelegate.processResult(list());
                 }catch (UnsuccessfullRequestEx e){
-                    delegate.processError(e.getResponceCode(),e.getResponceStr());
+                    listDelegate.processError(e.getResponceCode(),e.getResponceStr());
                 }
             }
         });

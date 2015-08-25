@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.zingle.api.sdk.Exceptions.UndefinedServiceDelegateEx;
 import me.zingle.api.sdk.Exceptions.UnsuccessfullRequestEx;
 import me.zingle.api.sdk.dao.QueryPart;
 import me.zingle.api.sdk.dao.ZingleConnection;
@@ -96,6 +97,7 @@ public class ZingleServiceServices {
     }
 
     public static List<ZingleService> search(List<QueryPart> filters) throws UnsuccessfullRequestEx{
+
         ZingleQuery query = new ZingleQuery(GET, resoursePath);
 
         for (QueryPart p:filters) {
@@ -114,6 +116,9 @@ public class ZingleServiceServices {
     }
 
     public boolean searchAsync(final List<QueryPart> filters){
+        if(searchDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
 
         Thread th=new Thread(new Runnable() {
             @Override
@@ -146,6 +151,10 @@ public class ZingleServiceServices {
     }
     
     public boolean getAsync(final String id){
+        if(getDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
+
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
@@ -176,6 +185,10 @@ public class ZingleServiceServices {
     }
 
     public boolean cancelAsync(final String id){
+        if(cancelDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
+
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
@@ -221,6 +234,10 @@ public class ZingleServiceServices {
 
     public boolean provisionNewServiceAsync(final ZinglePlan plan, final ZingleTimeZone timeZone, final ZinglePhoneNumber phoneNumber,
                                        final ZingleAddress address, final String serviceDisplayName){
+        if(provisionDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
+
 
         Thread th=new Thread(new Runnable() {
             @Override
@@ -258,6 +275,9 @@ public class ZingleServiceServices {
     }
 
     public boolean updateAsync(final ZingleService serviceUpd){
+        if(updateDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
 
         Thread th=new Thread(new Runnable() {
             @Override

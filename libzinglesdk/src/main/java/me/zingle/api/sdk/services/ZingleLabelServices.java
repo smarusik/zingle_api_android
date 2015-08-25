@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.zingle.api.sdk.Exceptions.UndefinedServiceDelegateEx;
 import me.zingle.api.sdk.Exceptions.UnsuccessfullRequestEx;
 import me.zingle.api.sdk.dao.ZingleConnection;
 import me.zingle.api.sdk.dao.ZingleQuery;
@@ -104,6 +105,10 @@ public class ZingleLabelServices {
     }
 
     public boolean listForServiceAsync(final ZingleService service){
+        if(listDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
+
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
@@ -134,6 +139,10 @@ public class ZingleLabelServices {
     }
 
     public boolean getForServiceWithIdAsync(final ZingleService service, final int id){
+        if(getDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
+
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
@@ -175,6 +184,10 @@ public class ZingleLabelServices {
     }
 
     public boolean createForServiceAsync(final ZingleService service, final String displayName, final Color backgroundColor, final Color textColor){
+        if(createDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
+
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
@@ -212,6 +225,10 @@ public class ZingleLabelServices {
     }
 
     public boolean updateAsync(final ZingleLabel labelUpd){
+        if(updateDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
+
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
@@ -243,6 +260,10 @@ public class ZingleLabelServices {
     }
 
     public boolean deleteAsync(final ZingleLabel label){
+        if(deleteDelegate==null){
+            throw new UndefinedServiceDelegateEx();
+        }
+
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
