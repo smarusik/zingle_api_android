@@ -32,7 +32,7 @@ public class RequestDTO {
         if(service.getPlan()!=null)
             res.key("plan_id").value(service.getPlan().getId());
         if(service.getPhoneNumber()!=null)
-            res.key("phone_number").value(service.getPhoneNumber().getFullNumber());
+            res.key("phone_number").value(service.getPhoneNumber());
         //res.key("inbound_sms_webhook_url").value("https://my-inbound-sms-handler");
         if(service.getAddress()!=null) {
             res.key("service_address");
@@ -54,14 +54,36 @@ public class RequestDTO {
 
         res.object();
 
-        if(contact.getPhoneNumber()!=null)
-            res.key("phone_number").value(contact.getPhoneNumber().getFullNumber());
+        if(contact.getPhoneNumber() !=null)
+            res.key("phone_number").value(contact.getPhoneNumber().getPhoneNumber());
+        if(contact.isConfirmed()!=null)
+            res.key("is_confirmed").value(contact.isConfirmed()?1:0);
+        if(contact.isStarred()!=null)
+            res.key("is_starred").value(contact.isStarred()?1:0);
+
 
         if(contact.getCustomFieldValues()!=null) {
             res.key("custom_field_values");
             res.array();
             for (Map.Entry<ZingleContactCustomField, String> entry : contact.getCustomFieldValues().entrySet()) {
-                res.object().key(String.valueOf(entry.getKey().getId())).value(entry.getValue()).endObject();
+                res.object();
+                res.key("customFieldId");
+                res.value(entry.getKey().getId());
+                res.key("value");
+                res.value(entry.getValue());
+                res.endObject();
+            }
+            res.endArray();
+        }
+
+        if(contact.getLabels()!=null) {
+            res.key("labels");
+            res.array();
+            for (ZingleLabel entry : contact.getLabels()) {
+                res.object();
+                res.key("id").value(entry.getId());
+                res.key("display_name").value(entry.getDisplayName());
+                res.endObject();
             }
             res.endArray();
         }
@@ -120,7 +142,7 @@ public class RequestDTO {
         res.key("type").value("sms");
 
         if(message.getServicePhoneNumber()!=null)
-            res.key("recipient").value(message.getServicePhoneNumber().getFullNumber());
+            res.key("recipient").value(message.getServicePhoneNumber());
 
         res.key("body").value(message.getBody());
 

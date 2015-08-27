@@ -11,9 +11,9 @@ public class ZingleLabel {
     private String displayName;
     private Color backgroundColor;
     private Color textColor;
-    private boolean isAutomation;
-    private boolean isGlobal;
-    private boolean active;
+    private Boolean isAutomation;
+    private Boolean isGlobal;
+    private Boolean active;
 
     public ZingleLabel() {
     }
@@ -69,7 +69,7 @@ public class ZingleLabel {
         this.textColor = textColor;
     }
 
-    public boolean isAutomation() {
+    public Boolean isAutomation() {
         return isAutomation;
     }
 
@@ -77,7 +77,7 @@ public class ZingleLabel {
         this.isAutomation = isAutomation;
     }
 
-    public boolean isGlobal() {
+    public Boolean isGlobal() {
         return isGlobal;
     }
 
@@ -85,7 +85,7 @@ public class ZingleLabel {
         this.isGlobal = isGlobal;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return active;
     }
 

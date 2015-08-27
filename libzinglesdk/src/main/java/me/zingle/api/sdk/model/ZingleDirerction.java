@@ -5,5 +5,5 @@ package me.zingle.api.sdk.model;
  */
 public enum ZingleDirerction {
     ZINGLE_DIRERCTION_INBOUND,
-    ZINGLE_DIRERCTION_OUTBUND
+    ZINGLE_DIRERCTION_OUTBOUND
 }

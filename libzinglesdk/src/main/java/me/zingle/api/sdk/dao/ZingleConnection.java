@@ -13,6 +13,10 @@ import me.zingle.api.sdk.Exceptions.UninitializedConnectionEx;
 import me.zingle.api.sdk.dto.ResponseDTO;
 import sun.net.www.protocol.https.HttpsURLConnectionImpl;
 
+//import me.zingle.api.sdk.logger.Log;
+
+//import android.util.log;
+
 public class ZingleConnection {
     private final String apiPath;
     private final String apiVersion;
@@ -44,8 +48,10 @@ public class ZingleConnection {
         if(instance!=null){
             return instance;
         }
-        else
+        else {
+            //Log.err("ZingleConnection need to be initialized by static init() function before use.");
             throw new UninitializedConnectionEx();
+        }
     }
 
     public static boolean init (String apiPath, String apiVersion, String token, String key){
@@ -59,10 +65,9 @@ public class ZingleConnection {
         try {
             URL url = new URL(temp.apiPath + temp.apiVersion);
         } catch (MalformedURLException e) {
+            //Log.err(ZingleConnection.class,"init()",temp.apiPath + temp.apiVersion+" is not a proper URL.");
             return false;
         }
-
-        //Authorization check must be here
 
         instance = temp;
         return true;
@@ -81,23 +86,40 @@ public class ZingleConnection {
         return encryptedAuthString;
     }
 
+/*
+    public void setEncryptedAuthString (String encryptedAuthString){
+        this.encryptedAuthString = encryptedAuthString;
+    }
+
+    public void setEncryptedAuthString(String token, String key) {
+        this.encryptedAuthString = generateEncryptedAuthString(token, key);
+    }
+*/
+
     public static String generateEncryptedAuthString(String token, String key) {
         String authString = token + ":" + key;
         byte[] authEncBytes = Base64.encodeBase64(authString.getBytes());
         return new String(authEncBytes);
     }
 
-    public ResponseDTO send(ZingleQuery query) {
+    public ResponseDTO send(ZingleQuery query){
         ResponseDTO result=new ResponseDTO();
         URL url;
 
         try {
             url = new URL(apiPath + apiVersion + query.getResourcePath() + query.getQueryStr());
+
         }catch (MalformedURLException e){
+
             result.setErrorStackTrace(e.getStackTrace().toString());
             result.setErrorString(e.getMessage());
+
+
+            //Log.err(this.getClass(),"send()",apiPath + apiVersion + query.getResourcePath() + query.getQueryStr()+" is not a proper URL name.");
+
             return result;
         }
+
 
         HttpsURLConnectionImpl connection=null;
 
@@ -117,15 +139,21 @@ public class ZingleConnection {
 
             connection.connect();
 
+            //Log.info(ZingleConnection.class,"send()",connection.getRequestMethod()+": "+connection.getURL().toString());
+
             if(query.getPayload()!=null){
                 OutputStream os = connection.getOutputStream();
                 os.write(query.getPayload().toString().getBytes());
                 os.flush();
                 os.close();
+
+                //Log.info(ZingleConnection.class,"send()","Payload transmitted:\n"+query.getPayload().toString());
             }
 
             result.setResponseCode(connection.getResponseCode());
             result.setResponseStr(connection.getResponseMessage());
+
+            //Log.info(ZingleConnection.class, "send()", "Responce:\n" + connection.getResponseCode()+":"+connection.getResponseMessage());
 
             if (result.getResponseCode() == 200) {
 
@@ -143,6 +171,8 @@ public class ZingleConnection {
 
                 dataStream.close();
                 channel.close();
+
+                //Log.info(ZingleConnection.class,"send()","Receive data:\n"+res.toString());
 
             }
 

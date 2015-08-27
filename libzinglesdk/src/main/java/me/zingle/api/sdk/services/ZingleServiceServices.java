@@ -100,8 +100,10 @@ public class ZingleServiceServices {
 
         ZingleQuery query = new ZingleQuery(GET, resoursePath);
 
-        for (QueryPart p:filters) {
-            query.addParam(p);
+        if(filters!=null) {
+            for (QueryPart p : filters) {
+                query.addParam(p);
+            }
         }
 
         ResponseDTO response = ZingleConnection.getInstance().send(query);

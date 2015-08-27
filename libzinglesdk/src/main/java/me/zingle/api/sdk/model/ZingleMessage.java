@@ -10,7 +10,7 @@ public class ZingleMessage {
     private String body;
     private ZinglePhoneNumber contactPhoneNumber;
     private ZinglePhoneNumber servicePhoneNumber;
-    private int templateId;
+    private Integer templateId;
     private ZingleDirerction direction;
     private ZingleContact contact;
     private String bodyLanguageCode;
@@ -22,7 +22,7 @@ public class ZingleMessage {
     }
 
     public ZingleMessage(int id, String body, ZinglePhoneNumber contactPhoneNumber,
-                         ZinglePhoneNumber servicePhoneNumber, int templateId,
+                         ZinglePhoneNumber servicePhoneNumber, Integer templateId,
                          ZingleDirerction direction, ZingleContact contact,
                          String bodyLanguageCode, String translatedBodyLanguageCode,
                          String translatedBody, Date createdAt) {
@@ -71,7 +71,7 @@ public class ZingleMessage {
         this.servicePhoneNumber = servicePhoneNumber;
     }
 
-    public int getTemplateId() {
+    public Integer getTemplateId() {
         return templateId;
     }
 

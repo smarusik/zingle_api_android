@@ -5,11 +5,11 @@ package me.zingle.api.sdk.model;
  */
 public class ZinglePlan {
     private int id;
-    private int termMonths;
-    private float monthlyOrUnitPrice;
-    private float setupPrice;
+    private Integer termMonths;
+    private Float monthlyOrUnitPrice;
+    private Float setupPrice;
     private String displayName;
-    private boolean isPrinterPlan;
+    private Boolean isPrinterPlan;
 
     public ZinglePlan() {
     }
@@ -31,7 +31,7 @@ public class ZinglePlan {
         this.id = id;
     }
 
-    public int getTermMonths() {
+    public Integer getTermMonths() {
         return termMonths;
     }
 
@@ -39,7 +39,7 @@ public class ZinglePlan {
         this.termMonths = termMonths;
     }
 
-    public float getMonthlyOrUnitPrice() {
+    public Float getMonthlyOrUnitPrice() {
         return monthlyOrUnitPrice;
     }
 
@@ -47,7 +47,7 @@ public class ZinglePlan {
         this.monthlyOrUnitPrice = monthlyOrUnitPrice;
     }
 
-    public float getSetupPrice() {
+    public Float getSetupPrice() {
         return setupPrice;
     }
 
@@ -63,7 +63,7 @@ public class ZinglePlan {
         this.displayName = displayName;
     }
 
-    public boolean isPrinterPlan() {
+    public Boolean isPrinterPlan() {
         return isPrinterPlan;
     }
 

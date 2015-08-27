@@ -7,7 +7,7 @@ public class ZingleAutomation {
     private int id;
     private ZingleService service;
     private String displayName;
-    private boolean isGlobal;
+    private Boolean isGlobal;
 
     public ZingleAutomation() {
     }
@@ -43,7 +43,7 @@ public class ZingleAutomation {
         this.displayName = displayName;
     }
 
-    public boolean isGlobal() {
+    public Boolean isGlobal() {
         return isGlobal;
     }
 

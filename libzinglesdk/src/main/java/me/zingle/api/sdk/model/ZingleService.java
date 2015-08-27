@@ -10,7 +10,7 @@ public class ZingleService {
     private ZingleTimeZone timeZone;
     private ZinglePlan plan;
     private ZingleAddress address;
-    private boolean active;
+    private Boolean active;
 
     public ZingleService() {
     }
@@ -76,7 +76,7 @@ public class ZingleService {
         this.address = address;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return active;
     }
 

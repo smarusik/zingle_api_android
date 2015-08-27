@@ -10,7 +10,7 @@ public class ZingleContactCustomField {
     private int id;
     private ZingleService service;
     private String displayName;
-    private boolean isGlobal;
+    private Boolean isGlobal;
     private List<ZingleContactCustomFieldOption> options;
 
     public ZingleContactCustomField() {
@@ -48,7 +48,7 @@ public class ZingleContactCustomField {
         this.displayName = displayName;
     }
 
-    public boolean isGlobal() {
+    public Boolean isGlobal() {
         return isGlobal;
     }
 

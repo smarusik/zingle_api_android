@@ -6,7 +6,7 @@ package me.zingle.api.sdk.model;
 public class ZingleContactCustomFieldOption {
     private String displayName;
     private String value;
-    private int sortOrder;
+    private Integer sortOrder;
 
     public ZingleContactCustomFieldOption() {
     }
@@ -33,7 +33,7 @@ public class ZingleContactCustomFieldOption {
         this.value = value;
     }
 
-    public int getSortOrder() {
+    public Integer getSortOrder() {
         return sortOrder;
     }
 

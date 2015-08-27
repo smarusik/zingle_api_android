@@ -35,9 +35,11 @@ public class ZinglePhoneNumberServices {
 
     static ZinglePhoneNumber mapper(JSONObject source) throws JSONException {
         String numberStr = source.getString("phone_number");
-        return new ZinglePhoneNumber(numberStr.substring(0, numberStr.length() - 10),
-                numberStr.substring(numberStr.length() - 10, numberStr.length() - 7),
-                numberStr.substring(numberStr.length() - 7));
+        if(!numberStr.isEmpty()) {
+            return new ZinglePhoneNumber(numberStr);
+        }
+        else
+            return new ZinglePhoneNumber("");
     }
 
     static List<ZinglePhoneNumber> arrayMapper(JSONArray source) throws JSONException {

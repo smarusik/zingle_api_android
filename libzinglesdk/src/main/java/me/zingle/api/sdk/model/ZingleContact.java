@@ -12,8 +12,8 @@ public class ZingleContact {
     private int id;
     private ZingleService service;
     private ZinglePhoneNumber phoneNumber;
-    private boolean isConfirmed;
-    private boolean isStarred;
+    private Boolean isConfirmed;
+    private Boolean isStarred;
     private Map<ZingleContactCustomField,String> customFieldValues;
     private List<ZingleLabel> labels;
 
@@ -30,6 +30,11 @@ public class ZingleContact {
         this.isStarred = isStarred;
         this.customFieldValues = customFieldValues;
         this.labels = labels;
+    }
+
+    public ZingleContact(int id, ZingleService service) {
+        this.id = id;
+        this.service = service;
     }
 
     public int getId() {
@@ -56,7 +61,7 @@ public class ZingleContact {
         this.phoneNumber = phoneNumber;
     }
 
-    public boolean isConfirmed() {
+    public Boolean isConfirmed() {
         return isConfirmed;
     }
 
@@ -64,7 +69,7 @@ public class ZingleContact {
         this.isConfirmed = isConfirmed;
     }
 
-    public boolean isStarred() {
+    public Boolean isStarred() {
         return isStarred;
     }
 
