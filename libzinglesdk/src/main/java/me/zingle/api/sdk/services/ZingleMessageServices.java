@@ -56,7 +56,7 @@ public class ZingleMessageServices {
         result.setContactPhoneNumber(new ZinglePhoneNumber(source.getString("contact_phone_number")));
         result.setServicePhoneNumber(new ZinglePhoneNumber(source.getString("service_phone_number")));
         //result.setTemplateId(source.getInt("template_id"));
-        result.setDirection(source.getString("communication_direction") == "inbound" ? ZINGLE_DIRERCTION_INBOUND : ZINGLE_DIRERCTION_OUTBOUND);
+        result.setDirection(source.getString("communication_direction").equals("inbound") ? ZINGLE_DIRERCTION_INBOUND : ZINGLE_DIRERCTION_OUTBOUND);
         result.setContact(new ZingleContact(source.getInt("contact_id"),service));
         //communication_details
         //result.setBodyLanguageCode(source.getString("body_language_code"));
