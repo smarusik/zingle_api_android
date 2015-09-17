@@ -4,7 +4,7 @@ package me.zingle.api.sdk.model;
  * Created by SLAVA 09 2015.
  */
 public class ZingleContactChannel {
-    private Integer id;
+    private int id;
     private ZingleChannelType type;
     private String displayName;
     private String value;
@@ -14,7 +14,7 @@ public class ZingleContactChannel {
     public ZingleContactChannel() {
     }
 
-    public ZingleContactChannel(Integer id, ZingleChannelType type, String displayName, String value, Boolean is_default, Boolean is_default_for_type) {
+    public ZingleContactChannel(int id, ZingleChannelType type, String displayName, String value, Boolean is_default, Boolean is_default_for_type) {
         this.id = id;
         this.type = type;
         this.displayName = displayName;
@@ -23,11 +23,11 @@ public class ZingleContactChannel {
         this.is_default_for_type = is_default_for_type;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

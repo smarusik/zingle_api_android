@@ -6,7 +6,7 @@ import java.net.URL;
  * Created by SLAVA 09 2015.
  */
 public class ZingleServiceChannel {
-    private Integer id;
+    private int id;
     private ZingleChannelType type;
     private Boolean default_for_type;
     private String value;
@@ -20,18 +20,18 @@ public class ZingleServiceChannel {
     public ZingleServiceChannel() {
     }
 
-    public ZingleServiceChannel(Integer id, ZingleChannelType type, Boolean default_for_type, String value) {
+    public ZingleServiceChannel(int id, ZingleChannelType type, Boolean default_for_type, String value) {
         this.id = id;
         this.type = type;
         this.default_for_type = default_for_type;
         this.value = value;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
