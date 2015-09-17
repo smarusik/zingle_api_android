@@ -11,7 +11,7 @@ import java.util.Map;
 public class ZingleContact {
     private int id;
     private ZingleService service;
-    private ZinglePhoneNumber phoneNumber;
+    private List<ZingleContactChannel> channels;
     private Boolean isConfirmed;
     private Boolean isStarred;
     private Map<ZingleContactCustomField,String> customFieldValues;
@@ -20,12 +20,11 @@ public class ZingleContact {
     public ZingleContact() {
     }
 
-    public ZingleContact(int id, ZingleService service, ZinglePhoneNumber phoneNumber,
-                         boolean isConfirmed, boolean isStarred,
-                         Map<ZingleContactCustomField,String> customFieldValues, List<ZingleLabel> labels) {
+    public ZingleContact(int id, ZingleService service, List<ZingleContactChannel> channels, Boolean isConfirmed, Boolean isStarred,
+                         Map<ZingleContactCustomField, String> customFieldValues, List<ZingleLabel> labels) {
         this.id = id;
         this.service = service;
-        this.phoneNumber = phoneNumber;
+        this.channels = channels;
         this.isConfirmed = isConfirmed;
         this.isStarred = isStarred;
         this.customFieldValues = customFieldValues;
@@ -53,12 +52,28 @@ public class ZingleContact {
         this.service = service;
     }
 
-    public ZinglePhoneNumber getPhoneNumber() {
-        return phoneNumber;
+    public List<ZingleContactChannel> getChannels() {
+        return channels;
     }
 
-    public void setPhoneNumber(ZinglePhoneNumber phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setChannels(List<ZingleContactChannel> channels) {
+        this.channels = channels;
+    }
+
+    public Boolean getIsConfirmed() {
+        return isConfirmed;
+    }
+
+    public void setIsConfirmed(Boolean isConfirmed) {
+        this.isConfirmed = isConfirmed;
+    }
+
+    public Boolean getIsStarred() {
+        return isStarred;
+    }
+
+    public void setIsStarred(Boolean isStarred) {
+        this.isStarred = isStarred;
     }
 
     public Boolean isConfirmed() {
