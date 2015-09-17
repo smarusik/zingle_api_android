@@ -17,16 +17,19 @@ import me.zingle.api.sdk.dao.ZingleQuery;
 import me.zingle.api.sdk.dto.RequestDTO;
 import me.zingle.api.sdk.dto.ResponseDTO;
 import me.zingle.api.sdk.model.ZingleAutomation;
+import me.zingle.api.sdk.model.ZingleChannelType;
 import me.zingle.api.sdk.model.ZingleContact;
+import me.zingle.api.sdk.model.ZingleContactChannel;
 import me.zingle.api.sdk.model.ZingleContactCustomField;
 import me.zingle.api.sdk.model.ZingleLabel;
-import me.zingle.api.sdk.model.ZinglePhoneNumber;
 import me.zingle.api.sdk.model.ZingleService;
 
 import static me.zingle.api.sdk.dao.RequestMethods.DELETE;
 import static me.zingle.api.sdk.dao.RequestMethods.GET;
 import static me.zingle.api.sdk.dao.RequestMethods.POST;
 import static me.zingle.api.sdk.dao.RequestMethods.PUT;
+import static me.zingle.api.sdk.model.ZingleChannelType.CHANNEL_TYPE_E_MAIL;
+import static me.zingle.api.sdk.model.ZingleChannelType.CHANNEL_TYPE_PHONE_NUMBER;
 
 /**
  * Created by SLAVA 08 2015.
@@ -77,12 +80,31 @@ public class ZingleContactServices {
         ZingleContact result=new ZingleContact();
 
         result.setId(source.optInt("id"));
-        result.setPhoneNumber(ZinglePhoneNumberServices.mapper(source));
         result.setIsConfirmed(source.optInt("is_confirmed") == 0 ? false : true);
-        result.setIsConfirmed(source.optInt("is_starred")==0?false:true);
+        result.setIsStarred(source.optInt("is_starred") == 0 ? false : true);
+
+        JSONArray channelsJS=source.optJSONArray("channels");
+        int i=0;
+        JSONObject channelJS=channelsJS.getJSONObject(i++);
+        List<ZingleContactChannel> channels=new ArrayList<>();
+
+        while(channelJS!=null){
+            ZingleContactChannel contactChannel=new ZingleContactChannel();
+            contactChannel.setId(channelJS.getInt("id"));
+            if(CHANNEL_TYPE_PHONE_NUMBER.equals(channelJS.getString("type")))
+                contactChannel.setType(CHANNEL_TYPE_PHONE_NUMBER);
+            else if(CHANNEL_TYPE_E_MAIL.equals(channelJS.getString("type")))
+                contactChannel.setType(CHANNEL_TYPE_E_MAIL);
+            else
+                contactChannel.setType(new ZingleChannelType(channelJS.getString("type")));
+
+            channels.add(contactChannel);
+        }
+
+        result.setChannels(channels);
 
         JSONArray customFieldsJS=source.optJSONArray("custom_field_values");
-        int i = 0;
+        i = 0;
         if(customFieldsJS!=null) {
             JSONObject customFieldJS = customFieldsJS.optJSONObject(i++);
             Map<ZingleContactCustomField, String> customFields = new HashMap<>();
@@ -255,12 +277,12 @@ public class ZingleContactServices {
         return deleteAsync(contact.getService(), contact.getId());
     }
 
-    public static ZingleContact create(ZingleService service, /*UUID uuid,*/ ZinglePhoneNumber phoneNumber,
+    public static ZingleContact create(ZingleService service, /*UUID uuid,*/ List<ZingleContactChannel> channels,
                                                             Map<ZingleContactCustomField,String> customFieldValues){
 
         ZingleContact contact=new ZingleContact();
 
-        contact.setPhoneNumber(phoneNumber);
+        contact.setChannels(channels);
         contact.setCustomFieldValues(customFieldValues);
 
         ZingleQuery query = new ZingleQuery(POST, resoursePrefixPath+"/"+service.getId()+"/"+resoursePath);
@@ -282,7 +304,7 @@ public class ZingleContactServices {
             throw new UnsuccessfullRequestEx("Error delete()",response.getResponseCode(),response.getResponseStr());
     }
 
-    public boolean createForServiceAsync(final ZingleService service, /*final UUID uuid,*/ final ZinglePhoneNumber phoneNumber,
+    public boolean createForServiceAsync(final ZingleService service, /*final UUID uuid,*/ final List<ZingleContactChannel> channels,
                                          final Map<ZingleContactCustomField,String> customFieldValues){
         if(createDelegate==null){
             throw new UndefinedServiceDelegateEx();
@@ -292,7 +314,7 @@ public class ZingleContactServices {
             @Override
             public void run() {
             try{
-                createDelegate.processResult(create(service, phoneNumber, customFieldValues));
+                createDelegate.processResult(create(service, channels, customFieldValues));
             }catch (UnsuccessfullRequestEx e){
                 createDelegate.processError(e.getResponceCode(),e.getResponceStr());
             }
