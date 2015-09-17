@@ -76,10 +76,10 @@ public class ZingleContactServices {
     static ZingleContact mapper(JSONObject source, ZingleService service){
         ZingleContact result=new ZingleContact();
 
-        result.setId(source.getInt("id"));
+        result.setId(source.optInt("id"));
         result.setPhoneNumber(ZinglePhoneNumberServices.mapper(source));
-        result.setIsConfirmed(source.getInt("is_confirmed") == 0 ? false : true);
-        result.setIsConfirmed(source.getInt("is_starred")==0?false:true);
+        result.setIsConfirmed(source.optInt("is_confirmed") == 0 ? false : true);
+        result.setIsConfirmed(source.optInt("is_starred")==0?false:true);
 
         JSONArray customFieldsJS=source.optJSONArray("custom_field_values");
         int i = 0;
@@ -279,7 +279,7 @@ public class ZingleContactServices {
             return mapper(result,service);
         }
         else
-            throw new UnsuccessfullRequestEx("Error list()",response.getResponseCode(),response.getResponseStr());
+            throw new UnsuccessfullRequestEx("Error delete()",response.getResponseCode(),response.getResponseStr());
     }
 
     public boolean createForServiceAsync(final ZingleService service, /*final UUID uuid,*/ final ZinglePhoneNumber phoneNumber,

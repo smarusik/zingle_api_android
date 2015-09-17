@@ -67,9 +67,11 @@ public class ZingleQuery {
 
     public String getQueryStr(){
         if(params !=null) {
+            char divider='?';
             StringBuilder res = new StringBuilder();
             for (QueryPart part : params) {
-                res.append("?").append(part.key).append("=").append(part.value);
+                res.append(divider).append(part.key).append("=").append(part.value);
+                if(divider=='?') divider='&';
             }
             return res.toString();
         }

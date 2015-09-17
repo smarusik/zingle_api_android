@@ -4,16 +4,16 @@ package me.zingle.api.sdk.model;
  * Created by SLAVA 08 2015.
  */
 public enum ZingleSortOrder {
-    ZINGLE_ASC(0),
-    ZINGLE_DESC(1);
+    ZINGLE_ASC("asc"),
+    ZINGLE_DESC("desc");
 
-    private final int sortOrder;
+    private final String sortOrder;
 
-    ZingleSortOrder(int i) {
+    ZingleSortOrder(String i) {
         sortOrder = i;
     }
 
-    public int toInt(){
+    public String toString(){
         return sortOrder;
     }
 

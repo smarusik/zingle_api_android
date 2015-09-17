@@ -29,6 +29,7 @@ import static me.zingle.api.sdk.model.ZingleDirerction.ZINGLE_DIRERCTION_OUTBOUN
  * Created by SLAVA 08 2015.
  */
 public class ZingleMessageServices {
+
     private static final String resoursePrefixPath="/services";
     private static final String resoursePath="messages";
 
@@ -52,12 +53,12 @@ public class ZingleMessageServices {
         ZingleMessage result=new ZingleMessage();
 
         result.setId(source.getInt("id"));
-        result.setBody(source.getString("body"));
-        result.setContactPhoneNumber(new ZinglePhoneNumber(source.getString("contact_phone_number")));
-        result.setServicePhoneNumber(new ZinglePhoneNumber(source.getString("service_phone_number")));
+        result.setBody(source.optString("body"));
+        result.setContactPhoneNumber(new ZinglePhoneNumber(source.optString("contact_phone_number")));
+        result.setServicePhoneNumber(new ZinglePhoneNumber(source.optString("service_phone_number")));
         //result.setTemplateId(source.getInt("template_id"));
         result.setDirection(source.getString("communication_direction").equals("inbound") ? ZINGLE_DIRERCTION_INBOUND : ZINGLE_DIRERCTION_OUTBOUND);
-        result.setContact(new ZingleContact(source.getInt("contact_id"),service));
+        result.setContact(new ZingleContact(source.optInt("contact_id"),service));
         //communication_details
         //result.setBodyLanguageCode(source.getString("body_language_code"));
         result.setCreatedAt(new Date(source.getLong("created_at")));

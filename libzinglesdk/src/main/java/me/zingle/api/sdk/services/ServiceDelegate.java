@@ -3,7 +3,7 @@ package me.zingle.api.sdk.services;
 /**
  * Created by SLAVA 08 2015.
  */
-public class ServiceDelegate <Model> {
+public abstract class ServiceDelegate <Model> {
 
     public final String asyncFunction;
 
@@ -11,11 +11,7 @@ public class ServiceDelegate <Model> {
         this.asyncFunction = asyncFunction;
     }
 
-    public void processResult(Model res){
-        return;
-    }
+    public abstract void processResult(Model res);
 
-    public void processError(int errorCode,String errorDescr){
-        return;
-    }
+    public abstract void processError(int errorCode,String errorDescr);
 }

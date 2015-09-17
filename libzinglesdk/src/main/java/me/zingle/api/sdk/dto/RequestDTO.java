@@ -8,6 +8,7 @@ import java.util.Map;
 import me.zingle.api.sdk.model.ZingleContact;
 import me.zingle.api.sdk.model.ZingleContactCustomField;
 import me.zingle.api.sdk.model.ZingleContactCustomFieldOption;
+import me.zingle.api.sdk.model.ZingleDirerction;
 import me.zingle.api.sdk.model.ZingleLabel;
 import me.zingle.api.sdk.model.ZingleMessage;
 import me.zingle.api.sdk.model.ZingleService;
@@ -141,8 +142,14 @@ public class RequestDTO {
 
         res.key("type").value("sms");
 
-        if(message.getServicePhoneNumber()!=null)
-            res.key("recipient").value(message.getServicePhoneNumber());
+        if(message.getDirection().equals(ZingleDirerction.ZINGLE_DIRERCTION_INBOUND)) {
+            if (message.getServicePhoneNumber() != null)
+                res.key("recipient").value(message.getServicePhoneNumber().getPhoneNumber());
+        }
+        else if(message.getDirection().equals(ZingleDirerction.ZINGLE_DIRERCTION_OUTBOUND)){
+            if (message.getContactPhoneNumber() != null)
+                res.key("recipient").value(message.getContactPhoneNumber().getPhoneNumber());
+        }
 
         res.key("body").value(message.getBody());
 

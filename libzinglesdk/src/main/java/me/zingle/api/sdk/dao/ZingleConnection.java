@@ -11,11 +11,8 @@ import java.util.Scanner;
 
 import me.zingle.api.sdk.Exceptions.UninitializedConnectionEx;
 import me.zingle.api.sdk.dto.ResponseDTO;
+import me.zingle.api.sdk.logger.Log;
 import sun.net.www.protocol.https.HttpsURLConnectionImpl;
-
-//import me.zingle.api.sdk.logger.Log;
-
-//import android.util.log;
 
 public class ZingleConnection {
     private final String apiPath;
@@ -49,7 +46,7 @@ public class ZingleConnection {
             return instance;
         }
         else {
-            //Log.err("ZingleConnection need to be initialized by static init() function before use.");
+            Log.err("ZingleConnection need to be initialized by static init() function before use.");
             throw new UninitializedConnectionEx();
         }
     }
@@ -65,7 +62,7 @@ public class ZingleConnection {
         try {
             URL url = new URL(temp.apiPath + temp.apiVersion);
         } catch (MalformedURLException e) {
-            //Log.err(ZingleConnection.class,"init()",temp.apiPath + temp.apiVersion+" is not a proper URL.");
+            Log.err(ZingleConnection.class,"init()",temp.apiPath + temp.apiVersion+" is not a proper URL.");
             return false;
         }
 
@@ -108,14 +105,13 @@ public class ZingleConnection {
 
         try {
             url = new URL(apiPath + apiVersion + query.getResourcePath() + query.getQueryStr());
-
         }catch (MalformedURLException e){
 
             result.setErrorStackTrace(e.getStackTrace().toString());
             result.setErrorString(e.getMessage());
 
 
-            //Log.err(this.getClass(),"send()",apiPath + apiVersion + query.getResourcePath() + query.getQueryStr()+" is not a proper URL name.");
+            Log.err(this.getClass(), "send()", apiPath + apiVersion + query.getResourcePath() + query.getQueryStr() + " is not a proper URL name.");
 
             return result;
         }
@@ -139,7 +135,7 @@ public class ZingleConnection {
 
             connection.connect();
 
-            //Log.info(ZingleConnection.class,"send()",connection.getRequestMethod()+": "+connection.getURL().toString());
+            Log.info(ZingleConnection.class, "send()", connection.getRequestMethod() + ": " + connection.getURL().toString());
 
             if(query.getPayload()!=null){
                 OutputStream os = connection.getOutputStream();
@@ -147,13 +143,13 @@ public class ZingleConnection {
                 os.flush();
                 os.close();
 
-                //Log.info(ZingleConnection.class,"send()","Payload transmitted:\n"+query.getPayload().toString());
+                Log.info(ZingleConnection.class, "send()", "Payload transmitted:\n" + query.getPayload().toString());
             }
 
             result.setResponseCode(connection.getResponseCode());
             result.setResponseStr(connection.getResponseMessage());
 
-            //Log.info(ZingleConnection.class, "send()", "Responce:\n" + connection.getResponseCode()+":"+connection.getResponseMessage());
+            Log.info(ZingleConnection.class, "send()", "Responce:\n" + connection.getResponseCode() + ":" + connection.getResponseMessage());
 
             if (result.getResponseCode() == 200) {
 
@@ -161,18 +157,22 @@ public class ZingleConnection {
                 dataStream = connection.getInputStream();
 
                 Scanner channel = new Scanner(dataStream);
+                channel.useDelimiter("\\A");
 
                 StringBuilder res = new StringBuilder();
 
-                while (channel.hasNext())
+
+                while (channel.hasNext()) {
                     res.append(channel.next());
+                }
+
 
                 result.setDataWithStr(res.toString());
 
-                dataStream.close();
                 channel.close();
+                dataStream.close();
 
-                //Log.info(ZingleConnection.class,"send()","Receive data:\n"+res.toString());
+                Log.info(ZingleConnection.class, "send()", "Receive data:\n" + res);
 
             }
 
