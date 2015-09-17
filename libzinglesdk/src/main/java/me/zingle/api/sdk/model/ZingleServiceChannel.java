@@ -7,6 +7,7 @@ import java.net.URL;
  */
 public class ZingleServiceChannel {
     private int id;
+    private int serviceId;
     private ZingleChannelType type;
     private Boolean default_for_type;
     private String value;
@@ -20,8 +21,9 @@ public class ZingleServiceChannel {
     public ZingleServiceChannel() {
     }
 
-    public ZingleServiceChannel(int id, ZingleChannelType type, Boolean default_for_type, String value) {
+    public ZingleServiceChannel(int id, int serviceId, ZingleChannelType type, Boolean default_for_type, String value) {
         this.id = id;
+        this.serviceId = serviceId;
         this.type = type;
         this.default_for_type = default_for_type;
         this.value = value;
@@ -33,6 +35,14 @@ public class ZingleServiceChannel {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(int serviceId) {
+        this.serviceId = serviceId;
     }
 
     public ZingleChannelType getType() {

@@ -1,32 +1,29 @@
 package me.zingle.api.sdk.model;
 
+import java.util.List;
+
 /**
  * Created by SLAVA 08 2015.
  */
 public class ZingleService {
     private int id;
     private String displayName;
-    private ZinglePhoneNumber phoneNumber;
+    private List<ZingleServiceChannel> channels;
     private ZingleTimeZone timeZone;
     private ZinglePlan plan;
     private ZingleAddress address;
-    private Boolean active;
 
     public ZingleService() {
     }
 
-    public ZingleService(int id, String displayName, ZinglePhoneNumber phoneNumber, ZingleTimeZone timeZone,
-                         ZinglePlan plan, ZingleAddress address, boolean active) {
+    public ZingleService(int id, String displayName, List<ZingleServiceChannel> channels, ZingleTimeZone timeZone, ZinglePlan plan, ZingleAddress address) {
         this.id = id;
         this.displayName = displayName;
-        this.phoneNumber = phoneNumber;
+        this.channels = channels;
         this.timeZone = timeZone;
         this.plan = plan;
         this.address = address;
-        this.active = active;
     }
-
-
 
     public int getId() {
         return id;
@@ -44,12 +41,12 @@ public class ZingleService {
         this.displayName = displayName;
     }
 
-    public ZinglePhoneNumber getPhoneNumber() {
-        return phoneNumber;
+    public List<ZingleServiceChannel> getChannels() {
+        return channels;
     }
 
-    public void setPhoneNumber(ZinglePhoneNumber phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setChannels(List<ZingleServiceChannel> channels) {
+        this.channels = channels;
     }
 
     public ZingleTimeZone getTimeZone() {
@@ -74,13 +71,5 @@ public class ZingleService {
 
     public void setAddress(ZingleAddress address) {
         this.address = address;
-    }
-
-    public Boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 }

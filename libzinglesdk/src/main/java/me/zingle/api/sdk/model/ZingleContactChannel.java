@@ -5,6 +5,7 @@ package me.zingle.api.sdk.model;
  */
 public class ZingleContactChannel {
     private int id;
+    private int contactId;
     private ZingleChannelType type;
     private String displayName;
     private String value;
@@ -14,8 +15,9 @@ public class ZingleContactChannel {
     public ZingleContactChannel() {
     }
 
-    public ZingleContactChannel(int id, ZingleChannelType type, String displayName, String value, Boolean is_default, Boolean is_default_for_type) {
+    public ZingleContactChannel(int id, int contactId, ZingleChannelType type, String displayName, String value, Boolean is_default, Boolean is_default_for_type) {
         this.id = id;
+        this.contactId = contactId;
         this.type = type;
         this.displayName = displayName;
         this.value = value;
@@ -29,6 +31,14 @@ public class ZingleContactChannel {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(int contactId) {
+        this.contactId = contactId;
     }
 
     public ZingleChannelType getType() {
