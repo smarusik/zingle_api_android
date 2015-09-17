@@ -1,6 +1,6 @@
 package me.zingle.api.sdk.model;
 
-import java.util.Date;
+import java.util.List;
 
 /**
  * Created by SLAVA 08 2015.
@@ -8,35 +8,41 @@ import java.util.Date;
 public class ZingleMessage {
     private int id;
     private String body;
-    private ZinglePhoneNumber contactPhoneNumber;
-    private ZinglePhoneNumber servicePhoneNumber;
-    private Integer templateId;
-    private ZingleDirerction direction;
-    private ZingleContact contact;
-    private String bodyLanguageCode;
-    private String translatedBodyLanguageCode;
-    private String translatedBody;
-    private Date createdAt;
+    private ZingleParticipant sender;
+    private ZingleParticipant recipient;
+    private Integer templateId=null;
+    private String bodyLanguageCode=null;
+    private String translatedBodyLanguageCode=null;
+    private String translatedBody=null;
+    private Long createdAt;
+    private Long readAt;
+    private Integer triggered_by_user_id=null;
+    private List<ZingleAttachment> attachments;
 
     public ZingleMessage() {
     }
 
-    public ZingleMessage(int id, String body, ZinglePhoneNumber contactPhoneNumber,
-                         ZinglePhoneNumber servicePhoneNumber, Integer templateId,
-                         ZingleDirerction direction, ZingleContact contact,
-                         String bodyLanguageCode, String translatedBodyLanguageCode,
-                         String translatedBody, Date createdAt) {
+    public ZingleMessage(int id, String body, ZingleParticipant sender, ZingleParticipant recipient, Integer templateId, String bodyLanguageCode,
+                         String translatedBodyLanguageCode, String translatedBody, Long createdAt, Long readAt, Integer triggered_by_user_id,
+                         List<ZingleAttachment> attachments) {
         this.id = id;
         this.body = body;
-        this.contactPhoneNumber = contactPhoneNumber;
-        this.servicePhoneNumber = servicePhoneNumber;
+        this.sender = sender;
+        this.recipient = recipient;
         this.templateId = templateId;
-        this.direction = direction;
-        this.contact = contact;
         this.bodyLanguageCode = bodyLanguageCode;
         this.translatedBodyLanguageCode = translatedBodyLanguageCode;
         this.translatedBody = translatedBody;
         this.createdAt = createdAt;
+        this.readAt = readAt;
+        this.triggered_by_user_id = triggered_by_user_id;
+        this.attachments = attachments;
+    }
+
+    public ZingleMessage(String body, ZingleParticipant sender, ZingleParticipant recipient) {
+        this.body = body;
+        this.sender = sender;
+        this.recipient = recipient;
     }
 
     public int getId() {
@@ -55,44 +61,28 @@ public class ZingleMessage {
         this.body = body;
     }
 
-    public ZinglePhoneNumber getContactPhoneNumber() {
-        return contactPhoneNumber;
+    public ZingleParticipant getSender() {
+        return sender;
     }
 
-    public void setContactPhoneNumber(ZinglePhoneNumber contactPhoneNumber) {
-        this.contactPhoneNumber = contactPhoneNumber;
+    public void setSender(ZingleParticipant sender) {
+        this.sender = sender;
     }
 
-    public ZinglePhoneNumber getServicePhoneNumber() {
-        return servicePhoneNumber;
+    public ZingleParticipant getRecipient() {
+        return recipient;
     }
 
-    public void setServicePhoneNumber(ZinglePhoneNumber servicePhoneNumber) {
-        this.servicePhoneNumber = servicePhoneNumber;
+    public void setRecipient(ZingleParticipant recipient) {
+        this.recipient = recipient;
     }
 
     public Integer getTemplateId() {
         return templateId;
     }
 
-    public void setTemplateId(int templateId) {
+    public void setTemplateId(Integer templateId) {
         this.templateId = templateId;
-    }
-
-    public ZingleDirerction getDirection() {
-        return direction;
-    }
-
-    public void setDirection(ZingleDirerction direction) {
-        this.direction = direction;
-    }
-
-    public ZingleContact getContact() {
-        return contact;
-    }
-
-    public void setContact(ZingleContact contact) {
-        this.contact = contact;
     }
 
     public String getBodyLanguageCode() {
@@ -119,11 +109,35 @@ public class ZingleMessage {
         this.translatedBody = translatedBody;
     }
 
-    public Date getCreatedAt() {
+    public Long getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Long createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Long getReadAt() {
+        return readAt;
+    }
+
+    public void setReadAt(Long readAt) {
+        this.readAt = readAt;
+    }
+
+    public Integer getTriggered_by_user_id() {
+        return triggered_by_user_id;
+    }
+
+    public void setTriggered_by_user_id(Integer triggered_by_user_id) {
+        this.triggered_by_user_id = triggered_by_user_id;
+    }
+
+    public List<ZingleAttachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<ZingleAttachment> attachments) {
+        this.attachments = attachments;
     }
 }
