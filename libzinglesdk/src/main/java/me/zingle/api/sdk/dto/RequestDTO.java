@@ -3,15 +3,21 @@ package me.zingle.api.sdk.dto;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
+import java.util.List;
 import java.util.Map;
 
+import me.zingle.api.sdk.model.ZingleAttachment;
 import me.zingle.api.sdk.model.ZingleContact;
+import me.zingle.api.sdk.model.ZingleContactChannel;
 import me.zingle.api.sdk.model.ZingleContactCustomField;
 import me.zingle.api.sdk.model.ZingleContactCustomFieldOption;
-import me.zingle.api.sdk.model.ZingleDirerction;
 import me.zingle.api.sdk.model.ZingleLabel;
 import me.zingle.api.sdk.model.ZingleMessage;
+import me.zingle.api.sdk.model.ZingleParticipant;
 import me.zingle.api.sdk.model.ZingleService;
+import me.zingle.api.sdk.model.ZingleServiceChannel;
+
+import static me.zingle.api.sdk.model.ZingleChannelType.CHANNEL_TYPE_PHONE_NUMBER;
 
 /**
  * Created by SLAVA 08 2015.
@@ -32,8 +38,15 @@ public class RequestDTO {
             res.key("time_zone").value(service.getTimeZone().getDisplayName());
         if(service.getPlan()!=null)
             res.key("plan_id").value(service.getPlan().getId());
-        if(service.getPhoneNumber()!=null)
-            res.key("phone_number").value(service.getPhoneNumber());
+
+        List<ZingleServiceChannel> channels=service.getChannels();
+        if(channels!=null) {
+            for(ZingleServiceChannel ch:channels){
+                if(ch.getType().equals(CHANNEL_TYPE_PHONE_NUMBER))
+                    res.key("phone_number").value(ch.getValue());
+            }
+        }
+
         //res.key("inbound_sms_webhook_url").value("https://my-inbound-sms-handler");
         if(service.getAddress()!=null) {
             res.key("service_address");
@@ -55,8 +68,19 @@ public class RequestDTO {
 
         res.object();
 
-        if(contact.getPhoneNumber() !=null)
-            res.key("phone_number").value(contact.getPhoneNumber().getPhoneNumber());
+        res.key("channels");
+        res.array();
+        List<ZingleContactChannel> channels=contact.getChannels();
+        if(channels!=null) {
+            for(ZingleContactChannel ch:channels){
+                res.object();
+                res.key("type").value(ch.getType());
+                res.key("value").value(ch.getValue());
+                res.endObject();
+            }
+        }
+        res.endArray();
+
         if(contact.isConfirmed()!=null)
             res.key("is_confirmed").value(contact.isConfirmed()?1:0);
         if(contact.isStarred()!=null)
@@ -140,19 +164,45 @@ public class RequestDTO {
 
         res.object();
 
-        res.key("type").value("sms");
+        res.key("sender");//Sender object
+        res.object();
+            ZingleParticipant sender=message.getSender();
+            if(sender!=null){
+                res.key("type").value(sender.getType());
+                res.key("id").value(sender.getParticipantId());
+                res.key("channel");
+                    res.object();
+                    res.key("type").value(sender.getChannelType());
+                    res.key("value").value(sender.getChannelValue());
+                    res.endObject();
+            }
+        res.endObject();
 
-        if(message.getDirection().equals(ZingleDirerction.ZINGLE_DIRERCTION_INBOUND)) {
-            if (message.getServicePhoneNumber() != null)
-                res.key("recipient").value(message.getServicePhoneNumber().getPhoneNumber());
+        res.key("recipient");//recipient object
+        res.object();
+        ZingleParticipant recipient=message.getSender();
+        if(sender!=null){
+            res.key("type").value(recipient.getType());
+            res.key("id").value(recipient.getParticipantId());
+            res.key("channel");
+            res.object();
+            res.key("type").value(recipient.getChannelType());
+            res.key("value").value(recipient.getChannelValue());
+            res.endObject();
         }
-        else if(message.getDirection().equals(ZingleDirerction.ZINGLE_DIRERCTION_OUTBOUND)){
-            if (message.getContactPhoneNumber() != null)
-                res.key("recipient").value(message.getContactPhoneNumber().getPhoneNumber());
-        }
+        res.endObject();
 
         res.key("body").value(message.getBody());
 
+        res.key("attachments");
+        res.array();
+        for(ZingleAttachment att:message.getAttachments()){
+            res.object();
+            res.key("mime-type").value(att.getMimeType());
+            res.key("base64").value(att.getData());
+            res.endObject();
+        }
+        res.endArray();
         res.endObject();
 
         data=new JSONObject(res.toString());
