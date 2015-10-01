@@ -5,27 +5,18 @@ import org.json.JSONObject;
 
 import me.zingle.api.sdk.Exceptions.MappingErrorEx;
 import me.zingle.api.sdk.model.ZingleAccount;
-import me.zingle.api.sdk.model.ZinglePlan;
 
 /**
- * Created by SLAVA 08 2015.
+ * Created by SLAVA 09 2015.
  */
-public class ZinglePlanServices extends ZingleBaseService<ZinglePlan> {
-
-    private final ZingleAccount parent;
-
-    public ZinglePlanServices(ZingleAccount parent) {
-        this.parent = parent;
-    }
+public class ZingleAccountServices extends ZingleBaseService<ZingleAccount> {
 
     @Override
     protected String resourcePath(boolean specific) {
-        String base=String.format("/accounts/%s/plans",parent.getId());
-
         if(specific)
-            return base+"/%s";
+            return "/accounts/%s";
         else
-            return base;
+            return "/accounts";
     }
 
     @Override
@@ -38,20 +29,17 @@ public class ZinglePlanServices extends ZingleBaseService<ZinglePlan> {
     }
 
     @Override
-    public ZinglePlan mapper(JSONObject source) throws MappingErrorEx {
+    public ZingleAccount mapper(JSONObject source) throws MappingErrorEx {
         try {
             String id = source.getString("id");
             if (!id.isEmpty()) {
-                ZinglePlan result = new ZinglePlan(id);
-                result.setCode(source.optString("code"));
+                ZingleAccount result = new ZingleAccount(id);
                 result.setDisplayName(source.optString("display_name"));
                 result.setTermMonths(source.optInt("term_months"));
-                result.setMonthlyOrUnitPrice(source.optDouble("monthly_or_unit_price"));
-                result.setSetupPrice(source.optDouble("setup_price"));
-                result.setIsPrinterPlan(source.optBoolean("is_printer_plan"));
-
-                result.setAccount(parent);
-
+                result.setCurrentTermStartDate(source.optLong("current_term_start_date"));
+                result.setCurrentTermEndDate(source.optLong("current_term_end_date"));
+                result.setCreatedAt(source.optLong("created_at"));
+                result.setUpdatedAt(source.optLong("updated_at"));
                 return result;
             } else
                 return null;

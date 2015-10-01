@@ -1,74 +1,34 @@
 package me.zingle.api.sdk.services;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import me.zingle.api.sdk.Exceptions.MappingErrorEx;
 import me.zingle.api.sdk.Exceptions.UndefinedServiceDelegateEx;
 import me.zingle.api.sdk.Exceptions.UnsuccessfullRequestEx;
-import me.zingle.api.sdk.dao.QueryPart;
 import me.zingle.api.sdk.dao.ZingleConnection;
 import me.zingle.api.sdk.dao.ZingleQuery;
 import me.zingle.api.sdk.dto.RequestDTO;
 import me.zingle.api.sdk.dto.ResponseDTO;
-import me.zingle.api.sdk.model.ZingleAutomation;
-import me.zingle.api.sdk.model.ZingleChannelType;
 import me.zingle.api.sdk.model.ZingleContact;
-import me.zingle.api.sdk.model.ZingleContactChannel;
-import me.zingle.api.sdk.model.ZingleContactCustomField;
-import me.zingle.api.sdk.model.ZingleLabel;
+import me.zingle.api.sdk.model.ZingleContactFieldValue;
 import me.zingle.api.sdk.model.ZingleService;
 
 import static me.zingle.api.sdk.dao.RequestMethods.DELETE;
-import static me.zingle.api.sdk.dao.RequestMethods.GET;
 import static me.zingle.api.sdk.dao.RequestMethods.POST;
-import static me.zingle.api.sdk.dao.RequestMethods.PUT;
-import static me.zingle.api.sdk.model.ZingleChannelType.CHANNEL_TYPE_E_MAIL;
-import static me.zingle.api.sdk.model.ZingleChannelType.CHANNEL_TYPE_PHONE_NUMBER;
 
 /**
  * Created by SLAVA 08 2015.
  */
-public class ZingleContactServices {
-    private static final String resoursePrefixPath="/services";
-    private static final String resoursePath="contacts";
+public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
 
-    private ServiceDelegate<List<ZingleContact>> searchDelegate;
-    private ServiceDelegate<ZingleContact> getDelegate;
-    private ServiceDelegate<Boolean> deleteDelegate;
-    private ServiceDelegate<ZingleContact> createDelegate;
-    private ServiceDelegate<ZingleContact> updateDelegate;
-    private ServiceDelegate<Boolean> labelDelegate;
+    final ZingleService parent;
+
+    private ServiceDelegate<ZingleContact> labelDelegate;
     private ServiceDelegate<Boolean> automationDelegate;
+    private ServiceDelegate<ZingleContact> fieldDelegate;
 
-
-    public void setSearchDelegate(ServiceDelegate<List<ZingleContact>> searchDelegate) {
-        this.searchDelegate = searchDelegate;
-    }
-
-    public void setGetDelegate(ServiceDelegate<ZingleContact> getDelegate) {
-        this.getDelegate = getDelegate;
-    }
-
-    public void setDeleteDelegate(ServiceDelegate<Boolean> deleteDelegate) {
-        this.deleteDelegate = deleteDelegate;
-    }
-
-    public void setCreateDelegate(ServiceDelegate<ZingleContact> createDelegate) {
-        this.createDelegate = createDelegate;
-    }
-
-    public void setUpdateDelegate(ServiceDelegate<ZingleContact> updateDelegate) {
-        this.updateDelegate = updateDelegate;
-    }
-
-
-    public void setLabelDelegate(ServiceDelegate<Boolean> labelDelegate) {
+    public void setLabelDelegate(ServiceDelegate<ZingleContact> labelDelegate) {
         this.labelDelegate = labelDelegate;
     }
 
@@ -76,111 +36,94 @@ public class ZingleContactServices {
         this.automationDelegate = automationDelegate;
     }
 
-    static ZingleContact mapper(JSONObject source, ZingleService service){
+    public void setFieldDelegate(ServiceDelegate<ZingleContact> fieldDelegate) {
+        this.fieldDelegate = fieldDelegate;
+    }
+
+    public ZingleContactServices(ZingleService parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    protected String resourcePath(boolean specific) {
+        String base=String.format("/services/%s/contacts",parent.getId());
+        if(specific)
+            return base+"/%s";
+        else
+            return base;
+    }
+
+    @Override
+    protected boolean checkModifier(String modifier) {
+        return modifier.equals("page")
+                ||modifier.equals("page_size")
+                ||modifier.equals("sort_field")
+                ||modifier.equals("sort_direction")
+                ||modifier.equals("channel_value")
+                ||modifier.equals("label_id")
+                ||modifier.equals("is_confirmed")
+                ||modifier.equals("is_starred")
+                ;
+    }
+
+    @Override
+    public ZingleContact mapper(JSONObject source) throws MappingErrorEx {
         ZingleContact result=new ZingleContact();
 
-        result.setId(source.optInt("id"));
-        result.setIsConfirmed(source.optInt("is_confirmed") == 0 ? false : true);
-        result.setIsStarred(source.optInt("is_starred") == 0 ? false : true);
+        result.setId(source.getString("id"));
+        result.setIsConfirmed(source.optBoolean("is_confirmed"));
+        result.setIsStarred(source.optBoolean("is_starred"));
+        result.setCreatedAt(source.optInt("created_at"));
+        result.setUpdatedAt(source.optInt("updated_at"));
 
-        JSONArray channelsJS=source.optJSONArray("channels");
-        int i=0;
-        JSONObject channelJS=channelsJS.getJSONObject(i++);
-        List<ZingleContactChannel> channels=new ArrayList<>();
-
-        while(channelJS!=null){
-            ZingleContactChannel contactChannel=new ZingleContactChannel();
-            contactChannel.setId(channelJS.getInt("id"));
-            if(CHANNEL_TYPE_PHONE_NUMBER.equals(channelJS.getString("type")))
-                contactChannel.setType(CHANNEL_TYPE_PHONE_NUMBER);
-            else if(CHANNEL_TYPE_E_MAIL.equals(channelJS.getString("type")))
-                contactChannel.setType(CHANNEL_TYPE_E_MAIL);
-            else
-                contactChannel.setType(new ZingleChannelType(channelJS.getString("type")));
-
-            channels.add(contactChannel);
+        JSONObject lastMessageJSON=source.optJSONObject("last_message");
+        if(lastMessageJSON!=null) {
+            result.setLastMessage(new ZingleContact.LastMessageDigest(lastMessageJSON.optString("id"),
+                                                                        lastMessageJSON.optString("body"),
+                                                                        lastMessageJSON.optInt("created_at")
+                                                                        ));
         }
 
-        result.setChannels(channels);
+        JSONArray channelsJS=source.optJSONArray("channels");
+        if(channelsJS!=null){
+            ZingleContactChannelServices contactChannelServices=new ZingleContactChannelServices(parent,result);
+            result.setChannels(contactChannelServices.arrayMapper(channelsJS));
+        }
 
         JSONArray customFieldsJS=source.optJSONArray("custom_field_values");
-        i = 0;
         if(customFieldsJS!=null) {
-            JSONObject customFieldJS = customFieldsJS.optJSONObject(i++);
-            Map<ZingleContactCustomField, String> customFields = new HashMap<>();
-
-            while (customFieldJS != null) {
-                ZingleContactCustomField key = new ZingleContactCustomField();
-
-                key.setService(service);
-                key.setId(customFieldJS.getInt("custom_field_id"));
-                key.setDisplayName(customFieldJS.getString("custom_field_display_name"));
-
-                customFields.put(key, customFieldJS.getString("value"));
-
-                customFieldJS = customFieldsJS.optJSONObject(i++);
-            }
-
-            result.setCustomFieldValues(customFields);
+            ZingleContactFieldValueService contactFieldValueService=new ZingleContactFieldValueService(parent);
+            result.setCustomFieldValues(contactFieldValueService.arrayMapper(customFieldsJS));
         }
 
         JSONArray labelsJS=source.getJSONArray("labels");
-        i=0;
-        JSONObject labelJS=labelsJS.optJSONObject(i++);
-        List<ZingleLabel> labels=new ArrayList<>();
-
-        while(labelJS!=null){
-            ZingleLabel temp=new ZingleLabel();
-            temp.setId(labelJS.getInt("id"));
-            temp.setDisplayName(labelJS.getString("display_name"));
-
-            labels.add(temp);
-
-            labelJS=labelsJS.optJSONObject(i++);
+        if(labelsJS!=null) {
+            ZingleLabelServices labelServices=new ZingleLabelServices(parent);
+            result.setLabels(labelServices.arrayMapper(labelsJS));
         }
-
-        result.setLabels(labels);
 
         return result;
     }
 
-    static List<ZingleContact> arrayMapper(JSONArray source, ZingleService service) throws JSONException {
-        int i=0;
-        JSONObject temp=source.optJSONObject(i++);
-
-        List<ZingleContact> retList=new ArrayList<>();
-
-        while(temp!=null){
-            retList.add(mapper(temp,service));
-            temp=source.optJSONObject(i++);
-        }
-
-        return retList;
+//Label manipulations
+    private String labelResourcePath(){
+        return resourcePath(true) + "/labels/%s";
     }
-
-    public static List<ZingleContact> search(ZingleService service,List<QueryPart> filters) throws UnsuccessfullRequestEx {
-
-        ZingleQuery query = new ZingleQuery(GET, resoursePrefixPath+"/"+service.getId()+"/"+resoursePath);
-
-        if(filters!=null){
-            for (QueryPart p:filters) {
-                query.addParam(p);
-            }
-        }
+    //detach
+    public ZingleContact detachLabel(ZingleContact contact, String labelId) {
+        ZingleQuery query = new ZingleQuery(DELETE, String.format(labelResourcePath(), contact.getId(), labelId));
 
         ResponseDTO response = ZingleConnection.getInstance().send(query);
 
-        if(response.getResponseCode()==200){
-            JSONArray result=response.getData().getJSONArray("result");
-            return arrayMapper(result,service);
-        }
-        else
-            throw new UnsuccessfullRequestEx("Error list()",response.getResponseCode(),response.getResponseStr());
-
+        if (response.getResponseCode() == 200) {
+            JSONObject result = response.getData().getJSONObject("result");
+            return mapper(result);
+        } else
+            throw new UnsuccessfullRequestEx("Error create()", response.getResponseCode(), response.getResponseStr());
     }
 
-    public boolean searchAsync(final ZingleService service,final List<QueryPart> filters){
-        if(searchDelegate==null){
+    public boolean detachLabelAsync(final ZingleContact contact, final String labelId,final ServiceDelegate<ZingleContact> delegate) {
+        if(delegate==null){
             throw new UndefinedServiceDelegateEx();
         }
 
@@ -188,9 +131,10 @@ public class ZingleContactServices {
             @Override
             public void run() {
                 try{
-                    searchDelegate.processResult(search(service,filters));
+                    ZingleContact result=detachLabel(contact, labelId);
+                    delegate.processResult(result);
                 }catch (UnsuccessfullRequestEx e){
-                    searchDelegate.processError(e.getResponceCode(),e.getResponceStr());
+                    delegate.processError(e.getResponceCode(),e.getResponceStr());
                 }
             }
         });
@@ -200,32 +144,42 @@ public class ZingleContactServices {
         return true;
     }
 
-    public static ZingleContact get(ZingleService service, int id){
-        ZingleQuery query = new ZingleQuery(GET, resoursePrefixPath+"/"+service.getId()+"/"+resoursePath+"/"+id);
+    public boolean detachLabelAsync(final ZingleContact contact, final String labelId) {
+        synchronized (labelDelegate) {
+            if (labelDelegate == null) {
+                throw new UndefinedServiceDelegateEx();
+            }
+            return detachLabelAsync(contact, labelId, labelDelegate);
+        }
+    }
+
+    //attach
+    public ZingleContact attachLabel(ZingleContact contact, String labelId) {
+        ZingleQuery query = new ZingleQuery(POST, String.format(labelResourcePath(), contact.getId(), labelId));
 
         ResponseDTO response = ZingleConnection.getInstance().send(query);
 
-        if(response.getResponseCode()==200){
-            JSONObject result=response.getData().getJSONObject("result");
-            return mapper(result, service);
-        }
-        else
-            throw new UnsuccessfullRequestEx("Error list()",response.getResponseCode(),response.getResponseStr());
+        if (response.getResponseCode() == 200) {
+            JSONObject result = response.getData().getJSONObject("result");
+            return mapper(result);
+        } else
+            throw new UnsuccessfullRequestEx("Error attachLabel()", response.getResponseCode(), response.getResponseStr());
     }
 
-    public boolean getAsync(final ZingleService service, final int id){
-        if(getDelegate==null){
+    public boolean attachLabelAsync(final ZingleContact contact, final String labelId,final ServiceDelegate<ZingleContact> delegate) {
+        if(delegate==null){
             throw new UndefinedServiceDelegateEx();
         }
 
         Thread th=new Thread(new Runnable() {
             @Override
             public void run() {
-            try{
-                getDelegate.processResult(get(service, id));
-            }catch (UnsuccessfullRequestEx e){
-                getDelegate.processError(e.getResponceCode(),e.getResponceStr());
-            }
+                try{
+                    ZingleContact result=attachLabel(contact, labelId);
+                    delegate.processResult(result);
+                }catch (UnsuccessfullRequestEx e){
+                    delegate.processError(e.getResponceCode(),e.getResponceStr());
+                }
             }
         });
 
@@ -234,21 +188,32 @@ public class ZingleContactServices {
         return true;
     }
 
-    public boolean delete(ZingleService service,int id){
-        ZingleQuery query = new ZingleQuery(DELETE, resoursePrefixPath+"/"+service.getId()+"/"+resoursePath+"/"+id);
+    public boolean attachLabelAsync(final ZingleContact contact, final String labelId) {
+        synchronized (labelDelegate) {
+            if (labelDelegate == null) {
+                throw new UndefinedServiceDelegateEx();
+            }
+            return attachLabelAsync(contact, labelId, labelDelegate);
+        }
+    }
+//Trigger Automation
+    private String automationResourcePath(){
+        return resourcePath(true) + "/automations/%s";
+    }
+
+    public Boolean triggerAutomation(ZingleContact contact, String automationId) {
+        ZingleQuery query = new ZingleQuery(POST, String.format(labelResourcePath(), contact.getId(), automationId));
 
         ResponseDTO response = ZingleConnection.getInstance().send(query);
 
-        if(response.getResponseCode()==200){
+        if (response.getResponseCode() == 200) {
             return true;
-        }
-        else
-            throw new UnsuccessfullRequestEx("Error list()", response.getResponseCode(), response.getResponseStr());
-
+        } else
+            throw new UnsuccessfullRequestEx("Error triggerAutomation()", response.getResponseCode(), response.getResponseStr());
     }
 
-    public boolean deleteAsync(final ZingleService service,final int id){
-        if(deleteDelegate==null){
+    public boolean triggerAutomationAsync(final ZingleContact contact, final String automationId,final ServiceDelegate<Boolean> delegate) {
+        if(delegate==null){
             throw new UndefinedServiceDelegateEx();
         }
 
@@ -256,9 +221,10 @@ public class ZingleContactServices {
             @Override
             public void run() {
                 try{
-                    deleteDelegate.processResult(delete(service, id));
+                    Boolean result=triggerAutomation(contact, automationId);
+                    delegate.processResult(result);
                 }catch (UnsuccessfullRequestEx e){
-                    deleteDelegate.processError(e.getResponceCode(),e.getResponceStr());
+                    delegate.processError(e.getResponceCode(),e.getResponceStr());
                 }
             }
         });
@@ -268,87 +234,39 @@ public class ZingleContactServices {
         return true;
     }
 
-
-    public boolean delete(ZingleContact contact){
-        return delete(contact.getService(),contact.getId());
-    }
-
-    public boolean deleteAsync(final ZingleContact contact){
-        return deleteAsync(contact.getService(), contact.getId());
-    }
-
-    public static ZingleContact create(ZingleService service, /*UUID uuid,*/ List<ZingleContactChannel> channels,
-                                                            Map<ZingleContactCustomField,String> customFieldValues){
-
-        ZingleContact contact=new ZingleContact();
-
-        contact.setChannels(channels);
-        contact.setCustomFieldValues(customFieldValues);
-
-        ZingleQuery query = new ZingleQuery(POST, resoursePrefixPath+"/"+service.getId()+"/"+resoursePath);
-
-        RequestDTO contactDTO=new RequestDTO();
-        contactDTO.fromContact(contact);
-
-        query.setPayload(contactDTO);
-
-        System.out.println(contactDTO.getData().toString());
-
-        ResponseDTO response = ZingleConnection.getInstance().send(query);
-
-        if(response.getResponseCode()==200){
-            JSONObject result=response.getData().getJSONObject("result");
-            return mapper(result,service);
-        }
-        else
-            throw new UnsuccessfullRequestEx("Error delete()",response.getResponseCode(),response.getResponseStr());
-    }
-
-    public boolean createForServiceAsync(final ZingleService service, /*final UUID uuid,*/ final List<ZingleContactChannel> channels,
-                                         final Map<ZingleContactCustomField,String> customFieldValues){
-        if(createDelegate==null){
-            throw new UndefinedServiceDelegateEx();
-        }
-
-        Thread th=new Thread(new Runnable() {
-            @Override
-            public void run() {
-            try{
-                createDelegate.processResult(create(service, channels, customFieldValues));
-            }catch (UnsuccessfullRequestEx e){
-                createDelegate.processError(e.getResponceCode(),e.getResponceStr());
+    public boolean triggerAutomationAsync(final ZingleContact contact, final String automationId) {
+        synchronized (automationDelegate) {
+            if (automationDelegate == null) {
+                throw new UndefinedServiceDelegateEx();
             }
-            }
-        });
-
-        th.start();
-
-        return true;
+            return triggerAutomationAsync(contact, automationId, automationDelegate);
+        }
     }
 
-    public static ZingleContact update(ZingleContact contact){
+//Set custom field value
+    private String fieldValueResourcePath(){
+        return resourcePath(true) + "/custom-field-values/%s";
+    }
 
-        ZingleQuery query = new ZingleQuery(PUT, resoursePrefixPath+"/"+contact.getService().getId()+"/"+resoursePath+"/"+contact.getId());
+    public ZingleContact setFieldValue(ZingleContact contact, ZingleContactFieldValue fieldValue) {
+        ZingleQuery query = new ZingleQuery(POST, String.format(fieldValueResourcePath(), contact.getId(), fieldValue.getContactField().getId()));
 
         RequestDTO payload=new RequestDTO();
-        payload.fromContact(contact);
-
+        fieldValue.checkForUpdate();
+        payload.setData(fieldValue.extractCreationData());
         query.setPayload(payload);
 
-        System.out.println(payload.getData().toString());
-
         ResponseDTO response = ZingleConnection.getInstance().send(query);
 
-        if(response.getResponseCode()==200){
-            JSONObject result=response.getData().getJSONObject("result");
-            return mapper(result,contact.getService());
-        }
-        else
-            throw new UnsuccessfullRequestEx("Error list()",response.getResponseCode(),response.getResponseStr());
+        if (response.getResponseCode() == 200) {
+            JSONObject result = response.getData().getJSONObject("result");
+            return mapper(result);
+        } else
+            throw new UnsuccessfullRequestEx("Error setFieldValue()", response.getResponseCode(), response.getResponseStr());
     }
 
-    public boolean updateAsync(final ZingleContact contact){
-        if(updateDelegate==null){
+    public boolean setFieldValueAsync(final ZingleContact contact, final ZingleContactFieldValue fieldValue,final ServiceDelegate<ZingleContact> delegate) {
+        if(delegate==null){
             throw new UndefinedServiceDelegateEx();
         }
 
@@ -356,9 +274,10 @@ public class ZingleContactServices {
             @Override
             public void run() {
                 try{
-                    updateDelegate.processResult(update(contact));
+                    ZingleContact result=setFieldValue(contact, fieldValue);
+                    delegate.processResult(result);
                 }catch (UnsuccessfullRequestEx e){
-                    updateDelegate.processError(e.getResponceCode(),e.getResponceStr());
+                    delegate.processError(e.getResponceCode(),e.getResponceStr());
                 }
             }
         });
@@ -368,108 +287,12 @@ public class ZingleContactServices {
         return true;
     }
 
-    public static boolean applyLabel(ZingleContact contact, ZingleLabel label){
-        ZingleQuery query = new ZingleQuery(POST, resoursePrefixPath+"/"+contact.getService().getId()+"/"+resoursePath+"/"+contact.getId()+
-                                                "/labels/"+label.getId());
-
-        ResponseDTO response = ZingleConnection.getInstance().send(query);
-
-        if(response.getResponseCode()==200){
-            return true;
-        }
-        else
-            throw new UnsuccessfullRequestEx("Error applyLabel()",response.getResponseCode(),response.getResponseStr());
-    }
-
-    public boolean applyLabelAsync(final ZingleContact contact, final ZingleLabel label){
-        if(labelDelegate==null){
-            throw new UndefinedServiceDelegateEx();
-        }
-
-        Thread th=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    labelDelegate.processResult(applyLabel(contact, label));
-                }catch (UnsuccessfullRequestEx e){
-                    labelDelegate.processError(e.getResponceCode(),e.getResponceStr());
-                }
+    public boolean setFieldValueAsync(final ZingleContact contact, final ZingleContactFieldValue fieldValue) {
+        synchronized (fieldDelegate) {
+            if (fieldDelegate == null) {
+                throw new UndefinedServiceDelegateEx();
             }
-        });
-
-        th.start();
-
-        return true;
-    }
-
-
-
-    public static boolean removeLabel(ZingleContact contact, ZingleLabel label){
-        ZingleQuery query = new ZingleQuery(DELETE, resoursePrefixPath+"/"+contact.getService().getId()+"/"+resoursePath+"/"+contact.getId()+
-                "/labels/"+label.getId());
-
-        ResponseDTO response = ZingleConnection.getInstance().send(query);
-
-        if(response.getResponseCode()==200){
-            return true;
+            return setFieldValueAsync(contact, fieldValue, fieldDelegate);
         }
-        else
-            throw new UnsuccessfullRequestEx("Error removeLabel()",response.getResponseCode(),response.getResponseStr());
-    }
-
-    public boolean removeLabelAsync(final ZingleContact contact, final ZingleLabel label){
-        if(labelDelegate==null){
-            throw new UndefinedServiceDelegateEx();
-        }
-
-        Thread th=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    labelDelegate.processResult(removeLabelAsync(contact, label));
-                }catch (UnsuccessfullRequestEx e){
-                    labelDelegate.processError(e.getResponceCode(),e.getResponceStr());
-                }
-            }
-        });
-
-        th.start();
-
-        return true;
-    }
-
-
-    public static boolean runAutomation(ZingleContact contact, ZingleAutomation automation){
-        ZingleQuery query = new ZingleQuery(POST, resoursePrefixPath+"/"+contact.getService().getId()+"/"+resoursePath+"/"+contact.getId()+
-                "/automations/"+automation.getId());
-
-        ResponseDTO response = ZingleConnection.getInstance().send(query);
-
-        if(response.getResponseCode()==200){
-            return true;
-        }
-        else
-            throw new UnsuccessfullRequestEx("Error runAutomation()",response.getResponseCode(),response.getResponseStr());
-    }
-
-    public boolean runAutomationAsync(final ZingleContact contact, final ZingleAutomation automation){
-        if(labelDelegate==null){
-            throw new UndefinedServiceDelegateEx();
-        }
-
-        Thread th=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    automationDelegate.processResult(runAutomation(contact, automation));
-                }catch (UnsuccessfullRequestEx e){
-                    automationDelegate.processError(e.getResponceCode(),e.getResponceStr());
-                }
-            }
-        });
-
-        th.start();
-
-        return true;
     }
 }

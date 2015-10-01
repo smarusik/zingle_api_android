@@ -20,4 +20,9 @@ public class UnsuccessfullRequestEx extends RuntimeException{
     public String getResponceStr() {
         return responceStr;
     }
+
+    @Override
+    public String getMessage() {
+        return String.format("HTTP request failed:\nError code: %i\nError descr: %s",responceCode,responceStr);
+    }
 }

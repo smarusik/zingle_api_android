@@ -1,52 +1,39 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONObject;
+import org.json.JSONStringer;
+
+import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
+import me.zingle.api.sdk.dao.RequestMethods;
+
 /**
  * Created by SLAVA 09 2015.
  */
-public class ZingleContactChannel {
-    private int id;
-    private int contactId;
-    private ZingleChannelType type;
+public class ZingleContactChannel extends ZingleBaseModel{
+    private String id;
     private String displayName;
     private String value;
-    private Boolean is_default;
-    private Boolean is_default_for_type;
+    private String formattedValue;
+    private String country;
+    private Boolean isDefault;
+    private Boolean isDefaultForType;
+    private ZingleChannelType type;
 
     public ZingleContactChannel() {
     }
 
-    public ZingleContactChannel(int id, int contactId, ZingleChannelType type, String displayName, String value, Boolean is_default, Boolean is_default_for_type) {
-        this.id = id;
-        this.contactId = contactId;
-        this.type = type;
-        this.displayName = displayName;
+    public ZingleContactChannel(String value, ZingleChannelType type, String country) {
         this.value = value;
-        this.is_default = is_default;
-        this.is_default_for_type = is_default_for_type;
+        this.type = type;
+        this.country = country;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public int getContactId() {
-        return contactId;
-    }
-
-    public void setContactId(int contactId) {
-        this.contactId = contactId;
-    }
-
-    public ZingleChannelType getType() {
-        return type;
-    }
-
-    public void setType(ZingleChannelType type) {
-        this.type = type;
     }
 
     public String getDisplayName() {
@@ -65,19 +52,118 @@ public class ZingleContactChannel {
         this.value = value;
     }
 
-    public Boolean getIs_default() {
-        return is_default;
+    public String getFormattedValue() {
+        return formattedValue;
     }
 
-    public void setIs_default(Boolean is_default) {
-        this.is_default = is_default;
+    public void setFormattedValue(String formattedValue) {
+        this.formattedValue = formattedValue;
     }
 
-    public Boolean getIs_default_for_type() {
-        return is_default_for_type;
+    public String getCountry() {
+        return country;
     }
 
-    public void setIs_default_for_type(Boolean is_default_for_type) {
-        this.is_default_for_type = is_default_for_type;
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public Boolean getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(Boolean isDefault) {
+        this.isDefault = isDefault;
+    }
+
+    public Boolean getIsDefaultForType() {
+        return isDefaultForType;
+    }
+
+    public void setIsDefaultForType(Boolean isDefaultForType) {
+        this.isDefaultForType = isDefaultForType;
+    }
+
+    public ZingleChannelType getType() {
+        return type;
+    }
+
+    public void setType(ZingleChannelType type) {
+        this.type = type;
+    }
+
+    @Override
+    public JSONObject extractCreationData() {
+
+        checkForCreate();
+
+        JSONStringer res = new JSONStringer();
+
+        res.object();
+
+        res.key("channel_type_id").value(getType().getId());
+        res.key("value").value(getValue());
+        res.key("country").value(getCountry());
+
+
+        if (!getDisplayName().isEmpty())
+            res.key("display_name").value(getDisplayName());
+
+        if (getIsDefaultForType() != null)
+            res.key("is_default_for_type").value(getIsDefaultForType());
+
+        if (getIsDefault() != null)
+            res.key("is_default").value(getIsDefault());
+
+        res.endObject();
+
+        return new JSONObject(res.toString());
+    }
+
+    @Override
+    public JSONObject extractUpdateData() {
+        checkForUpdate();
+
+        JSONStringer res = new JSONStringer();
+
+        res.object();
+
+        if (!getDisplayName().isEmpty())
+            res.key("display_name").value(getDisplayName());
+
+        if (getIsDefault() != null)
+            res.key("is_default").value(getIsDefault());
+
+        if (getIsDefaultForType() != null)
+            res.key("is_default_for_type").value(getIsDefaultForType());
+
+        res.endObject();
+
+        return new JSONObject(res.toString());
+
+    }
+
+    @Override
+    public void checkForCreate() {
+        if (getType() == null || getType().getId().isEmpty()) {
+            throw new RequestBodyCreationEx(RequestMethods.POST, "channel_type_id", "ZingleServiceChannel.type.id");
+        }
+
+        if (getValue().isEmpty()) {
+            throw new RequestBodyCreationEx(RequestMethods.POST, "value", "ZingleServiceChannel.value");
+        }
+
+        if (getCountry().isEmpty()) {
+            throw new RequestBodyCreationEx(RequestMethods.POST, "country", "ZingleServiceChannel.country");
+        }
+
+    }
+
+    @Override
+    public void checkForUpdate() {
+        if(displayName==null && isDefault==null && isDefaultForType==null){
+            throw new RequestBodyCreationEx(RequestMethods.PUT, "displayName,isDefault,isDefaultForType",
+                    "ZingleServiceChannel.display_name,is_default,is_default_for_type");
+        }
     }
 }

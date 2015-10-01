@@ -1,145 +1,106 @@
 package me.zingle.api.sdk.services;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import me.zingle.api.sdk.Exceptions.UndefinedServiceDelegateEx;
 import me.zingle.api.sdk.Exceptions.UnsuccessfullRequestEx;
-import me.zingle.api.sdk.dao.QueryPart;
 import me.zingle.api.sdk.dao.ZingleConnection;
 import me.zingle.api.sdk.dao.ZingleQuery;
 import me.zingle.api.sdk.dto.RequestDTO;
 import me.zingle.api.sdk.dto.ResponseDTO;
-import me.zingle.api.sdk.model.ZingleAddress;
-import me.zingle.api.sdk.model.ZinglePhoneNumber;
-import me.zingle.api.sdk.model.ZinglePlan;
+import me.zingle.api.sdk.model.ZingleAccount;
 import me.zingle.api.sdk.model.ZingleService;
+import me.zingle.api.sdk.model.ZingleServiceSetting;
 import me.zingle.api.sdk.model.ZingleTimeZone;
 
-import static me.zingle.api.sdk.dao.RequestMethods.DELETE;
-import static me.zingle.api.sdk.dao.RequestMethods.GET;
 import static me.zingle.api.sdk.dao.RequestMethods.POST;
-import static me.zingle.api.sdk.dao.RequestMethods.PUT;
 
 /**
  * Created by SLAVA 08 2015.
  */
-public class ZingleServiceServices {
-    private static final String resoursePath="/services";
-    //static String serviceID;
+public class ZingleServiceServices extends ZingleBaseService<ZingleService>{
 
-    private ServiceDelegate<List<ZingleService>> searchDelegate;
-    private ServiceDelegate<ZingleService> getDelegate;
-    private ServiceDelegate<Boolean> cancelDelegate;
-    private ServiceDelegate<ZingleService> provisionDelegate;
-    private ServiceDelegate<ZingleService> updateDelegate;
+    private ServiceDelegate<ZingleService> settingsDelegate;
 
-   /* public static String getServiceID() {
-        return serviceID;
+    public void setSettingsDelegate(ServiceDelegate<ZingleService> settingsDelegate) {
+        this.settingsDelegate = settingsDelegate;
     }
 
-    public static void setServiceID(String serviceID) {
-        ZingleServiceServices.serviceID = serviceID;
-    }*/
-
-    public void setSearchDelegate(ServiceDelegate<List<ZingleService>> searchDelegate) {
-        this.searchDelegate = searchDelegate;
+    @Override
+    protected String resourcePath(boolean specific) {
+        final String base="/services";
+        if(specific)
+            return base+"/%s";
+        else
+            return base;
     }
 
-    public void setGetDelegate(ServiceDelegate<ZingleService> getDelegate) {
-        this.getDelegate = getDelegate;
+    @Override
+    protected boolean checkModifier(String modifier) {
+        return modifier.equals("page")
+            ||modifier.equals("page_size")
+            ||modifier.equals("sort_field")
+            ||modifier.equals("sort_direction")
+            ||modifier.equals("account_id") //	N	only return Services from this Account
+            ||modifier.equals("channel_value") //	Y	Filter by service channel values
+            ||modifier.equals("display_name") //	Y	Filter by Service display name
+            ||modifier.equals("address") //	Y	Filter by Service street address
+            ||modifier.equals("city") //	N	Filter by Service city
+            ||modifier.equals("state") //	N	Filter by Service state
+            ||modifier.equals("country") //	N	Filter by Service country
+            ||modifier.equals("postal_code") //
+            ;
     }
 
-    public void setCancelDelegate(ServiceDelegate<Boolean> cancelDelegate) {
-        this.cancelDelegate = cancelDelegate;
-    }
-
-    public void setProvisionDelegate(ServiceDelegate<ZingleService> provisionDelegate) {
-        this.provisionDelegate = provisionDelegate;
-    }
-
-    public void setUpdateDelegate(ServiceDelegate<ZingleService> updateDelegate) {
-        this.updateDelegate = updateDelegate;
-    }
-
-    static ZingleService mapper(JSONObject source) throws JSONException {
+    @Override
+    public ZingleService mapper(JSONObject source) throws JSONException {
         ZingleService mapResult=new ZingleService();
 
-        mapResult.setId(source.getInt("id"));
+        mapResult.setId(source.getString("id"));
         mapResult.setDisplayName(source.getString("display_name"));
-        mapResult.setPhoneNumber(ZinglePhoneNumberServices.mapper(source.getJSONObject("phone_number")));
         mapResult.setTimeZone(new ZingleTimeZone(source.getString("time_zone")));
+        mapResult.setCreated_at(source.getInt("created_at"));
+        mapResult.setUpdated_at(source.getInt("updated_at"));
 
-        mapResult.setPlan(new ZinglePlan());
-        mapResult.getPlan().setId(source.getInt("plan_id"));
+        ZingleAccountServices accountServices=new ZingleAccountServices();
+        ZingleAccount account=accountServices.mapper(source.getJSONObject("account"));
+        mapResult.setAccount(account);
 
-        mapResult.setAddress(ZingleAddressServices.mapper(source.getJSONObject("service_address")));
+        ZinglePlanServices planServices=new ZinglePlanServices(account);
+        mapResult.setPlan(planServices.mapper(source.getJSONObject("plan")));
+
+        ZingleServiceChannelServices channelServices= new ZingleServiceChannelServices(mapResult);
+        mapResult.setChannels(channelServices.arrayMapper(source.getJSONArray("channels")));
+
+        ZingleChannelTypeServices channelTypeServices= new ZingleChannelTypeServices();
+        mapResult.setChannelTypes(channelTypeServices.arrayMapper(source.getJSONArray("channel_types")));
+
+        ZingleLabelServices labelServices=new ZingleLabelServices(mapResult);
+        mapResult.setContactLabels(labelServices.arrayMapper(source.getJSONArray("contact_labels")));
+
+        ZingleContactFieldServices customFieldServices=new ZingleContactFieldServices(mapResult);
+        mapResult.setCustomFields(customFieldServices.arrayMapper(source.getJSONArray("contact_custom_fields")));
+
+        ZingleServiceAddressServices addressServices=new ZingleServiceAddressServices();
+        mapResult.setAddress(addressServices.mapper(source.getJSONObject("service_address")));
+
+        ZingleServiceSettingService settingService=new ZingleServiceSettingService(mapResult);
+        mapResult.setSettings(settingService.arrayMapper(source.getJSONArray("settings")));
+
+        //"customFieldValues": [] ?????
 
         return mapResult;
     }
 
-    static List<ZingleService> arrayMapper(JSONArray source) throws JSONException {
-        int i=0;
-        JSONObject temp=source.optJSONObject(i++);
+//Update settings
+    public ZingleService updateSetting(ZingleServiceSetting object){
 
-        List<ZingleService> retList=new ArrayList<>();
+        ZingleQuery query = new ZingleQuery(POST, String.format(resourcePath(true) + "/settings/%s", object.getService().getId(), object.getSettingsField().getId()));
 
-        while(temp!=null){
-            retList.add(mapper(temp));
-            temp=source.optJSONObject(i++);
-        }
-
-        return retList;
-    }
-
-    public static List<ZingleService> search(List<QueryPart> filters) throws UnsuccessfullRequestEx{
-
-        ZingleQuery query = new ZingleQuery(GET, resoursePath);
-
-        if(filters!=null) {
-            for (QueryPart p : filters) {
-                query.addParam(p);
-            }
-        }
-
-        ResponseDTO response = ZingleConnection.getInstance().send(query);
-
-        if(response.getResponseCode()==200){
-            JSONArray result=response.getData().getJSONArray("result");
-            return arrayMapper(result);
-        }
-        else
-            throw new UnsuccessfullRequestEx("Error list()",response.getResponseCode(),response.getResponseStr());
-
-    }
-
-    public boolean searchAsync(final List<QueryPart> filters){
-        if(searchDelegate==null){
-            throw new UndefinedServiceDelegateEx();
-        }
-
-        Thread th=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    searchDelegate.processResult(search(filters));
-                }catch (UnsuccessfullRequestEx e){
-                    searchDelegate.processError(e.getResponceCode(),e.getResponceStr());
-                }
-            }
-        });
-
-        th.start();
-
-        return true;
-    }
-
-    public static ZingleService get(String id) throws UnsuccessfullRequestEx{
-        ZingleQuery query = new ZingleQuery(GET, resoursePath+"/"+id);
+        RequestDTO payload=new RequestDTO();
+        payload.setData(object.extractCreationData());
+        query.setPayload(payload);
 
         ResponseDTO response = ZingleConnection.getInstance().send(query);
 
@@ -148,12 +109,11 @@ public class ZingleServiceServices {
             return mapper(result);
         }
         else
-            throw new UnsuccessfullRequestEx("Error list()",response.getResponseCode(),response.getResponseStr());
-
+            throw new UnsuccessfullRequestEx("Error create()",response.getResponseCode(),response.getResponseStr());
     }
-    
-    public boolean getAsync(final String id){
-        if(getDelegate==null){
+
+    public boolean updateSettingAsync(final ZingleServiceSetting object,final ServiceDelegate<ZingleService> delegate){
+        if(delegate==null){
             throw new UndefinedServiceDelegateEx();
         }
 
@@ -161,9 +121,10 @@ public class ZingleServiceServices {
             @Override
             public void run() {
                 try{
-                    getDelegate.processResult(get(id));
+                    ZingleService result=updateSetting(object);
+                    delegate.processResult(result);
                 }catch (UnsuccessfullRequestEx e){
-                    getDelegate.processError(e.getResponceCode(),e.getResponceStr());
+                    delegate.processError(e.getResponceCode(),e.getResponceStr());
                 }
             }
         });
@@ -171,130 +132,16 @@ public class ZingleServiceServices {
         th.start();
 
         return true;
-    }
-
-    public static boolean cancel(String id){
-        ZingleQuery query = new ZingleQuery(DELETE, resoursePath+"/"+id);
-
-        ResponseDTO response = ZingleConnection.getInstance().send(query);
-
-        if(response.getResponseCode()==200){
-            return true;
-        }
-        else
-            throw new UnsuccessfullRequestEx("Error list()", response.getResponseCode(), response.getResponseStr());
 
     }
 
-    public boolean cancelAsync(final String id){
-        if(cancelDelegate==null){
-            throw new UndefinedServiceDelegateEx();
-        }
-
-        Thread th=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    cancelDelegate.processResult(cancel(id));
-                }catch (UnsuccessfullRequestEx e){
-                    cancelDelegate.processError(e.getResponceCode(),e.getResponceStr());
-                }
+    public boolean updateSettingAsync(final ZingleServiceSetting object){
+        synchronized (settingsDelegate) {
+            if (settingsDelegate == null) {
+                throw new UndefinedServiceDelegateEx();
             }
-        });
-
-        th.start();
-
-        return true;
-    }
-
-    public static ZingleService provisionNewService(ZinglePlan plan, ZingleTimeZone timeZone, ZinglePhoneNumber phoneNumber,
-                                                    ZingleAddress address, String serviceDisplayName){
-
-        ZingleService newService=new ZingleService();
-        newService.setAddress(address);
-        newService.setPlan(plan);
-        newService.setPhoneNumber(phoneNumber);
-        newService.setTimeZone(timeZone);
-        newService.setDisplayName(serviceDisplayName);
-
-        ZingleQuery query = new ZingleQuery(POST, resoursePath);
-
-        RequestDTO service=new RequestDTO();
-        service.fromService(newService);
-
-        query.setPayload(service);
-
-        ResponseDTO response = ZingleConnection.getInstance().send(query);
-
-        if(response.getResponseCode()==200){
-            JSONObject result=response.getData().getJSONObject("result");
-            return mapper(result);
+            return updateSettingAsync(object, settingsDelegate);
         }
-        else
-            throw new UnsuccessfullRequestEx("Error list()",response.getResponseCode(),response.getResponseStr());
-    }
-
-    public boolean provisionNewServiceAsync(final ZinglePlan plan, final ZingleTimeZone timeZone, final ZinglePhoneNumber phoneNumber,
-                                       final ZingleAddress address, final String serviceDisplayName){
-        if(provisionDelegate==null){
-            throw new UndefinedServiceDelegateEx();
-        }
-
-
-        Thread th=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    provisionDelegate.processResult(provisionNewService(plan,timeZone,phoneNumber,address,serviceDisplayName));
-                }catch (UnsuccessfullRequestEx e){
-                    provisionDelegate.processError(e.getResponceCode(),e.getResponceStr());
-                }
-            }
-        });
-
-        th.start();
-
-        return true;
-    }
-
-    public static ZingleService update(ZingleService serviceUpd){
-
-        ZingleQuery query = new ZingleQuery(PUT, resoursePath+"/"+serviceUpd.getId());
-
-        RequestDTO service=new RequestDTO();
-        service.fromService(serviceUpd);
-
-        query.setPayload(service);
-
-        ResponseDTO response = ZingleConnection.getInstance().send(query);
-
-        if(response.getResponseCode()==200){
-            JSONObject result=response.getData().getJSONObject("result");
-            return mapper(result);
-        }
-        else
-            throw new UnsuccessfullRequestEx("Error list()",response.getResponseCode(),response.getResponseStr());
-    }
-
-    public boolean updateAsync(final ZingleService serviceUpd){
-        if(updateDelegate==null){
-            throw new UndefinedServiceDelegateEx();
-        }
-
-        Thread th=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    updateDelegate.processResult(update(serviceUpd));
-                }catch (UnsuccessfullRequestEx e){
-                    updateDelegate.processError(e.getResponceCode(),e.getResponceStr());
-                }
-            }
-        });
-
-        th.start();
-
-        return true;
     }
 
 }

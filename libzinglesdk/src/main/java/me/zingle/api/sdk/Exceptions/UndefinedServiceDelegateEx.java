@@ -7,6 +7,6 @@ public class UndefinedServiceDelegateEx extends RuntimeException{
 
     @Override
     public String getMessage() {
-        return "It's redundancy to call asynch method without proper delegate.";
+        return "Asynch method without proper delegate.";
     }
 }

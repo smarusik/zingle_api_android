@@ -1,55 +1,87 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONObject;
+import org.json.JSONStringer;
+
+import java.util.Arrays;
 import java.util.List;
+
+import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
+import me.zingle.api.sdk.dao.RequestMethods;
 
 /**
  * Created by SLAVA 08 2015.
  */
-public class ZingleMessage {
-    private int id;
+public class ZingleMessage extends ZingleBaseModel{
+
+    private class Directions{
+        final String[] direrctions ={"inbound", "outbound"};
+        public Directions(String name) {
+            if(Arrays.asList(direrctions).contains(name)) {
+                this.name = name;
+            }
+            else
+                throw new RuntimeException("Unsupported Message direction.");
+        }
+
+        private String name;
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
+
+    private class CorrespondentTypes{
+        final String[] correspondentTypes ={"contact", "service"};
+        public CorrespondentTypes(String name) {
+            if(Arrays.asList(correspondentTypes).contains(name)) {
+                this.name = name;
+            }
+            else
+                throw new RuntimeException("Unsupported Correspondent type.");
+        }
+
+        private String name;
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
+
+    private String id;
     private String body;
-    private ZingleParticipant sender;
-    private ZingleParticipant recipient;
-    private Integer templateId=null;
+    private Directions communicationDirection;
     private String bodyLanguageCode=null;
-    private String translatedBodyLanguageCode=null;
     private String translatedBody=null;
-    private Long createdAt;
-    private Long readAt;
-    private Integer triggered_by_user_id=null;
+    private String translatedBodyLanguageCode=null;
+    private String triggeredByUserId;
+    private String templateId=null;
+    private CorrespondentTypes senderType;
+    private ZingleCorrespondent sender;
+    private CorrespondentTypes recipientType;
+    private ZingleCorrespondent recipient;
     private List<ZingleAttachment> attachments;
+    private Integer createdAt;
+    private Integer readAt;
 
     public ZingleMessage() {
     }
 
-    public ZingleMessage(int id, String body, ZingleParticipant sender, ZingleParticipant recipient, Integer templateId, String bodyLanguageCode,
-                         String translatedBodyLanguageCode, String translatedBody, Long createdAt, Long readAt, Integer triggered_by_user_id,
-                         List<ZingleAttachment> attachments) {
-        this.id = id;
+    public ZingleMessage(String body, CorrespondentTypes senderType, ZingleCorrespondent sender, CorrespondentTypes recipientType, ZingleCorrespondent recipient) {
         this.body = body;
+        this.senderType = senderType;
         this.sender = sender;
-        this.recipient = recipient;
-        this.templateId = templateId;
-        this.bodyLanguageCode = bodyLanguageCode;
-        this.translatedBodyLanguageCode = translatedBodyLanguageCode;
-        this.translatedBody = translatedBody;
-        this.createdAt = createdAt;
-        this.readAt = readAt;
-        this.triggered_by_user_id = triggered_by_user_id;
-        this.attachments = attachments;
-    }
-
-    public ZingleMessage(String body, ZingleParticipant sender, ZingleParticipant recipient) {
-        this.body = body;
-        this.sender = sender;
+        this.recipientType = recipientType;
         this.recipient = recipient;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -61,28 +93,12 @@ public class ZingleMessage {
         this.body = body;
     }
 
-    public ZingleParticipant getSender() {
-        return sender;
+    public String getCommunicationDirection() {
+        return communicationDirection.name;
     }
 
-    public void setSender(ZingleParticipant sender) {
-        this.sender = sender;
-    }
-
-    public ZingleParticipant getRecipient() {
-        return recipient;
-    }
-
-    public void setRecipient(ZingleParticipant recipient) {
-        this.recipient = recipient;
-    }
-
-    public Integer getTemplateId() {
-        return templateId;
-    }
-
-    public void setTemplateId(Integer templateId) {
-        this.templateId = templateId;
+    public void setCommunicationDirection(String communicationDirection) {
+        this.communicationDirection = new Directions(communicationDirection);
     }
 
     public String getBodyLanguageCode() {
@@ -93,14 +109,6 @@ public class ZingleMessage {
         this.bodyLanguageCode = bodyLanguageCode;
     }
 
-    public String getTranslatedBodyLanguageCode() {
-        return translatedBodyLanguageCode;
-    }
-
-    public void setTranslatedBodyLanguageCode(String translatedBodyLanguageCode) {
-        this.translatedBodyLanguageCode = translatedBodyLanguageCode;
-    }
-
     public String getTranslatedBody() {
         return translatedBody;
     }
@@ -109,28 +117,60 @@ public class ZingleMessage {
         this.translatedBody = translatedBody;
     }
 
-    public Long getCreatedAt() {
-        return createdAt;
+    public String getTranslatedBodyLanguageCode() {
+        return translatedBodyLanguageCode;
     }
 
-    public void setCreatedAt(Long createdAt) {
-        this.createdAt = createdAt;
+    public void setTranslatedBodyLanguageCode(String translatedBodyLanguageCode) {
+        this.translatedBodyLanguageCode = translatedBodyLanguageCode;
     }
 
-    public Long getReadAt() {
-        return readAt;
+    public String getTriggeredByUserId() {
+        return triggeredByUserId;
     }
 
-    public void setReadAt(Long readAt) {
-        this.readAt = readAt;
+    public void setTriggeredByUserId(String triggeredByUserId) {
+        this.triggeredByUserId = triggeredByUserId;
     }
 
-    public Integer getTriggered_by_user_id() {
-        return triggered_by_user_id;
+    public String getTemplateId() {
+        return templateId;
     }
 
-    public void setTriggered_by_user_id(Integer triggered_by_user_id) {
-        this.triggered_by_user_id = triggered_by_user_id;
+    public void setTemplateId(String templateId) {
+        this.templateId = templateId;
+    }
+
+    public String getSenderType() {
+        return senderType.name;
+    }
+
+    public void setSenderType(String senderType) {
+        this.senderType = new CorrespondentTypes(senderType);
+    }
+
+    public ZingleCorrespondent getSender() {
+        return sender;
+    }
+
+    public void setSender(ZingleCorrespondent sender) {
+        this.sender = sender;
+    }
+
+    public String getRecipientType() {
+        return recipientType.name;
+    }
+
+    public void setRecipientType(String recipientType) {
+        this.recipientType = new CorrespondentTypes(recipientType);
+    }
+
+    public ZingleCorrespondent getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(ZingleCorrespondent recipient) {
+        this.recipient = recipient;
     }
 
     public List<ZingleAttachment> getAttachments() {
@@ -139,5 +179,83 @@ public class ZingleMessage {
 
     public void setAttachments(List<ZingleAttachment> attachments) {
         this.attachments = attachments;
+    }
+
+    public void addAttachment(ZingleAttachment attachment){
+        attachments.add(attachment);
+    }
+
+    public void addAttachment(List<ZingleAttachment> attachments){
+        attachments.addAll(attachments);
+    }
+
+
+    public Integer getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Integer createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Integer getReadAt() {
+        return readAt;
+    }
+
+    public void setReadAt(Integer readAt) {
+        this.readAt = readAt;
+    }
+
+    @Override
+    public JSONObject extractCreationData() {
+        return null;
+    }
+
+    @Override
+    public JSONObject extractUpdateData() {
+        checkForUpdate();
+
+        JSONStringer res=new JSONStringer();
+
+        res.object();
+
+        res.key("read_at").value(getReadAt());
+
+        res.endObject();
+
+        return new JSONObject(res.toString());
+
+    }
+
+    @Override
+    public void checkForCreate() {
+
+    }
+
+    @Override
+    public void checkForUpdate() {
+        if(readAt==null) throw new RequestBodyCreationEx(RequestMethods.POST,"read_at",getClass().getName()+".readAt");
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ZingleMessage{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", body='").append(body).append('\'');
+        sb.append(", communicationDirection=").append(communicationDirection);
+        sb.append(", bodyLanguageCode='").append(bodyLanguageCode).append('\'');
+        sb.append(", translatedBody='").append(translatedBody).append('\'');
+        sb.append(", translatedBodyLanguageCode='").append(translatedBodyLanguageCode).append('\'');
+        sb.append(", triggeredByUserId='").append(triggeredByUserId).append('\'');
+        sb.append(", templateId='").append(templateId).append('\'');
+        sb.append(", senderType=").append(senderType);
+        sb.append(", sender=").append(sender);
+        sb.append(", recipientType=").append(recipientType);
+        sb.append(", recipient=").append(recipient);
+        sb.append(", attachments=").append(attachments);
+        sb.append(", createdAt=").append(createdAt);
+        sb.append(", readAt=").append(readAt);
+        sb.append('}');
+        return sb.toString();
     }
 }

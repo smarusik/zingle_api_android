@@ -1,29 +1,77 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONObject;
+import org.json.JSONStringer;
+
+import java.util.Arrays;
+
+import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
+import me.zingle.api.sdk.dao.RequestMethods;
+
 /**
  * Created by SLAVA 08 2015.
  */
-public class ZingleAutomation {
-    private int id;
+public class ZingleAutomation extends ZingleBaseModel {
+
+    private class Types{
+        final String[] types={"Escalation","Keyword","Self-Registration","Survey","Phone Call","Custom Automation"};
+
+        public Types(String name) {
+            if(Arrays.asList(types).contains(name)) {
+                this.name = name;
+            }
+            else
+                throw new RuntimeException("Unsupported Automation type.");
+        }
+
+        private String name;
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
+
+    private class Statuses{
+        final String[] statuses={"active","inactive"};
+        public Statuses(String name) {
+            if(Arrays.asList(statuses).contains(name)) {
+                this.name = name;
+            }
+            else
+                throw new RuntimeException("Unsupported Automation status.");
+        }
+
+        private String name;
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
+
     private ZingleService service;
+
+    private String id;
     private String displayName;
+    private Types type;
+    private Statuses status;
     private Boolean isGlobal;
 
     public ZingleAutomation() {
     }
 
-    public ZingleAutomation(int id, ZingleService service, String displayName, boolean isGlobal) {
-        this.id = id;
+    public ZingleAutomation(ZingleService service, String id, String displayName) {
         this.service = service;
+        this.id = id;
         this.displayName = displayName;
-        this.isGlobal = isGlobal;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -49,5 +97,63 @@ public class ZingleAutomation {
 
     public void setIsGlobal(boolean isGlobal) {
         this.isGlobal = isGlobal;
+    }
+
+    public String getType() {
+        return type.name;
+    }
+
+    public void setType(String type) {
+        this.type = new Types(type);
+    }
+
+    public String getStatus() {
+        return status.name;
+    }
+
+    public void setStatus(String status) {
+        this.status = new Statuses(status);
+    }
+
+    @Override
+    public JSONObject extractCreationData() {
+        return null;
+    }
+
+    @Override
+    public JSONObject extractUpdateData() {
+        checkForUpdate();
+
+        JSONStringer res=new JSONStringer();
+
+        res.object();
+
+        res.key("status").value(status.name);
+
+        res.endObject();
+
+        return new JSONObject(res.toString());
+    }
+
+    @Override
+    public void checkForCreate() {
+
+    }
+
+    @Override
+    public void checkForUpdate() {
+        if(status==null) throw new RequestBodyCreationEx(RequestMethods.PUT, "status", getClass().getName() + ".status");
+    }
+
+    @Override
+    public String toString() {
+        return "ZingleAutomation{" +
+                "service=" + service +
+                ", id='" + id + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", type=" + type +
+                ", status=" + status +
+                ", isGlobal=" + isGlobal +
+                '}';
     }
 }

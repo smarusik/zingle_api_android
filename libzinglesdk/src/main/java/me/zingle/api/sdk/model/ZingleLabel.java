@@ -1,39 +1,49 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONObject;
+import org.json.JSONStringer;
+
 import java.awt.Color;
+
+import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
+import me.zingle.api.sdk.dao.RequestMethods;
 
 /**
  * Created by SLAVA 08 2015.
  */
-public class ZingleLabel {
-    private int id;
+public class ZingleLabel extends ZingleBaseModel{
+    private String id;
     private ZingleService service;
     private String displayName;
     private Color backgroundColor;
     private Color textColor;
-    private Boolean isAutomation;
     private Boolean isGlobal;
-    private Boolean active;
 
     public ZingleLabel() {
     }
 
-    public ZingleLabel(int id, ZingleService service, String displayName, Color backgroundColor, Color textColor, boolean isAutomation, boolean isGlobal, boolean active) {
+    public ZingleLabel(String id, ZingleService service, String displayName, Color backgroundColor, Color textColor) {
         this.id = id;
         this.service = service;
         this.displayName = displayName;
         this.backgroundColor = backgroundColor;
         this.textColor = textColor;
-        this.isAutomation = isAutomation;
-        this.isGlobal = isGlobal;
-        this.active = active;
     }
 
-    public int getId() {
+
+    public Boolean getIsGlobal() {
+        return isGlobal;
+    }
+
+    public void setIsGlobal(Boolean isGlobal) {
+        this.isGlobal = isGlobal;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -69,27 +79,58 @@ public class ZingleLabel {
         this.textColor = textColor;
     }
 
-    public Boolean isAutomation() {
-        return isAutomation;
+    @Override
+    public JSONObject extractCreationData() {
+        checkForCreate();
+        return extractData();
+
     }
 
-    public void setIsAutomation(boolean isAutomation) {
-        this.isAutomation = isAutomation;
+    @Override
+    public JSONObject extractUpdateData() {
+        checkForUpdate();
+        return extractData();
     }
 
-    public Boolean isGlobal() {
-        return isGlobal;
+    public JSONObject extractData() {
+        checkForCreate();
+        JSONStringer res=new JSONStringer();
+
+        res.object();
+
+        res.key("display_name").value(getDisplayName());
+        if(getBackgroundColor()!=null)
+            res.key("background_color").value("#" + Integer.toHexString(getBackgroundColor().getRGB()).substring(2));
+        if(getTextColor()!=null)
+            res.key("text_color").value("#" + Integer.toHexString(getTextColor().getRGB()).substring(2));
+
+        res.endObject();
+
+        return new JSONObject(res.toString());
     }
 
-    public void setIsGlobal(boolean isGlobal) {
-        this.isGlobal = isGlobal;
+    @Override
+    public void checkForCreate() {
+        if(displayName==null) throw new RequestBodyCreationEx(RequestMethods.POST,"display_name",getClass().getName()+".displayName");
+        if(backgroundColor==null) throw new RequestBodyCreationEx(RequestMethods.POST,"background_color",getClass().getName()+".backgroundColor");
+        if(textColor==null) throw new RequestBodyCreationEx(RequestMethods.POST,"text_color",getClass().getName()+".textColor");
     }
 
-    public Boolean isActive() {
-        return active;
+    @Override
+    public void checkForUpdate() {
+        if(displayName==null && backgroundColor==null && textColor==null)
+            throw new RequestBodyCreationEx(RequestMethods.PUT,"text_color,background_color,display_name",getClass().getName()+".textColor,backgroundColor,displayName");
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    @Override
+    public String toString() {
+        return "ZingleLabel{" +
+                "id='" + id + '\'' +
+                ", service=" + service +
+                ", displayName='" + displayName + '\'' +
+                ", backgroundColor=" + backgroundColor +
+                ", textColor=" + textColor +
+                ", isGlobal=" + isGlobal +
+                '}';
     }
 }

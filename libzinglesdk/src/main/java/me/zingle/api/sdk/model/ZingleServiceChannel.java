@@ -1,48 +1,56 @@
 package me.zingle.api.sdk.model;
 
-import java.net.URL;
+import org.json.JSONObject;
+import org.json.JSONStringer;
+
+import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
+import me.zingle.api.sdk.dao.RequestMethods;
 
 /**
  * Created by SLAVA 09 2015.
  */
-public class ZingleServiceChannel {
-    private int id;
-    private int serviceId;
+public class ZingleServiceChannel extends ZingleBaseModel{
+
+    ZingleService service;
+
+    private String id;
+    private String displayName;
     private ZingleChannelType type;
-    private Boolean default_for_type;
+    private Boolean isDefaultForType;
     private String value;
-    private URL inbound_notification_url=null;
-    private String inbound_notification_request_type=null;
-    private String inbound_notification_data_format=null;
-    private URL outbound_notification_url=null;
-    private String outbound_notification_request_type=null;
-    private String outbound_notification_data_format=null;
+    private String formattedValue;
+    private String country;
 
     public ZingleServiceChannel() {
     }
 
-    public ZingleServiceChannel(int id, int serviceId, ZingleChannelType type, Boolean default_for_type, String value) {
+    public ZingleServiceChannel(String id, ZingleChannelType type) {
         this.id = id;
-        this.serviceId = serviceId;
         this.type = type;
-        this.default_for_type = default_for_type;
-        this.value = value;
     }
 
-    public int getId() {
+    public ZingleService getService() {
+        return service;
+    }
+
+    public void setService(ZingleService service) {
+        this.service = service;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getServiceId() {
-        return serviceId;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setServiceId(int serviceId) {
-        this.serviceId = serviceId;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public ZingleChannelType getType() {
@@ -53,12 +61,12 @@ public class ZingleServiceChannel {
         this.type = type;
     }
 
-    public Boolean getDefault_for_type() {
-        return default_for_type;
+    public Boolean getIsDefaultForType() {
+        return isDefaultForType;
     }
 
-    public void setDefault_for_type(Boolean default_for_type) {
-        this.default_for_type = default_for_type;
+    public void setIsDefaultForType(Boolean isDefaultForType) {
+        this.isDefaultForType = isDefaultForType;
     }
 
     public String getValue() {
@@ -69,51 +77,100 @@ public class ZingleServiceChannel {
         this.value = value;
     }
 
-    public URL getInbound_notification_url() {
-        return inbound_notification_url;
+    public String getFormattedValue() {
+        return formattedValue;
     }
 
-    public void setInbound_notification_url(URL inbound_notification_url) {
-        this.inbound_notification_url = inbound_notification_url;
+    public void setFormattedValue(String formattedValue) {
+        this.formattedValue = formattedValue;
     }
 
-    public String getInbound_notification_request_type() {
-        return inbound_notification_request_type;
+    public String getCountry() {
+        return country;
     }
 
-    public void setInbound_notification_request_type(String inbound_notification_request_type) {
-        this.inbound_notification_request_type = inbound_notification_request_type;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
-    public String getInbound_notification_data_format() {
-        return inbound_notification_data_format;
+    @Override
+    public JSONObject extractCreationData() {
+
+        checkForCreate();
+
+        JSONStringer res = new JSONStringer();
+
+        res.object();
+
+        res.key("channel_type_id").value(getType().getId());
+        res.key("value").value(getValue());
+        res.key("country").value(getCountry());
+
+
+        if (!getDisplayName().isEmpty())
+            res.key("display_name").value(getDisplayName());
+
+        if (getIsDefaultForType() != null)
+            res.key("is_default_for_type").value(getIsDefaultForType());
+
+        res.endObject();
+
+        return new JSONObject(res.toString());
     }
 
-    public void setInbound_notification_data_format(String inbound_notification_data_format) {
-        this.inbound_notification_data_format = inbound_notification_data_format;
+    @Override
+    public JSONObject extractUpdateData() {
+        checkForUpdate();
+
+        JSONStringer res = new JSONStringer();
+
+        res.object();
+
+        if (!getDisplayName().isEmpty())
+            res.key("display_name").value(getDisplayName());
+
+        if (getIsDefaultForType() != null)
+            res.key("is_default_for_type").value(getIsDefaultForType());
+
+        res.endObject();
+
+        return new JSONObject(res.toString());
     }
 
-    public URL getOutbound_notification_url() {
-        return outbound_notification_url;
+    @Override
+    public void checkForCreate() {
+        if (getType() == null || getType().getId().isEmpty()) {
+            throw new RequestBodyCreationEx(RequestMethods.POST, "channel_type_id", "ZingleServiceChannel.type.id");
+        }
+
+        if (getValue().isEmpty()) {
+            throw new RequestBodyCreationEx(RequestMethods.POST, "value", "ZingleServiceChannel.value");
+        }
+
+        if (getCountry().isEmpty()) {
+            throw new RequestBodyCreationEx(RequestMethods.POST, "country", "ZingleServiceChannel.country");
+        }
     }
 
-    public void setOutbound_notification_url(URL outbound_notification_url) {
-        this.outbound_notification_url = outbound_notification_url;
+    @Override
+    public void checkForUpdate() {
+        if ((getType() == null || getType().getId().isEmpty()) && getIsDefaultForType()==null) {
+            throw new RequestBodyCreationEx(RequestMethods.PUT, "type,is_default_for_type", "ZingleServiceChannel.type,isDefaultForType");
+        }
     }
 
-    public String getOutbound_notification_request_type() {
-        return outbound_notification_request_type;
-    }
-
-    public void setOutbound_notification_request_type(String outbound_notification_request_type) {
-        this.outbound_notification_request_type = outbound_notification_request_type;
-    }
-
-    public String getOutbound_notification_data_format() {
-        return outbound_notification_data_format;
-    }
-
-    public void setOutbound_notification_data_format(String outbound_notification_data_format) {
-        this.outbound_notification_data_format = outbound_notification_data_format;
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ZingleServiceChannel{");
+        sb.append("service=").append(service);
+        sb.append(", id='").append(id).append('\'');
+        sb.append(", displayName='").append(displayName).append('\'');
+        sb.append(", type=").append(type);
+        sb.append(", isDefaultForType=").append(isDefaultForType);
+        sb.append(", value='").append(value).append('\'');
+        sb.append(", formattedValue='").append(formattedValue).append('\'');
+        sb.append(", country='").append(country).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }
