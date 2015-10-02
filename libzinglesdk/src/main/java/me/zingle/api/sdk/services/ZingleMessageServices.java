@@ -55,7 +55,7 @@ public class ZingleMessageServices extends ZingleBaseService<ZingleMessage>{
         result.setId(source.getString("id"));
         result.setBody(source.optString("body"));
         result.setCreatedAt(source.getInt("created_at"));
-        result.setReadAt(source.getInt("read_at"));
+        result.setReadAt(source.optInt("read_at"));
         result.setSenderType(source.getString("sender_type"));
 
         ZingleCorrespondentServices correspondentServices=new ZingleCorrespondentServices();
@@ -64,8 +64,8 @@ public class ZingleMessageServices extends ZingleBaseService<ZingleMessage>{
         result.setRecipientType(source.getString("recipient_type"));
         result.setRecipient(correspondentServices.mapper(source.getJSONObject("recipient")));
 
-        result.setCommunicationDirection(source.getString("communication_direction"));
-        result.setBodyLanguageCode(source.getString("body_language_code"));
+        result.setCommunicationDirection(source.optString("communication_direction"));
+        result.setBodyLanguageCode(source.optString("body_language_code"));
         result.setTriggeredByUserId(source.optString("triggered_by_user_id"));
         result.setTranslatedBody(source.optString("translated_body"));
         result.setTemplateId(source.optString("template_id"));

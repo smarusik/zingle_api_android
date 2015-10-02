@@ -13,9 +13,15 @@ public class ZingleContactFieldValue extends ZingleBaseModel {
 
     private ZingleContactField contactField;
     private Object value;
-    private Integer selectedFieldOptionId;
+    private String selectedFieldOptionId;
 
     public ZingleContactFieldValue() {
+    }
+
+    public ZingleContactFieldValue(ZingleContactField contactField, Object value, String selectedFieldOptionId) {
+        this.contactField = contactField;
+        this.value = value;
+        this.selectedFieldOptionId = selectedFieldOptionId;
     }
 
     public ZingleContactFieldValue(ZingleContactField contactField) {
@@ -38,11 +44,11 @@ public class ZingleContactFieldValue extends ZingleBaseModel {
         this.value = value;
     }
 
-    public Integer getSelectedFieldOptionId() {
+    public String getSelectedFieldOptionId() {
         return selectedFieldOptionId;
     }
 
-    public void setSelectedFieldOptionId(Integer selectedFieldOptionId) {
+    public void setSelectedFieldOptionId(String selectedFieldOptionId) {
         this.selectedFieldOptionId = selectedFieldOptionId;
     }
 
@@ -55,6 +61,8 @@ public class ZingleContactFieldValue extends ZingleBaseModel {
 
         res.object();
 
+        res.key("custom_field_id").value(contactField.getId());
+
         if(value!=null)
             res.key("value").value(value);
         else if (selectedFieldOptionId !=null)
@@ -66,7 +74,19 @@ public class ZingleContactFieldValue extends ZingleBaseModel {
 
     @Override
     public JSONObject extractUpdateData() {
-        return null;
+        checkForUpdate();
+
+        JSONStringer res = new JSONStringer();
+
+        res.object();
+
+        if(value!=null)
+            res.key("value").value(value);
+        else if (selectedFieldOptionId !=null)
+            res.key("selected_custom_field_option_id").value(selectedFieldOptionId);
+
+        res.endObject();
+        return new JSONObject(res.toString());
     }
 
     @Override
@@ -83,16 +103,23 @@ public class ZingleContactFieldValue extends ZingleBaseModel {
 
     @Override
     public void checkForUpdate() {
-
+        if(contactField==null){
+            throw new RequestBodyCreationEx(RequestMethods.POST,"custom_field",
+                    getClass().getName()+".custom_field");
+        }
+        if(value==null && selectedFieldOptionId ==null){
+            throw new RequestBodyCreationEx(RequestMethods.POST,"value,selected_custom_field_option_id",
+                    getClass().getName()+".value,selectedSettingsFieldOptionId");
+        }
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ZingleContactFieldValue{");
-        sb.append("contactField=").append(contactField);
-        sb.append(", value=").append(value);
-        sb.append(", selectedFieldOptionId=").append(selectedFieldOptionId);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("\nZingleContactFieldValue{");
+        sb.append("\n    contactField=").append(contactField);
+        sb.append("\n    value=").append(value);
+        sb.append("\n    selectedFieldOptionId=").append(selectedFieldOptionId);
+        sb.append("}\n");
         return sb.toString();
     }
 }

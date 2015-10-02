@@ -5,6 +5,7 @@ import org.json.JSONStringer;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 
 import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
 import me.zingle.api.sdk.dao.RequestMethods;
@@ -96,9 +97,11 @@ public class ZingleAttachment extends ZingleBaseModel{
 
     @Override
     public String toString() {
-        return "ZingleAttachment{" +
-                "mimeType='" + mimeType + '\'' +
-                ", url=" + url +
-                '}';
+        final StringBuilder sb = new StringBuilder("\nZingleAttachment{");
+        sb.append("\n    mimeType='").append(mimeType).append('\'');
+        sb.append("\n    url=").append(url);
+        sb.append("\n    data=").append(Arrays.toString(data));
+        sb.append("}\n");
+        return sb.toString();
     }
 }

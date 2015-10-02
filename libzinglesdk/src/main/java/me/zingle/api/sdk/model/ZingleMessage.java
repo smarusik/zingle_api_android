@@ -239,23 +239,23 @@ public class ZingleMessage extends ZingleBaseModel{
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ZingleMessage{");
-        sb.append("id='").append(id).append('\'');
-        sb.append(", body='").append(body).append('\'');
-        sb.append(", communicationDirection=").append(communicationDirection);
-        sb.append(", bodyLanguageCode='").append(bodyLanguageCode).append('\'');
-        sb.append(", translatedBody='").append(translatedBody).append('\'');
-        sb.append(", translatedBodyLanguageCode='").append(translatedBodyLanguageCode).append('\'');
-        sb.append(", triggeredByUserId='").append(triggeredByUserId).append('\'');
-        sb.append(", templateId='").append(templateId).append('\'');
-        sb.append(", senderType=").append(senderType);
-        sb.append(", sender=").append(sender);
-        sb.append(", recipientType=").append(recipientType);
-        sb.append(", recipient=").append(recipient);
-        sb.append(", attachments=").append(attachments);
-        sb.append(", createdAt=").append(createdAt);
-        sb.append(", readAt=").append(readAt);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("\nZingleMessage{");
+        sb.append("\n    id='").append(id).append('\'');
+        sb.append("\n    body='").append(body).append('\'');
+        sb.append("\n    communicationDirection=").append(communicationDirection);
+        sb.append("\n    bodyLanguageCode='").append(bodyLanguageCode).append('\'');
+        sb.append("\n    translatedBody='").append(translatedBody).append('\'');
+        sb.append("\n    translatedBodyLanguageCode='").append(translatedBodyLanguageCode).append('\'');
+        sb.append("\n    triggeredByUserId='").append(triggeredByUserId).append('\'');
+        sb.append("\n    templateId='").append(templateId).append('\'');
+        sb.append("\n    senderType=").append(senderType);
+        sb.append("\n    sender=").append(sender);
+        sb.append("\n    recipientType=").append(recipientType);
+        sb.append("\n    recipient=").append(recipient);
+        sb.append("\n    attachments=").append(attachments);
+        sb.append("\n    createdAt=").append(createdAt);
+        sb.append("\n    readAt=").append(readAt);
+        sb.append("}\n");
         return sb.toString();
     }
 }

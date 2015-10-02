@@ -68,7 +68,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
      * @param values array of filter expressions
      * @return list of conditions to use in ZingleQuery
      */
-    protected List<QueryPart> createConditions(String keys,String ...values){
+    public List<QueryPart> createConditions(String keys,String ...values){
 
         String[] keyList=keys.split(",");
 
@@ -228,7 +228,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
         }
     }
 
-    protected ZingleList<Model> list(List<QueryPart> conditions){
+    public ZingleList<Model> list(List<QueryPart> conditions){
         ZingleQuery query = new ZingleQuery(GET, resourcePath(false));
         query.setParams(conditions);
 
@@ -241,7 +241,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
             throw new UnsuccessfullRequestEx("Error list()",response.getResponseCode(),response.getResponseStr());
     }
 
-    protected boolean listAsync(final List<QueryPart> conditions,final ServiceDelegate<ZingleList<Model>> delegate){
+    public boolean listAsync(final List<QueryPart> conditions,final ServiceDelegate<ZingleList<Model>> delegate){
         if(delegate==null){
             throw new UndefinedServiceDelegateEx();
         }
@@ -263,7 +263,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
         return true;
     }
 
-    protected boolean listAsync(final List<QueryPart> conditions){
+    public boolean listAsync(final List<QueryPart> conditions){
         synchronized (listDelegate){
             if(listDelegate==null){
                 throw new UndefinedServiceDelegateEx();
@@ -372,7 +372,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
 //Updating methods
 public Model update(Model object){
 
-    ZingleQuery query = new ZingleQuery(PUT, resourcePath(true));
+    ZingleQuery query = new ZingleQuery(PUT, String.format(resourcePath(true),object.getId()));
 
     RequestDTO payload=new RequestDTO();
     object.checkForUpdate();

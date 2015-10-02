@@ -122,13 +122,13 @@ public class ZingleServiceAddress extends ZingleBaseModel{
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ZingleServiceAddress{");
-        sb.append("address='").append(address).append('\'');
-        sb.append(", city='").append(city).append('\'');
-        sb.append(", state='").append(state).append('\'');
-        sb.append(", country='").append(country).append('\'');
-        sb.append(", postalCode='").append(postalCode).append('\'');
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("\nZingleServiceAddress{");
+        sb.append("\n    address='").append(address).append('\'');
+        sb.append("\n    city='").append(city).append('\'');
+        sb.append("\n    state='").append(state).append('\'');
+        sb.append("\n    country='").append(country).append('\'');
+        sb.append("\n    postalCode='").append(postalCode).append('\'');
+        sb.append("}\n");
         return sb.toString();
     }
 }

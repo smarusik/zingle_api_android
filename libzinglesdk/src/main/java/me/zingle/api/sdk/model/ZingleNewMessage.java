@@ -178,15 +178,15 @@ public class ZingleNewMessage extends ZingleBaseModel {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ZingleNewMessage{");
-        sb.append("senderType=").append(senderType);
-        sb.append(", sender=").append(sender);
-        sb.append(", recipientType=").append(recipientType);
-        sb.append(", recipients=").append(recipients);
-        sb.append(", channelTypes=").append(channelTypes);
-        sb.append(", body='").append(body).append('\'');
-        sb.append(", attachments=").append(attachments);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("\nZingleNewMessage{");
+        sb.append("\n    senderType=").append(senderType);
+        sb.append("\n    sender=").append(sender);
+        sb.append("\n    recipientType=").append(recipientType);
+        sb.append("\n    recipients=").append(recipients);
+        sb.append("\n    channelTypes=").append(channelTypes);
+        sb.append("\n    body='").append(body).append('\'');
+        sb.append("\n    attachments=").append(attachments);
+        sb.append("}\n");
         return sb.toString();
     }
 }

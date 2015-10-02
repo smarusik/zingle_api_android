@@ -95,19 +95,17 @@ public class ZinglePlan extends ZingleBaseModel{
 
     @Override
     public String toString() {
-        StringBuilder result=new StringBuilder();
-
-        result.append("Account:\n").append(account.toString()).append("\n");
-
-        result.append("\nid=").append(id);
-        result.append("\ncode=").append(code);
-        result.append("\ndisplayName=").append(displayName);
-        result.append("\nmonthlyOrUnitPrice=").append(monthlyOrUnitPrice);
-        result.append("\nsetupPrice=").append(setupPrice);
-        result.append("\ntermMonths=").append(termMonths);
-        result.append("\nisPrinterPlan=").append(isPrinterPlan);
-
-        return result.toString();
+        final StringBuilder sb = new StringBuilder("\nZinglePlan{");
+        sb.append("\n    account=").append(account);
+        sb.append("\n    id='").append(id).append('\'');
+        sb.append("\n    code='").append(code).append('\'');
+        sb.append("\n    displayName='").append(displayName).append('\'');
+        sb.append("\n    monthlyOrUnitPrice=").append(monthlyOrUnitPrice);
+        sb.append("\n    setupPrice=").append(setupPrice);
+        sb.append("\n    termMonths=").append(termMonths);
+        sb.append("\n    isPrinterPlan=").append(isPrinterPlan);
+        sb.append("}\n");
+        return sb.toString();
     }
 
     @Override

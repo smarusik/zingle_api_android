@@ -29,7 +29,7 @@ public class ZingleSettingsFieldServices extends ZingleBaseService<ZingleSetting
                 ZingleSettingsField result = new ZingleSettingsField();
                 result.setId(id);
                 result.setDisplayName(source.optString("display_name"));
-                //result.setDataType(source.optString("data_type"));
+                result.setDataType(source.optString("data_type"));
 
                 JSONArray optionsJSON=source.optJSONArray("options");
                 ZingleFieldOptionServices optionServices=new ZingleFieldOptionServices();

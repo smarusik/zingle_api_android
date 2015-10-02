@@ -103,12 +103,11 @@ public class ZingleServiceSetting extends ZingleBaseModel {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ZingleServiceSetting{");
-        sb.append("service=").append(service);
-        sb.append(", value=").append(value);
-        sb.append(", settingsFieldOptionId=").append(settingsFieldOptionId);
-        sb.append(", settingsField=").append(settingsField);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("\nZingleServiceSetting{");
+        sb.append("\n    value=").append(value);
+        sb.append("\n    settingsFieldOptionId=").append(settingsFieldOptionId);
+        sb.append("\n    settingsField=").append(settingsField);
+        sb.append("}\n");
         return sb.toString();
     }
 }

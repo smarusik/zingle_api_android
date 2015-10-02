@@ -147,13 +147,13 @@ public class ZingleAutomation extends ZingleBaseModel {
 
     @Override
     public String toString() {
-        return "ZingleAutomation{" +
-                "service=" + service +
-                ", id='" + id + '\'' +
-                ", displayName='" + displayName + '\'' +
-                ", type=" + type +
-                ", status=" + status +
-                ", isGlobal=" + isGlobal +
-                '}';
+        final StringBuilder sb = new StringBuilder("\nZingleAutomation{");
+        sb.append("\n    id='").append(id).append('\'');
+        sb.append("\n    displayName='").append(displayName).append('\'');
+        sb.append("\n    type=").append(type);
+        sb.append("\n    status=").append(status);
+        sb.append("\n    isGlobal=").append(isGlobal);
+        sb.append("}\n");
+        return sb.toString();
     }
 }

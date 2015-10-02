@@ -89,12 +89,12 @@ public class ZingleFieldOption extends ZingleBaseModel {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ZingleFieldOption{");
-        sb.append("id='").append(id).append('\'');
-        sb.append(", displayName='").append(displayName).append('\'');
-        sb.append(", value='").append(value).append('\'');
-        sb.append(", sortOrder=").append(sortOrder);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("\nZingleFieldOption{");
+        sb.append("\n    id='").append(id).append('\'');
+        sb.append("\n    displayName='").append(displayName).append('\'');
+        sb.append("\n    value='").append(value).append('\'');
+        sb.append("\n    sortOrder=").append(sortOrder);
+        sb.append("}\n");
         return sb.toString();
     }
 }

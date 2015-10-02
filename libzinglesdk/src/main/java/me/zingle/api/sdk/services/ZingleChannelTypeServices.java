@@ -76,17 +76,17 @@ public class ZingleChannelTypeServices extends ZingleBaseService<ZingleChannelTy
     }
 
     @Override
-    protected ZingleList<ZingleChannelType> list(List<QueryPart> conditions) {
+    public ZingleList<ZingleChannelType> list(List<QueryPart> conditions) {
         return null;
     }
 
     @Override
-    protected boolean listAsync(List<QueryPart> conditions, ServiceDelegate<ZingleList<ZingleChannelType>> delegate) {
+    public boolean listAsync(List<QueryPart> conditions, ServiceDelegate<ZingleList<ZingleChannelType>> delegate) {
         return false;
     }
 
     @Override
-    protected boolean listAsync(List<QueryPart> conditions) {
+    public boolean listAsync(List<QueryPart> conditions) {
         return false;
     }
 }

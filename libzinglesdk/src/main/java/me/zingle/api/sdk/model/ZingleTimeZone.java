@@ -25,12 +25,14 @@ public class ZingleTimeZone extends ZingleBaseModel{
 
     @Override
     public String toString() {
-        return displayName;
+        final StringBuilder sb = new StringBuilder("\nZingleTimeZone{");
+        sb.append("\n    displayName='").append(displayName).append('\'');
+        sb.append("}\n");
+        return sb.toString();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return this.displayName.equals(obj.toString());
+    public boolean equals(ZingleTimeZone obj) {
+        return this.displayName.equals(obj.displayName);
     }
 
     @Override

@@ -22,6 +22,12 @@ public class ZingleLabel extends ZingleBaseModel{
     public ZingleLabel() {
     }
 
+    public ZingleLabel(String displayName, Color backgroundColor, Color textColor) {
+        this.displayName = displayName;
+        this.backgroundColor = backgroundColor;
+        this.textColor = textColor;
+    }
+
     public ZingleLabel(String id, ZingleService service, String displayName, Color backgroundColor, Color textColor) {
         this.id = id;
         this.service = service;
@@ -124,13 +130,13 @@ public class ZingleLabel extends ZingleBaseModel{
 
     @Override
     public String toString() {
-        return "ZingleLabel{" +
-                "id='" + id + '\'' +
-                ", service=" + service +
-                ", displayName='" + displayName + '\'' +
-                ", backgroundColor=" + backgroundColor +
-                ", textColor=" + textColor +
-                ", isGlobal=" + isGlobal +
-                '}';
+        final StringBuilder sb = new StringBuilder("\nZingleLabel{");
+        sb.append("\n    id='").append(id).append('\'');
+        sb.append("\n    displayName='").append(displayName).append('\'');
+        sb.append("\n    backgroundColor=").append(backgroundColor);
+        sb.append("\n    textColor=").append(textColor);
+        sb.append("\n    isGlobal=").append(isGlobal);
+        sb.append("}\n");
+        return sb.toString();
     }
 }

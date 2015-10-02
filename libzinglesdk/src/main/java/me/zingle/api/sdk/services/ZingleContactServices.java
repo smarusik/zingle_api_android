@@ -102,6 +102,8 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
             result.setLabels(labelServices.arrayMapper(labelsJS));
         }
 
+        result.setService(parent);
+
         return result;
     }
 
@@ -253,7 +255,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
 
         RequestDTO payload=new RequestDTO();
         fieldValue.checkForUpdate();
-        payload.setData(fieldValue.extractCreationData());
+        payload.setData(fieldValue.extractUpdateData());
         query.setPayload(payload);
 
         ResponseDTO response = ZingleConnection.getInstance().send(query);

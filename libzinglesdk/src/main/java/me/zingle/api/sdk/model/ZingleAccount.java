@@ -83,24 +83,16 @@ public class ZingleAccount extends ZingleBaseModel {
 
     @Override
     public String toString() {
-        StringBuilder result=new StringBuilder();
-
-        result.append("\nid=");
-        result.append(id);
-        result.append("\ndisplayName=");
-        result.append(displayName);
-        result.append("\ntermMonths=");
-        result.append(termMonths);
-        result.append("\ncurrentTermStartDate=");
-        result.append(currentTermStartDate);
-        result.append("\ncurrentTermEndDate=");
-        result.append(currentTermEndDate);
-        result.append("\ncreatedAt=");
-        result.append(createdAt);
-        result.append("\nupdatedAt=");
-        result.append(updatedAt);
-
-        return result.toString();
+        final StringBuilder sb = new StringBuilder("\nZingleAccount{");
+        sb.append("\n    id='").append(id).append('\'');
+        sb.append("\n    displayName='").append(displayName).append('\'');
+        sb.append("\n    termMonths=").append(termMonths);
+        sb.append("\n    currentTermStartDate=").append(currentTermStartDate);
+        sb.append("\n    currentTermEndDate=").append(currentTermEndDate);
+        sb.append("\n    createdAt=").append(createdAt);
+        sb.append("\n    updatedAt=").append(updatedAt);
+        sb.append("}\n");
+        return sb.toString();
     }
 
     @Override

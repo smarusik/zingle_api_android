@@ -91,14 +91,14 @@ public class ZingleChannelType extends ZingleBaseModel{
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ZingleChannelType{");
-        sb.append("id='").append(id).append('\'');
-        sb.append(", typeclass='").append(typeclass).append('\'');
-        sb.append(", displayName='").append(displayName).append('\'');
-        sb.append(", inboundNotificationUrl='").append(inboundNotificationUrl).append('\'');
-        sb.append(", outboundNotificationUrl='").append(outboundNotificationUrl).append('\'');
-        sb.append(", allowCommunications=").append(allowCommunications);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("\nZingleChannelType{");
+        sb.append("\n    id='").append(id).append('\'');
+        sb.append("\n    typeclass='").append(typeclass).append('\'');
+        sb.append("\n    displayName='").append(displayName).append('\'');
+        sb.append("\n    inboundNotificationUrl='").append(inboundNotificationUrl).append('\'');
+        sb.append("\n    outboundNotificationUrl='").append(outboundNotificationUrl).append('\'');
+        sb.append("\n    allowCommunications=").append(allowCommunications);
+        sb.append("}\n");
         return sb.toString();
     }
 }

@@ -126,7 +126,7 @@ public class ZingleNewMessageService extends ZingleBaseService<ZingleNewMessage>
     }
 
     @Override
-    protected ZingleList<ZingleNewMessage> list(List<QueryPart> conditions) {
+    public ZingleList<ZingleNewMessage> list(List<QueryPart> conditions) {
         return null;
     }
 

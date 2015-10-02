@@ -23,6 +23,16 @@ public class ZingleContact extends ZingleBaseModel{
             this.body = body;
             this.created_at = created_at;
         }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder("\nLastMessageDigest{");
+            sb.append("\n    id='").append(id).append('\'');
+            sb.append("\n    body='").append(body).append('\'');
+            sb.append("\n    created_at=").append(created_at);
+            sb.append("}\n");
+            return sb.toString();
+        }
     }
 
     private ZingleService service;
@@ -101,6 +111,17 @@ public class ZingleContact extends ZingleBaseModel{
         this.customFieldValues = customFieldValues;
     }
 
+    public void addCustomFieldValue(ZingleContactFieldValue contactFieldValue){
+        for(ZingleContactFieldValue v:customFieldValues){
+            if(v.getContactField().equals(contactFieldValue.getContactField())){
+                v.setValue(contactFieldValue.getValue());
+                v.setSelectedFieldOptionId(contactFieldValue.getSelectedFieldOptionId());
+                return;
+            }
+        }
+        customFieldValues.add(contactFieldValue);
+    }
+
     public List<ZingleLabel> getLabels() {
         return labels;
     }
@@ -127,6 +148,11 @@ public class ZingleContact extends ZingleBaseModel{
 
     @Override
     public JSONObject extractCreationData() {
+        checkForCreate();
+        return extractData();
+    }
+
+    private JSONObject extractData(){
         JSONStringer res = new JSONStringer();
 
         res.object();
@@ -154,7 +180,8 @@ public class ZingleContact extends ZingleBaseModel{
 
     @Override
     public JSONObject extractUpdateData() {
-        return extractCreationData();
+        checkForUpdate();
+        return extractData();
     }
 
     @Override
@@ -169,18 +196,17 @@ public class ZingleContact extends ZingleBaseModel{
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ZingleContact{");
-        sb.append("service=").append(service);
-        sb.append(", id='").append(id).append('\'');
-        sb.append(", isConfirmed=").append(isConfirmed);
-        sb.append(", isStarred=").append(isStarred);
-        sb.append(", lastMessage=").append(lastMessage);
-        sb.append(", channels=").append(channels);
-        sb.append(", customFieldValues=").append(customFieldValues);
-        sb.append(", labels=").append(labels);
-        sb.append(", createdAt=").append(createdAt);
-        sb.append(", updatedAt=").append(updatedAt);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("\nZingleContact{");
+        sb.append("\n    id='").append(id).append('\'');
+        sb.append("\n    isConfirmed=").append(isConfirmed);
+        sb.append("\n    isStarred=").append(isStarred);
+        sb.append("\n    lastMessage=").append(lastMessage);
+        sb.append("\n    channels=").append(channels);
+        sb.append("\n    customFieldValues=").append(customFieldValues);
+        sb.append("\n    labels=").append(labels);
+        sb.append("\n    createdAt=").append(createdAt);
+        sb.append("\n    updatedAt=").append(updatedAt);
+        sb.append("}\n");
         return sb.toString();
     }
 }

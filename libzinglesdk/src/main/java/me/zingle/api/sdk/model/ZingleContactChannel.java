@@ -166,4 +166,19 @@ public class ZingleContactChannel extends ZingleBaseModel{
                     "ZingleServiceChannel.display_name,is_default,is_default_for_type");
         }
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("\nZingleContactChannel{");
+        sb.append("\n    id='").append(id).append('\'');
+        sb.append("\n    displayName='").append(displayName).append('\'');
+        sb.append("\n    value='").append(value).append('\'');
+        sb.append("\n    formattedValue='").append(formattedValue).append('\'');
+        sb.append("\n    country='").append(country).append('\'');
+        sb.append("\n    isDefault=").append(isDefault);
+        sb.append("\n    isDefaultForType=").append(isDefaultForType);
+        sb.append("\n    type=").append(type);
+        sb.append("}\n");
+        return sb.toString();
+    }
 }

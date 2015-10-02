@@ -161,16 +161,15 @@ public class ZingleServiceChannel extends ZingleBaseModel{
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ZingleServiceChannel{");
-        sb.append("service=").append(service);
-        sb.append(", id='").append(id).append('\'');
-        sb.append(", displayName='").append(displayName).append('\'');
-        sb.append(", type=").append(type);
-        sb.append(", isDefaultForType=").append(isDefaultForType);
-        sb.append(", value='").append(value).append('\'');
-        sb.append(", formattedValue='").append(formattedValue).append('\'');
-        sb.append(", country='").append(country).append('\'');
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("\nZingleServiceChannel{");
+        sb.append("\n    id='").append(id).append('\'');
+        sb.append("\n    displayName='").append(displayName).append('\'');
+        sb.append("\n    type=").append(type);
+        sb.append("\n    isDefaultForType=").append(isDefaultForType);
+        sb.append("\n    value='").append(value).append('\'');
+        sb.append("\n    formattedValue='").append(formattedValue).append('\'');
+        sb.append("\n    country='").append(country).append('\'');
+        sb.append("}\n");
         return sb.toString();
     }
 }

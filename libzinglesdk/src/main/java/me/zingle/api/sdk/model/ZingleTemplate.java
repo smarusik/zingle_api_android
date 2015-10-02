@@ -168,15 +168,14 @@ public class ZingleTemplate extends ZingleBaseModel {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ZingleTemplate{");
-        sb.append("service=").append(service);
-        sb.append(", id='").append(id).append('\'');
-        sb.append(", displayName='").append(displayName).append('\'');
-        sb.append(", subject='").append(subject).append('\'');
-        sb.append(", type=").append(type);
-        sb.append(", body='").append(body).append('\'');
-        sb.append(", isGlobal=").append(isGlobal);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("\nZingleTemplate{");
+        sb.append("\n    id='").append(id).append('\'');
+        sb.append("\n    displayName='").append(displayName).append('\'');
+        sb.append("\n    subject='").append(subject).append('\'');
+        sb.append("\n    type=").append(type);
+        sb.append("\n    body='").append(body).append('\'');
+        sb.append("\n    isGlobal=").append(isGlobal);
+        sb.append("}\n");
         return sb.toString();
     }
 }

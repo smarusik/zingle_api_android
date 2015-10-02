@@ -67,7 +67,7 @@ public class ZingleAttachmentService extends ZingleBaseService<ZingleAttachment>
     }
 
     @Override
-    protected ZingleList<ZingleAttachment> list(List<QueryPart> conditions) {
+    public ZingleList<ZingleAttachment> list(List<QueryPart> conditions) {
         return super.list(conditions);
     }
 

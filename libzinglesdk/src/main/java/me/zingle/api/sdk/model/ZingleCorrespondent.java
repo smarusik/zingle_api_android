@@ -44,10 +44,21 @@ public class ZingleCorrespondent extends ZingleBaseModel{
         public void setFormattedValue(String formattedValue) {
             this.formattedValue = formattedValue;
         }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder("\nChannel{");
+            sb.append("\n    typeClass='").append(typeClass).append('\'');
+            sb.append("\n    displayName='").append(displayName).append('\'');
+            sb.append("\n    value='").append(value).append('\'');
+            sb.append("\n    formattedValue='").append(formattedValue).append('\'');
+            sb.append("}\n");
+            return sb.toString();
+        }
     }
 
     private String id;
-    private Channel channel;
+    private Channel channel=new Channel();
 
     public ZingleCorrespondent() {
     }
@@ -128,10 +139,10 @@ public class ZingleCorrespondent extends ZingleBaseModel{
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ZingleCorrespondent{");
-        sb.append("id='").append(id).append('\'');
-        sb.append(", channel=").append(channel);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("\nZingleCorrespondent{");
+        sb.append("\n    id='").append(id).append('\'');
+        sb.append("\n    channel=").append(channel);
+        sb.append("}\n");
         return sb.toString();
     }
 }

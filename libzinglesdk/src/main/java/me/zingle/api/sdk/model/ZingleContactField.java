@@ -159,14 +159,13 @@ public class ZingleContactField extends ZingleBaseModel{
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ZingleContactField{");
-        sb.append("service=").append(service);
-        sb.append(", id='").append(id).append('\'');
-        sb.append(", displayName='").append(displayName).append('\'');
-        sb.append(", dataType='").append(dataType).append('\'');
-        sb.append(", isGlobal=").append(isGlobal);
-        sb.append(", options=").append(options);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("\nZingleContactField{");
+        sb.append("\n    id='").append(id).append('\'');
+        sb.append("\n    displayName='").append(displayName).append('\'');
+        sb.append("\n    dataType='").append(dataType).append('\'');
+        sb.append("\n    isGlobal=").append(isGlobal);
+        sb.append("\n    options=").append(options);
+        sb.append("}\n");
         return sb.toString();
     }
 }

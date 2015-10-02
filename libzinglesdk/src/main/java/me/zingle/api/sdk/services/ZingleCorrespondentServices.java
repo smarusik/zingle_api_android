@@ -30,10 +30,10 @@ public class ZingleCorrespondentServices extends ZingleBaseService<ZingleCorresp
         result.setId(source.getString("id"));
         JSONObject channelJSON = source.getJSONObject("channel");
 
-        result.setChannelDisplayName(channelJSON.getString("display_name"));
-        result.setChannelTypeClass(channelJSON.getString("type_class"));
+        result.setChannelDisplayName(channelJSON.optString("display_name"));
+        result.setChannelTypeClass(channelJSON.optString("type_class"));
         result.setChannelValue(channelJSON.getString("value"));
-        result.setChannelFormattedValue(channelJSON.getString("formatted_value"));
+        result.setChannelFormattedValue(channelJSON.optString("formatted_value"));
 
         return result;
 
@@ -50,7 +50,7 @@ public class ZingleCorrespondentServices extends ZingleBaseService<ZingleCorresp
     }
 
     @Override
-    protected ZingleList<ZingleCorrespondent> list(List<QueryPart> conditions) {
+    public ZingleList<ZingleCorrespondent> list(List<QueryPart> conditions) {
         return null;
     }
 

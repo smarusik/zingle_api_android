@@ -202,21 +202,21 @@ public class ZingleService extends ZingleBaseModel{
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ZingleService{");
-        sb.append("id='").append(id).append('\'');
-        sb.append(", displayName='").append(displayName).append('\'');
-        sb.append(", timeZone=").append(timeZone);
-        sb.append(", plan=").append(plan);
-        sb.append(", address=").append(address);
-        sb.append(", account=").append(account);
-        sb.append(", created_at=").append(created_at);
-        sb.append(", updated_at=").append(updated_at);
-        sb.append(", channels=").append(channels);
-        sb.append(", channelTypes=").append(channelTypes);
-        sb.append(", contactLabels=").append(contactLabels);
-        sb.append(", customFields=").append(customFields);
-        sb.append(", settings=").append(settings);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("\nZingleService{");
+        sb.append("\n    id='").append(id).append('\'');
+        sb.append("\n    displayName='").append(displayName).append('\'');
+        sb.append("\n    timeZone=").append(timeZone);
+        sb.append("\n    plan=").append(plan);
+        sb.append("\n    address=").append(address);
+        sb.append("\n    account=").append(account);
+        sb.append("\n    created_at=").append(created_at);
+        sb.append("\n    updated_at=").append(updated_at);
+        sb.append("\n    channels=").append(channels);
+        sb.append("\n    channelTypes=").append(channelTypes);
+        sb.append("\n    contactLabels=").append(contactLabels);
+        sb.append("\n    customFields=").append(customFields);
+        sb.append("\n    settings=").append(settings);
+        sb.append("}\n");
         return sb.toString();
     }
 }

@@ -36,7 +36,7 @@ public class ZingleContactFieldValueService extends ZingleBaseService<ZingleCont
         ZingleContactFieldValue result=new ZingleContactFieldValue();
 
         result.setValue(source.get("value"));
-        result.setSelectedFieldOptionId(source.getInt("selected_custom_field_option_id"));
+        result.setSelectedFieldOptionId(source.optString("selected_custom_field_option_id"));
 
         ZingleContactFieldServices contactFieldServices = new ZingleContactFieldServices(parent);
         result.setContactField(contactFieldServices.mapper(source.getJSONObject("custom_field")));
@@ -45,7 +45,7 @@ public class ZingleContactFieldValueService extends ZingleBaseService<ZingleCont
     }
 
     @Override
-    protected ZingleList<ZingleContactFieldValue> list(List<QueryPart> conditions) {
+    public ZingleList<ZingleContactFieldValue> list(List<QueryPart> conditions) {
         return super.list(conditions);
     }
 

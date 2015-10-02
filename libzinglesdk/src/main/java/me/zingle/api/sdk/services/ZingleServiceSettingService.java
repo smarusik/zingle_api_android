@@ -37,20 +37,16 @@ public class ZingleServiceSettingService extends ZingleBaseService<ZingleService
     @Override
     public ZingleServiceSetting mapper(JSONObject source) throws MappingErrorEx {
         try {
-            String id = source.getString("id");
-            if (!id.isEmpty()) {
-                ZingleServiceSetting result = new ZingleServiceSetting();
-                result.setValue(source.get("value"));//NEED to be thoroughly checked
-                result.setSettingsFieldOptionId(source.optInt("selected_settings_field_option_id"));
+            ZingleServiceSetting result = new ZingleServiceSetting();
+            result.setValue(source.get("value"));//NEED to be thoroughly checked
+            result.setSettingsFieldOptionId(source.optInt("settings_field_option_id"));
 
-                ZingleSettingsFieldServices settingsFieldServices=new ZingleSettingsFieldServices();
-                result.setSettingsField(settingsFieldServices.mapper(source.optJSONObject("settings_field")));
+            ZingleSettingsFieldServices settingsFieldServices=new ZingleSettingsFieldServices();
+            result.setSettingsField(settingsFieldServices.mapper(source.optJSONObject("settings_field")));
 
-                result.setService(parent);
+            result.setService(parent);
 
-                return result;
-            } else
-                return null;
+            return result;
         }catch(JSONException e){
             throw new MappingErrorEx(this.getClass().getSimpleName(),source.toString(),source.toString());
         }

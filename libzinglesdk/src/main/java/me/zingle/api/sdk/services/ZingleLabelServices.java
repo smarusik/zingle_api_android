@@ -48,11 +48,13 @@ public class ZingleLabelServices extends ZingleBaseService<ZingleLabel> {
         result.setDisplayName(source.getString("display_name"));
         result.setIsGlobal(source.optBoolean("is_global"));
 
-        if(!source.get("background_color").equals(null))
-            result.setBackgroundColor(new Color(Integer.parseInt(source.getString("background_color").substring(1), 16)));
+        String bgc=source.optString("background_color");
+        if(!bgc.isEmpty())
+            result.setBackgroundColor(new Color(Integer.parseInt(bgc.substring(1), 16)));
 
-        if(!source.get("text_color").equals(null))
-            result.setTextColor(new Color(Integer.parseInt(source.getString("text_color").substring(1), 16)));
+        String tc=source.optString("text_color");
+        if(!tc.isEmpty())
+            result.setTextColor(new Color(Integer.parseInt(tc.substring(1), 16)));
 
         result.setService(parent);
 

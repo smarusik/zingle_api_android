@@ -43,14 +43,18 @@ public class ZingleAvailablePhoneNumber extends ZingleBaseModel {
         this.country = country;
     }
 
-    @Override
-    public String toString() {
-        return String.format("phone_number: %s\nformatted_phone_number: %s\ncountry: %s",
-                phoneNumber,formattedPhoneNumber,country);
-    }
-
     public boolean equals(ZingleAvailablePhoneNumber obj) {
         return obj.phoneNumber.equals(phoneNumber);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("\nZingleAvailablePhoneNumber{");
+        sb.append("\n    phoneNumber='").append(phoneNumber).append('\'');
+        sb.append("\n    formattedPhoneNumber='").append(formattedPhoneNumber).append('\'');
+        sb.append("\n    country='").append(country).append('\'');
+        sb.append("}\n");
+        return sb.toString();
     }
 
     @Override
