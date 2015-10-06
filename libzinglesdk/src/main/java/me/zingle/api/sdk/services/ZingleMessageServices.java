@@ -42,7 +42,9 @@ public class ZingleMessageServices extends ZingleBaseService<ZingleMessage>{
                 ||modifier.equals("sort_field")
                 ||modifier.equals("sort_direction")
                 ||modifier.equals("contact_id")
-                ||modifier.equals("template_id")
+                ||modifier.equals("channel_type")
+                ||modifier.equals("channel_value")
+                ||modifier.equals("communication_id")
                 ||modifier.equals("communication_direction")
                 ||modifier.equals("created_at")
                 ;

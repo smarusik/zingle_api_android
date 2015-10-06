@@ -27,12 +27,12 @@ public class ZingleCorrespondentServices extends ZingleBaseService<ZingleCorresp
     public ZingleCorrespondent mapper(JSONObject source) throws MappingErrorEx {
         ZingleCorrespondent result=new ZingleCorrespondent();
 
-        result.setId(source.getString("id"));
+        result.setId(source.optString("id"));
         JSONObject channelJSON = source.getJSONObject("channel");
 
         result.setChannelDisplayName(channelJSON.optString("display_name"));
         result.setChannelTypeClass(channelJSON.optString("type_class"));
-        result.setChannelValue(channelJSON.getString("value"));
+        result.setChannelValue(channelJSON.optString("value"));
         result.setChannelFormattedValue(channelJSON.optString("formatted_value"));
 
         return result;

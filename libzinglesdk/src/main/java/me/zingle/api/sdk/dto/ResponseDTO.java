@@ -59,7 +59,7 @@ public class ResponseDTO {
         try {
             this.data = new JSONObject(dataStr);
         }catch (JSONException e){
-            this.data=null;
+            this.data= new JSONObject("{\"status\":null,\"result\":null}");
             errorString.concat("\n"+e.getMessage());
             errorStackTrace.concat("\n"+e.getStackTrace());
         }
