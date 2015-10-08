@@ -1,0 +1,35 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/atlas_background_white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <!--<include layout="@layout/atlas_actionbar_stub"/>-->
+
+
+        <me.zingle.atlas_adoption.MessagesList
+            android:id="@+id/atlas_screen_messages_messages_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            />
+
+        <!-- separator: 1px line -->
+        <View android:layout_width="match_parent" android:layout_height="1px" android:background="@color/atlas_background_blue_dark"/>
+
+        <me.zingle.atlas_adoption.MessageComposer
+            android:id="@+id/atlas_screen_messages_message_composer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
+
+    <!--<include layout="@layout/atlas_actionbar_layout"/>-->
+
+</FrameLayout>

@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">atlas_adoption</string>
+
+    <string name="hello_world">Hello world!</string>
+
+    <string name="action_new_message">New message</string>
+    <string name="action_exit">Exit</string>
+
+    <string-array name="weekdays_names">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+</resources>
