@@ -1,1 +1,1 @@
-include ':app', ':libzinglesdk'
+include ':app', ':libzinglesdk', ':atlas_adoption'
