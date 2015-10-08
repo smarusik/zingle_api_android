@@ -30,7 +30,6 @@
     <orderEntry type="library" exported="" name="json-20150729" level="project" />
     <orderEntry type="library" exported="" name="org.apache.commons.codec-1.8" level="project" />
     <orderEntry type="library" exported="" name="commons-codec-1.8" level="project" />
-    <orderEntry type="library" exported="" name="_Users_siddha_Desktop_projects_Zingle_ZingleApiAndroid_libzinglesdk_libs_java_json_jar" level="project" />
     <orderEntry type="library" exported="" name="libzinglesdk.libzinglesdk" level="project" />
   </component>
 </module>
