@@ -28,12 +28,14 @@ public class ZingleCorrespondentServices extends ZingleBaseService<ZingleCorresp
         ZingleCorrespondent result=new ZingleCorrespondent();
 
         result.setId(source.optString("id"));
-        JSONObject channelJSON = source.getJSONObject("channel");
+        result.setType(source.optString("type"));
 
-        result.setChannelDisplayName(channelJSON.optString("display_name"));
-        result.setChannelTypeClass(channelJSON.optString("type_class"));
-        result.setChannelValue(channelJSON.optString("value"));
-        result.setChannelFormattedValue(channelJSON.optString("formatted_value"));
+        JSONObject channelJSON = source.optJSONObject("channel");
+
+        if(channelJSON!=null) {
+            result.setChannelTypeClass(channelJSON.optString("type"));
+            result.setChannelValue(channelJSON.optString("value"));
+        }
 
         return result;
 

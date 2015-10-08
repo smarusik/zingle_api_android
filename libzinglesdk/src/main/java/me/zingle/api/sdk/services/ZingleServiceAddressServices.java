@@ -1,8 +1,8 @@
 package me.zingle.api.sdk.services;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import me.zingle.api.sdk.Exceptions.MappingErrorEx;
 import me.zingle.api.sdk.model.ZingleList;
 import me.zingle.api.sdk.model.ZingleServiceAddress;
 
@@ -20,7 +20,7 @@ public class ZingleServiceAddressServices extends ZingleBaseService <ZingleServi
         return false;
     }
 
-    public ZingleServiceAddress mapper(JSONObject source) throws JSONException {
+    public ZingleServiceAddress mapper(JSONObject source) throws MappingErrorEx {
         return new ZingleServiceAddress(source.getString("address"), source.getString("city"), source.getString("state"),
                 source.getString("country"), source.getString("postal_code"));
     }

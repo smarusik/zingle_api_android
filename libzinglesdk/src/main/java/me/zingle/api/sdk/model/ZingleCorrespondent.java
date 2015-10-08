@@ -3,15 +3,38 @@ package me.zingle.api.sdk.model;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
+import java.util.Arrays;
+
+import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
+import me.zingle.api.sdk.dao.RequestMethods;
+
 /**
  * Created by SLAVA 09 2015.
  */
 public class ZingleCorrespondent extends ZingleBaseModel{
-    private class Channel{
+    //Correspondent types
+    private class CorrespondentTypes{
+        final String[] correspondentTypes ={"contact", "service","label"};
+        public CorrespondentTypes(String name) {
+            if(Arrays.asList(correspondentTypes).contains(name)) {
+                this.name = name;
+            }
+            else
+                throw new RuntimeException("Unsupported Correspondent type.");
+        }
+
+        private String name;
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
+
+    //Correspondent's channel
+    public static class Channel{
         String typeClass;
-        String displayName;
         String value;
-        String formattedValue;
 
         public String getTypeClass() {
             return typeClass;
@@ -21,13 +44,6 @@ public class ZingleCorrespondent extends ZingleBaseModel{
             this.typeClass = typeClass;
         }
 
-        public String getDisplayName() {
-            return displayName;
-        }
-
-        public void setDisplayName(String displayName) {
-            this.displayName = displayName;
-        }
 
         public String getValue() {
             return value;
@@ -37,31 +53,32 @@ public class ZingleCorrespondent extends ZingleBaseModel{
             this.value = value;
         }
 
-        public String getFormattedValue() {
-            return formattedValue;
-        }
-
-        public void setFormattedValue(String formattedValue) {
-            this.formattedValue = formattedValue;
-        }
-
         @Override
         public String toString() {
             final StringBuilder sb = new StringBuilder("\nChannel{");
             sb.append("\n    typeClass='").append(typeClass).append('\'');
-            sb.append("\n    displayName='").append(displayName).append('\'');
             sb.append("\n    value='").append(value).append('\'');
-            sb.append("\n    formattedValue='").append(formattedValue).append('\'');
             sb.append("}\n");
             return sb.toString();
         }
     }
 
+    //Correspondent itself
+    private CorrespondentTypes type;
     private String id;
     private Channel channel=new Channel();
 
     public ZingleCorrespondent() {
     }
+
+    public String getType() {
+        return type.name;
+    }
+
+    public void setType(String senderType) {
+        this.type = new CorrespondentTypes(senderType);
+    }
+
 
     public String getId() {
         return id;
@@ -79,13 +96,6 @@ public class ZingleCorrespondent extends ZingleBaseModel{
         this.channel.setTypeClass(channelTypeClass);
     }
 
-    public String getChannelDisplayName() {
-        return channel.getDisplayName();
-    }
-
-    public void setChannelDisplayName(String displayName) {
-        channel.setDisplayName(displayName);
-    }
 
     public String getChannelValue() {
         return channel.getValue();
@@ -95,13 +105,6 @@ public class ZingleCorrespondent extends ZingleBaseModel{
         channel.setValue(value);
     }
 
-    public String getChannelFormattedValue() {
-        return channel.getFormattedValue();
-    }
-
-    public void setChannelFormattedValue(String formattedValue) {
-        channel.setFormattedValue(formattedValue);
-    }
 
     @Override
     public JSONObject extractCreationData() {
@@ -111,11 +114,16 @@ public class ZingleCorrespondent extends ZingleBaseModel{
 
         res.object();
 
-        if(!(id==null || !id.isEmpty()))
-            res.key("id").value(id);
+        res.key("id").value(id);
+        res.key("type").value(type.name);
 
-        if(!(channel==null || channel.getValue().isEmpty()))
-            res.key("channel_value").value(channel.getValue());
+        if(!(channel==null || channel.getValue().isEmpty())) {
+            res.key("channel");
+            res.object();
+            res.key("type").value(channel.getTypeClass());
+            res.key("value").value(channel.getValue());
+            res.endObject();
+        }
 
         res.endObject();
 
@@ -130,6 +138,11 @@ public class ZingleCorrespondent extends ZingleBaseModel{
 
     @Override
     public void checkForCreate() {
+        if(type==null)
+            throw new RequestBodyCreationEx(RequestMethods.POST,"type",getClass().getName()+".type");
+
+        if(id==null)
+            throw new RequestBodyCreationEx(RequestMethods.POST,"id",getClass().getName()+".id");
 
     }
 

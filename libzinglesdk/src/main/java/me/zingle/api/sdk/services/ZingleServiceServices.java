@@ -1,8 +1,8 @@
 package me.zingle.api.sdk.services;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import me.zingle.api.sdk.Exceptions.MappingErrorEx;
 import me.zingle.api.sdk.Exceptions.UndefinedServiceDelegateEx;
 import me.zingle.api.sdk.Exceptions.UnsuccessfullRequestEx;
 import me.zingle.api.sdk.dao.ZingleConnection;
@@ -54,7 +54,7 @@ public class ZingleServiceServices extends ZingleBaseService<ZingleService>{
     }
 
     @Override
-    public ZingleService mapper(JSONObject source) throws JSONException {
+    public ZingleService mapper(JSONObject source) throws MappingErrorEx {
         ZingleService mapResult=new ZingleService();
 
         mapResult.setId(source.getString("id"));

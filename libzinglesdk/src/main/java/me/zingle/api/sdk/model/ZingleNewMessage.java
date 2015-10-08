@@ -1,9 +1,9 @@
 package me.zingle.api.sdk.model;
 
+
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
-import java.util.Arrays;
 import java.util.List;
 
 import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
@@ -14,28 +14,8 @@ import me.zingle.api.sdk.dao.RequestMethods;
  */
 public class ZingleNewMessage extends ZingleBaseModel {
 
-    private class CorrespondentTypes{
-        final String[] correspondentTypes ={"contact", "service","label"};
-        public CorrespondentTypes(String name) {
-            if(Arrays.asList(correspondentTypes).contains(name)) {
-                this.name = name;
-            }
-            else
-                throw new RuntimeException("Unsupported Correspondent type.");
-        }
-
-        private String name;
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
-    private CorrespondentTypes senderType;
     private ZingleCorrespondent sender;
-    private CorrespondentTypes recipientType;
-    private List<ZingleCorrespondent> recipients;
+    private ZingleCorrespondent recipient;
     private List<ZingleChannelType> channelTypes;
     private String body;
     private List<ZingleAttachment> attachments;
@@ -43,13 +23,6 @@ public class ZingleNewMessage extends ZingleBaseModel {
     public ZingleNewMessage() {
     }
 
-    public String getSenderType() {
-        return senderType.name;
-    }
-
-    public void setSenderType(String senderType) {
-        this.senderType = new CorrespondentTypes(senderType);
-    }
 
     public ZingleCorrespondent getSender() {
         return sender;
@@ -59,20 +32,13 @@ public class ZingleNewMessage extends ZingleBaseModel {
         this.sender = sender;
     }
 
-    public String getRecipientType() {
-        return recipientType.name;
+
+    public ZingleCorrespondent getRecipient() {
+        return recipient;
     }
 
-    public void setRecipientType(String recipientType) {
-        this.recipientType = new CorrespondentTypes(recipientType);
-    }
-
-    public List<ZingleCorrespondent> getRecipients() {
-        return recipients;
-    }
-
-    public void setRecipients(List<ZingleCorrespondent> recipients) {
-        this.recipients = recipients;
+    public void setRecipient(ZingleCorrespondent recipient) {
+        this.recipient = recipient;
     }
 
     public List<ZingleChannelType> getChannelTypes() {
@@ -99,6 +65,11 @@ public class ZingleNewMessage extends ZingleBaseModel {
         this.attachments = attachments;
     }
 
+    public void addAttachment(ZingleAttachment att){
+        if(att!=null)
+            attachments.add(att);
+    }
+
     @Override
     public JSONObject extractCreationData() {
 
@@ -108,17 +79,8 @@ public class ZingleNewMessage extends ZingleBaseModel {
 
         res.object();
 
-        res.key("sender_type").value(senderType.name);
         res.key("sender").value(sender.extractCreationData());
-
-        res.key("recipient_type").value(recipientType.name);
-
-        res.key("recipients");
-        res.array();
-        for(ZingleCorrespondent c:recipients){
-            c.extractCreationData();
-        }
-        res.endArray();
+        res.key("recipient").value(recipient.extractCreationData());
 
         res.key("channel_type_ids");
         res.array();
@@ -151,19 +113,14 @@ public class ZingleNewMessage extends ZingleBaseModel {
 
     @Override
     public void checkForCreate() {
-        if(senderType==null||senderType.name.isEmpty())
-            throw new RequestBodyCreationEx(RequestMethods.POST,"sender_type",getClass().getName()+".senderType");
 
         if(sender==null)
             throw new RequestBodyCreationEx(RequestMethods.POST,"sender",getClass().getName()+".sender");
 
-        if(recipientType==null)
-            throw new RequestBodyCreationEx(RequestMethods.POST,"recipient_type",getClass().getName()+".recipientType");
-
-        if(recipients==null || recipients.isEmpty())
+        if(recipient==null)
             throw new RequestBodyCreationEx(RequestMethods.POST,"recipients",getClass().getName()+".recipients");
 
-        if(channelTypes==null || channelTypes.isEmpty())
+        if(recipient.getType().equals("label") && (channelTypes==null || channelTypes.isEmpty()))
             throw new RequestBodyCreationEx(RequestMethods.POST,"channel_type_ids",getClass().getName()+".channelTypes");
 
         if((body==null || body.isEmpty()) && (attachments==null || attachments.isEmpty()))
@@ -179,10 +136,8 @@ public class ZingleNewMessage extends ZingleBaseModel {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("\nZingleNewMessage{");
-        sb.append("\n    senderType=").append(senderType);
         sb.append("\n    sender=").append(sender);
-        sb.append("\n    recipientType=").append(recipientType);
-        sb.append("\n    recipients=").append(recipients);
+        sb.append("\n    recipients=").append(recipient);
         sb.append("\n    channelTypes=").append(channelTypes);
         sb.append("\n    body='").append(body).append('\'');
         sb.append("\n    attachments=").append(attachments);
