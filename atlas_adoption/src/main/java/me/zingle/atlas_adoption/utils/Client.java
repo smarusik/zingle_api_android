@@ -6,34 +6,51 @@ import me.zingle.atlas_adoption.facade_models.Participant;
  * Created by SLAVA 09 2015.
  */
 public class Client {
-
     public static final String CONTACT_ID="contact_id";
-    public static final String CONTACT_NAME="contact_name";
-    public static final String CONTACT_CH_TYPE="contact_channel_type";
     public static final String CONTACT_CH_VALUE="contact_channel_value";
-
     public static final String SERVICE_ID="service_id";
     public static final String SERVICE_NAME="service_name";
-    public static final String SERVICE_CH_TYPE="service_channel_type";
     public static final String SERVICE_CH_VALUE="service_channel_value";
+    public static final String CH_TYPE_ID="channel_type_id";
 
+    private static Client item;
+
+    public static Client getItem(){
+        if(item==null){
+            item=new Client();
+        }
+
+        return item;
+    }
+
+    private Client() {
+    }
 
     private Participant authContact;
     private Participant connectedService;
+    private String channelTypeId;
 
-    public Participant getAuthContact() {
+    synchronized public String getChannelTypeId() {
+        return channelTypeId;
+    }
+
+    synchronized public void setChannelTypeId(String channelTypeId) {
+        this.channelTypeId = channelTypeId;
+    }
+
+    synchronized public Participant getAuthContact() {
         return authContact;
     }
 
-    public void setAuthContact(Participant authContact) {
+    synchronized public void setAuthContact(Participant authContact) {
         this.authContact = authContact;
     }
 
-    public Participant getConnectedService() {
+    synchronized public Participant getConnectedService() {
         return connectedService;
     }
 
-    public void setConnectedService(Participant connectedService) {
+    synchronized public void setConnectedService(Participant connectedService) {
         this.connectedService = connectedService;
     }
 

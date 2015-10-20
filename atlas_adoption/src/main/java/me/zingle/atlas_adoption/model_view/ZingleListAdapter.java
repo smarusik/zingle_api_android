@@ -3,7 +3,6 @@ package me.zingle.atlas_adoption.model_view;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
-import android.net.Uri;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +21,6 @@ import me.zingle.atlas_adoption.R;
 import me.zingle.atlas_adoption.facade_models.Attachment;
 import me.zingle.atlas_adoption.facade_models.Message;
 import me.zingle.atlas_adoption.utils.Client;
-
-import static me.zingle.atlas_adoption.facade_models.MimeTypes.MIME_TYPE_UNSUPPORTED;
 
 /**
  * Created by SLAVA 09 2015.
@@ -60,6 +57,7 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
 
 
 
+/*
         //Example data
         Date today=new Date();
 
@@ -99,12 +97,13 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
         dataGroupServices.addItem(new Message("Message 3_3 Another day with veeeeeeeery long message in order to fill space from left to right.....",
                 client.getAuthContact(), client.getConnectedService(), new Date(today.getTime()-86400000*2+2000)));
         dataGroupServices.addItem(new Message("Message 3_2", client.getConnectedService(), client.getAuthContact(), new Date(today.getTime()-86400000*2+3000)));
+*/
 
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return dataGroupServices.getItemData(groupPosition,childPosition);
+        return dataGroupServices.getItemData(client.getConnectedService().getId(), groupPosition,childPosition);
     }
 
     @Override
@@ -114,7 +113,7 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final Message msg=dataGroupServices.getItemData(groupPosition,childPosition);
+        final Message msg=dataGroupServices.getItemData(client.getConnectedService().getId(),groupPosition,childPosition);
 
         if(convertView==null){
             convertView=layoutInflater.inflate(R.layout.atlas_view_messages_convert,null);
@@ -136,7 +135,12 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
         if(msg.getSender().equals(client.getConnectedService())) {
             avatarContainer.setVisibility(View.VISIBLE);
             textAvatar.setVisibility(View.VISIBLE);
-            textAvatar.setText(client.getConnectedService().getName().substring(0,2));
+
+            String clName=client.getConnectedService().getName();
+            if(clName.length()>2)
+                textAvatar.setText(clName.substring(0, 2));
+            else
+                textAvatar.setText(clName);
         }
         else{
             avatarContainer.setVisibility(View.GONE);
@@ -214,17 +218,17 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return dataGroupServices.getItemCount(groupPosition);
+        return dataGroupServices.getItemCount(client.getConnectedService().getId(),groupPosition);
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return dataGroupServices.getGroupData(groupPosition);
+        return dataGroupServices.getGroupData(client.getConnectedService().getId(),groupPosition);
     }
 
     @Override
     public int getGroupCount() {
-        return dataGroupServices.getGroupCount();
+        return dataGroupServices.getGroupCount(client.getConnectedService().getId());
     }
 
     @Override

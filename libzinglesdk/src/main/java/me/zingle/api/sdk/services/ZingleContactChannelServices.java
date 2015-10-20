@@ -1,7 +1,9 @@
 package me.zingle.api.sdk.services;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import me.zingle.api.sdk.Exceptions.MappingErrorEx;
 import me.zingle.api.sdk.model.ZingleContact;
 import me.zingle.api.sdk.model.ZingleContactChannel;
 import me.zingle.api.sdk.model.ZingleList;
@@ -39,14 +41,19 @@ public class ZingleContactChannelServices extends ZingleBaseService<ZingleContac
     public ZingleContactChannel mapper(JSONObject source){
         ZingleContactChannel result=new ZingleContactChannel();
 
-        result.setId(source.getString("id"));
-        result.setValue(source.getString("value"));
-        result.setCountry(source.getString("country"));
-        result.setDisplayName(source.getString("display_name"));
-        result.setFormattedValue(source.getString("formatted_value"));
-        result.setIsDefault(source.getBoolean("is_default"));
-        result.setIsDefaultForType(source.getBoolean("is_default_for_type"));
+        try{
+            result.setId(source.getString("id"));
+            result.setValue(source.getString("value"));
+            result.setCountry(source.getString("country"));
+            result.setDisplayName(source.getString("display_name"));
+            result.setFormattedValue(source.getString("formatted_value"));
+            result.setIsDefault(source.getBoolean("is_default"));
+            result.setIsDefaultForType(source.getBoolean("is_default_for_type"));
 
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new MappingErrorEx(this.getClass().getName(),source.toString(),e.getMessage());
+        }
         ZingleChannelTypeServices channelTypeServices=new ZingleChannelTypeServices();
         result.setType(channelTypeServices.mapper(source.optJSONObject("channel_type")));
 

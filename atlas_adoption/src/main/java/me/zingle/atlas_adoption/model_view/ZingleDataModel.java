@@ -1,9 +1,7 @@
 package me.zingle.atlas_adoption.model_view;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import me.zingle.atlas_adoption.facade_models.Message;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by SLAVA 09 2015.
@@ -19,57 +17,24 @@ public class ZingleDataModel {
         return item;
     }
 
+//    private Map<String,Message> straightList=new HashMap<>();
 
-    private List<DataGroup> groups;
-    private LinkedList<Message> unsentMessages;
+    private Map<String,Conversation> conversations=new HashMap<>();
 
-    private ZingleDataModel() {
-        groups=new LinkedList<>();
-        unsentMessages=new LinkedList<>();
+    public Map<String, Conversation> getConversations() {
+        return conversations;
     }
 
-    public List<Message> getUnsentMessages() {
-        return unsentMessages;
+    public void setConversations(Map<String, Conversation> conversations) {
+        this.conversations = conversations;
     }
 
-
-    public List<DataGroup> getGroups () {
-        return groups;
+    public void addConversation(String key,Conversation conversation) {
+        this.conversations.put(key,conversation);
     }
 
-    public void setGroups(List<DataGroup> groups) {
-        this.groups = groups;
-    }
-
-    public void addGroup(DataGroup group) {
-        if(groups.isEmpty() || groups.get(groups.size()-1).getEndDate().before(group.getStartDate())){
-            groups.add(group);
-            return;
-        }
-        else{
-            for(int i=groups.size()-2;i>=0;i--){
-                if(groups.get(i).getEndDate().before(group.getStartDate())){
-                    groups.add(i,group);
-                    return;
-                }
-            }
-        }
-        groups.add(0,group);
-    }
-
-    public void addMessage(DataGroup group, Message message) {
-        int index=groups.indexOf(group);
-        if(index!=-1){
-            groups.get(index).addMessage(message);
-        }
-    }
-
-    public void pushUnsentMessage(Message msg){
-        unsentMessages.add(msg);
-    }
-
-    public Message popUnsentMessage(){
-        return unsentMessages.pollFirst();
+    public Conversation getConversation(String serviceId) {
+        return conversations.get(serviceId);
     }
 
 }

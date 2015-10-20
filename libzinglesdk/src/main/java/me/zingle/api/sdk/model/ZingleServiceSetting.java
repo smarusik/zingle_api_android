@@ -1,7 +1,7 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
 import me.zingle.api.sdk.dao.RequestMethods;
@@ -62,20 +62,22 @@ public class ZingleServiceSetting extends ZingleBaseModel {
     public JSONObject extractCreationData() {
         checkForCreate();
 
-        JSONStringer res = new JSONStringer();
+        JSONObject resJS=new JSONObject();
 
-        res.object();
+        try {
 
-        if(settingsField.getOptions().isEmpty()){
-            res.key("value").value(value.toString());
+            if(settingsField.getOptions().isEmpty()){
+                resJS.put("value",value.toString());
+            }
+            else{
+                resJS.put("settings_field_option_id",settingsFieldOptionId);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        else{
-            res.key("settings_field_option_id").value(settingsFieldOptionId);
-        }
 
-        res.endObject();
-
-        return new JSONObject(res.toString());
+        return resJS;
     }
 
     @Override

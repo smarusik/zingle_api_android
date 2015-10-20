@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ZingleApiAndroid</string>
+    <string name="action_start_messaging">Choose service.</string>
+    <string name="hello_world">Here must be some proprietary application.</string>
+    <string name="contact_selection_explanation">Here must be some registration or authorization procedure. For now contact id is fixed.</string>
+    <string name="action_continue">Continue</string>
 </resources>

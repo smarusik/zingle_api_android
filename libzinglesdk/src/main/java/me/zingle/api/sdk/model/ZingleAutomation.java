@@ -1,7 +1,7 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.util.Arrays;
 
@@ -124,15 +124,18 @@ public class ZingleAutomation extends ZingleBaseModel {
     public JSONObject extractUpdateData() {
         checkForUpdate();
 
-        JSONStringer res=new JSONStringer();
+        JSONObject resJS=new JSONObject();
 
-        res.object();
+        try {
 
-        res.key("status").value(status.name);
+            resJS.put("status",status.name);
 
-        res.endObject();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        return new JSONObject(res.toString());
+
+        return resJS;
     }
 
     @Override

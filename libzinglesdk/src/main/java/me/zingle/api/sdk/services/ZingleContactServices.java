@@ -1,6 +1,7 @@
 package me.zingle.api.sdk.services;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import me.zingle.api.sdk.Exceptions.MappingErrorEx;
@@ -70,39 +71,44 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
     public ZingleContact mapper(JSONObject source) throws MappingErrorEx {
         ZingleContact result=new ZingleContact();
 
-        result.setId(source.getString("id"));
-        result.setIsConfirmed(source.optBoolean("is_confirmed"));
-        result.setIsStarred(source.optBoolean("is_starred"));
-        result.setCreatedAt(source.optInt("created_at"));
-        result.setUpdatedAt(source.optInt("updated_at"));
+        try {
+            result.setId(source.getString("id"));
+            result.setIsConfirmed(source.optBoolean("is_confirmed"));
+            result.setIsStarred(source.optBoolean("is_starred"));
+            result.setCreatedAt(source.optInt("created_at"));
+            result.setUpdatedAt(source.optInt("updated_at"));
 
-        JSONObject lastMessageJSON=source.optJSONObject("last_message");
-        if(lastMessageJSON!=null) {
-            result.setLastMessage(new ZingleContact.LastMessageDigest(lastMessageJSON.optString("id"),
-                                                                        lastMessageJSON.optString("body"),
-                                                                        lastMessageJSON.optInt("created_at")
-                                                                        ));
+            JSONObject lastMessageJSON = source.optJSONObject("last_message");
+            if (lastMessageJSON != null) {
+                result.setLastMessage(new ZingleContact.LastMessageDigest(lastMessageJSON.optString("id"),
+                        lastMessageJSON.optString("body"),
+                        lastMessageJSON.optInt("created_at")
+                ));
+            }
+
+            JSONArray channelsJS = source.optJSONArray("channels");
+            if (channelsJS != null) {
+                ZingleContactChannelServices contactChannelServices = new ZingleContactChannelServices(parent, result);
+                result.setChannels(contactChannelServices.arrayMapper(channelsJS));
+            }
+
+            JSONArray customFieldsJS = source.optJSONArray("custom_field_values");
+            if (customFieldsJS != null) {
+                ZingleContactFieldValueService contactFieldValueService = new ZingleContactFieldValueService(parent);
+                result.setCustomFieldValues(contactFieldValueService.arrayMapper(customFieldsJS));
+            }
+
+            JSONArray labelsJS = source.getJSONArray("labels");
+            if (labelsJS != null) {
+                ZingleLabelServices labelServices = new ZingleLabelServices(parent);
+                result.setLabels(labelServices.arrayMapper(labelsJS));
+            }
+
+            result.setService(parent);
+        }catch (JSONException e) {
+            e.printStackTrace();
+            throw new MappingErrorEx(this.getClass().getName(),source.toString(),e.getMessage());
         }
-
-        JSONArray channelsJS=source.optJSONArray("channels");
-        if(channelsJS!=null){
-            ZingleContactChannelServices contactChannelServices=new ZingleContactChannelServices(parent,result);
-            result.setChannels(contactChannelServices.arrayMapper(channelsJS));
-        }
-
-        JSONArray customFieldsJS=source.optJSONArray("custom_field_values");
-        if(customFieldsJS!=null) {
-            ZingleContactFieldValueService contactFieldValueService=new ZingleContactFieldValueService(parent);
-            result.setCustomFieldValues(contactFieldValueService.arrayMapper(customFieldsJS));
-        }
-
-        JSONArray labelsJS=source.getJSONArray("labels");
-        if(labelsJS!=null) {
-            ZingleLabelServices labelServices=new ZingleLabelServices(parent);
-            result.setLabels(labelServices.arrayMapper(labelsJS));
-        }
-
-        result.setService(parent);
 
         return result;
     }
@@ -118,7 +124,12 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
         ResponseDTO response = ZingleConnection.getInstance().send(query);
 
         if (response.getResponseCode() == 200) {
-            JSONObject result = response.getData().getJSONObject("result");
+            JSONObject result = null;
+            try {
+                result = response.getData().getJSONObject("result");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return mapper(result);
         } else
             throw new UnsuccessfullRequestEx("Error create()", response.getResponseCode(), response.getResponseStr());
@@ -162,7 +173,12 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
         ResponseDTO response = ZingleConnection.getInstance().send(query);
 
         if (response.getResponseCode() == 200) {
-            JSONObject result = response.getData().getJSONObject("result");
+            JSONObject result = null;
+            try {
+                result = response.getData().getJSONObject("result");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return mapper(result);
         } else
             throw new UnsuccessfullRequestEx("Error attachLabel()", response.getResponseCode(), response.getResponseStr());
@@ -261,7 +277,12 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
         ResponseDTO response = ZingleConnection.getInstance().send(query);
 
         if (response.getResponseCode() == 200) {
-            JSONObject result = response.getData().getJSONObject("result");
+            JSONObject result = null;
+            try {
+                result = response.getData().getJSONObject("result");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return mapper(result);
         } else
             throw new UnsuccessfullRequestEx("Error setFieldValue()", response.getResponseCode(), response.getResponseStr());

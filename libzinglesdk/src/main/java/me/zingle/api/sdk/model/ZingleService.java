@@ -1,7 +1,8 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.util.List;
 
@@ -145,43 +146,46 @@ public class ZingleService extends ZingleBaseModel{
     public JSONObject extractCreationData() {
         checkForCreate();
 
-        JSONStringer res=new JSONStringer();
+        JSONObject resJS=new JSONObject();
 
-        res.object();
+        try {
 
-        res.key("account_id").value(account.getId());
-        res.key("display_name").value(getDisplayName());
-        res.key("time_zone").value(getTimeZone().getDisplayName());
-        res.key("plan_id").value(getPlan().getId());
+            resJS.put("account_id",account.getId());
+            resJS.put("display_name", getDisplayName());
+            resJS.put("time_zone",getTimeZone().getDisplayName());
+            resJS.put("plan_id", getPlan().getId());
 
-        //Dummy arrays
-        res.key("contact_labels").array().endArray();
-        res.key("contact_custom_fields").array().endArray();
+            //Dummy arrays
+            resJS.put("contact_labels", new JSONArray());
+            resJS.put("contact_custom_fields", new JSONArray());
 
-        res.key("service_address").value(address.extractCreationData());
+            resJS.put("service_address",address.extractCreationData());
 
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        res.endObject();
-
-        return new JSONObject(res.toString());
+        return resJS;
     }
 
     @Override
     public JSONObject extractUpdateData() {
         checkForUpdate();
 
-        JSONStringer res=new JSONStringer();
+        JSONObject resJS=new JSONObject();
 
-        res.object();
+        try {
 
-        if(displayName!=null) res.key("display_name").value(getDisplayName());
-        if(timeZone != null) res.key("time_zone").value(getTimeZone().getDisplayName());
-        if(plan!=null) res.key("plan_id").value(getPlan().getId());
-        if(address!=null) res.key("service_address").value(address.extractCreationData());
+            if(displayName!=null) resJS.put("display_name",getDisplayName());
+            if(timeZone != null) resJS.put("time_zone",getTimeZone().getDisplayName());
+            if(plan!=null) resJS.put("plan_id",getPlan().getId());
+            if(address!=null) resJS.put("service_address",address.extractCreationData());
 
-        res.endObject();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        return new JSONObject(res.toString());
+        return resJS;
     }
 
     @Override

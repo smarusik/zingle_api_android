@@ -9,10 +9,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import me.zingle.api.sdk.Exceptions.UninitializedConnectionEx;
 import me.zingle.api.sdk.dto.ResponseDTO;
 import me.zingle.api.sdk.logger.Log;
-import sun.net.www.protocol.https.HttpsURLConnectionImpl;
+//import sun.net.www.protocol.https.HttpsURLConnectionImpl;
 
 public class ZingleConnection {
     private final String apiPath;
@@ -53,9 +55,9 @@ public class ZingleConnection {
 
     public static boolean init (String apiPath, String apiVersion, String token, String key){
 
-        if(instance!=null) return false;
+        //if(instance!=null) return false;
 
-        System.setProperty("jsse.enableSNIExtension", "false");
+        //System.setProperty("jsse.enableSNIExtension", "false");
 
         ZingleConnection temp = new ZingleConnection(apiPath, apiVersion, generateEncryptedAuthString(token, key));
 
@@ -117,10 +119,10 @@ public class ZingleConnection {
         }
 
 
-        HttpsURLConnectionImpl connection=null;
+        HttpsURLConnection connection=null;
 
         try{
-            connection = (HttpsURLConnectionImpl) url.openConnection();
+            connection = (HttpsURLConnection) url.openConnection();
 
             connection.setRequestProperty("Authorization", "Basic " + encryptedAuthString);
             connection.setRequestProperty("Content-Type", "application/json");

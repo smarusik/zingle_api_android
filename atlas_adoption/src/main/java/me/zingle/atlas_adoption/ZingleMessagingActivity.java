@@ -24,6 +24,7 @@ public class ZingleMessagingActivity extends AppCompatActivity {
 
     private MessagesList messagesList;
     private MessageComposer messageComposer;
+    private Client client;
 
     /**
      * used to take photos from camera
@@ -39,27 +40,25 @@ public class ZingleMessagingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.zingle_messaging_activity);
-        Client client = new Client();
+        client =Client.getItem();
 
         Bundle credentials = getIntent().getExtras();
         if (credentials != null) {
-            /*Toast.makeText(this.getApplicationContext(),
-                    "Token="+credentials.getString("Token")+"\nKey="+credentials.getString("Key")+"\nID: "+credentials.getLong("contactId")
-                    ,Toast.LENGTH_LONG).show();*/
+            Participant p=new Participant();
 
-            client.setAuthContact(new Participant(credentials.getString(Client.CONTACT_NAME),
-                    Participant.ParticipantType.CONTACT,
-                    credentials.getString(Client.CONTACT_ID),
-                    credentials.getString(Client.CONTACT_CH_TYPE),
-                    credentials.getString(Client.CONTACT_CH_VALUE)));
+            p.setType( Participant.ParticipantType.CONTACT);
+            p.setId(credentials.getString(Client.CONTACT_ID));
+            p.setChannelValue(credentials.getString(Client.CONTACT_CH_VALUE));
+            client.setAuthContact(p);
 
+            p=new Participant();
+            p.setType(Participant.ParticipantType.SERVICE);
+            p.setId(credentials.getString(Client.SERVICE_ID));
+            p.setName(credentials.getString(Client.SERVICE_NAME));
+            p.setChannelValue(credentials.getString(Client.SERVICE_CH_VALUE));
+            client.setConnectedService(p);
 
-            client.setConnectedService(new Participant(credentials.getString(Client.SERVICE_NAME),
-                    Participant.ParticipantType.SERVICE,
-                    credentials.getString(Client.SERVICE_ID),
-                    credentials.getString(Client.SERVICE_CH_TYPE),
-                    credentials.getString(Client.SERVICE_CH_VALUE)));
-
+            client.setChannelTypeId(credentials.getString(Client.CH_TYPE_ID));
         }
 
         messagesList = (MessagesList) findViewById(R.id.atlas_screen_messages_messages_list);
@@ -72,14 +71,19 @@ public class ZingleMessagingActivity extends AppCompatActivity {
         messageComposer.setListener(new MessageComposer.Listener() {
             public boolean beforeSend(Message message) {
 
-                dataGroupServices.addItem(message,messagesList);
-                dataGroupServices.addUnsentMessage(message);
+                dataGroupServices.addItem(client.getConnectedService().getId(), message);
+
+                if(messagesList!=null){
+                    messagesList.reloadMessagesList();
+                    messagesList.showLastMessage();
+                }
+
 
                 Intent sendIntent=new Intent(messageComposer.getContext(), MessageSender.class);
+                sendIntent.putExtra(Message.SEND_INTENT_MSG_ID,message.getId());
+                sendIntent.putExtra(Message.SEND_INTENT_SERVICE_ID,message.getRecipient().getId());
 
-                startService(sendIntent);
-
-                return true;
+                return startService(sendIntent) != null;
             }
 
         });

@@ -1,7 +1,8 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,44 +108,34 @@ public class ZingleContactField extends ZingleBaseModel{
     @Override
     public JSONObject extractCreationData() {
         checkForCreate();
-
-        JSONStringer res = new JSONStringer();
-
-        res.object();
-
-        res.key("display_name").value(displayName);
-        res.key("options");
-
-        if(!(options==null || options.isEmpty())){
-            res.array();
-            for(ZingleFieldOption fo:options) res.value(fo.extractCreationData());
-            res.endArray();
-        }
-
-        res.endObject();
-        return new JSONObject(res.toString());
+        return extractData();
     }
 
     @Override
     public JSONObject extractUpdateData() {
         checkForUpdate();
+        return extractData();
+    }
 
-        JSONStringer res = new JSONStringer();
+    private JSONObject extractData(){
 
-        res.object();
+        JSONObject resJS=new JSONObject();
 
-        res.key("display_name").value(displayName);
-        res.key("options");
+        try {
 
-        if(!(options==null || options.isEmpty())){
-            res.array();
-            for(ZingleFieldOption fo:options) res.value(fo.extractUpdateData());
-            res.endArray();
+            resJS.put("display_name", displayName);
+            JSONArray arrJS=new JSONArray();
+
+            if(!(options==null || options.isEmpty())){
+                for(ZingleFieldOption fo:options) arrJS.put(fo.extractCreationData());
+            }
+            resJS.put("options",arrJS);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
-        res.endObject();
-        return new JSONObject(res.toString());
-
+        return resJS;
     }
 
     @Override

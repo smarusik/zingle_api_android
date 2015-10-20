@@ -1,5 +1,6 @@
 package me.zingle.api.sdk.services;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import me.zingle.api.sdk.Exceptions.MappingErrorEx;
@@ -54,27 +55,32 @@ public class ZingleMessageServices extends ZingleBaseService<ZingleMessage>{
     public ZingleMessage mapper(JSONObject source) throws MappingErrorEx {
         ZingleMessage result=new ZingleMessage();
 
-        result.setId(source.getString("id"));
-        result.setBody(source.optString("body"));
-        result.setCreatedAt(source.getInt("created_at"));
-        result.setReadAt(source.optInt("read_at"));
-        result.setSenderType(source.getString("sender_type"));
+        try {
+            result.setId(source.getString("id"));
+            result.setBody(source.optString("body"));
+            result.setCreatedAt(source.getInt("created_at"));
+            result.setReadAt(source.optInt("read_at"));
+            result.setSenderType(source.getString("sender_type"));
 
-        ZingleCorrespondentServices correspondentServices=new ZingleCorrespondentServices();
-        result.setSender(correspondentServices.mapper(source.getJSONObject("sender")));
+            ZingleCorrespondentServices correspondentServices = new ZingleCorrespondentServices();
+            result.setSender(correspondentServices.mapper(source.getJSONObject("sender")));
 
-        result.setRecipientType(source.getString("recipient_type"));
-        result.setRecipient(correspondentServices.mapper(source.getJSONObject("recipient")));
+            result.setRecipientType(source.getString("recipient_type"));
+            result.setRecipient(correspondentServices.mapper(source.getJSONObject("recipient")));
 
-        result.setCommunicationDirection(source.optString("communication_direction"));
-        result.setBodyLanguageCode(source.optString("body_language_code"));
-        result.setTriggeredByUserId(source.optString("triggered_by_user_id"));
-        result.setTranslatedBody(source.optString("translated_body"));
-        result.setTemplateId(source.optString("template_id"));
-        result.setTranslatedBodyLanguageCode(source.optString("translated_body_language_code"));
+            result.setCommunicationDirection(source.optString("communication_direction"));
+            result.setBodyLanguageCode(source.optString("body_language_code"));
+            result.setTriggeredByUserId(source.optString("triggered_by_user_id"));
+            result.setTranslatedBody(source.optString("translated_body"));
+            result.setTemplateId(source.optString("template_id"));
+            result.setTranslatedBodyLanguageCode(source.optString("translated_body_language_code"));
 
-        ZingleAttachmentService attachmentService=new ZingleAttachmentService();
-        result.setAttachments(attachmentService.arrayMapper(source.getJSONArray("attachments")));
+            ZingleAttachmentService attachmentService = new ZingleAttachmentService();
+            result.setAttachments(attachmentService.arrayMapper(source.getJSONArray("attachments")));
+        }catch (JSONException e) {
+            e.printStackTrace();
+            throw new MappingErrorEx(this.getClass().getName(),source.toString(),e.getMessage());
+        }
 
         return result;
     }

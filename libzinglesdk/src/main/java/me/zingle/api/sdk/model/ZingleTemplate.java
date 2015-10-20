@@ -1,5 +1,6 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
@@ -110,21 +111,21 @@ public class ZingleTemplate extends ZingleBaseModel {
     public JSONObject extractCreationData() {
         checkForCreate();
 
-        JSONStringer res=new JSONStringer();
+        JSONObject resJS=new JSONObject();
 
-        res.object();
+        try {
+            resJS.put("display_name",displayName);
+            resJS.put("body",body);
+            resJS.put("type",type.name);
 
-        res.key("display_name").value(displayName);
-        res.key("body").value(body);
-        res.key("type").value(type.name);
+            if(subject!=null)
+                resJS.put("subject",subject);
 
-        if(subject!=null)
-            res.key("subject").value(subject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        res.endObject();
-
-        return new JSONObject(res.toString());
-
+        return resJS;
     }
 
     @Override
@@ -132,24 +133,32 @@ public class ZingleTemplate extends ZingleBaseModel {
         checkForUpdate();
 
         JSONStringer res=new JSONStringer();
+        JSONObject resJS=null;
 
-        res.object();
+        try {
+            res.object();
 
-        if(displayName!=null)
-            res.key("display_name").value(displayName);
+            if(displayName!=null)
+                res.key("display_name").value(displayName);
 
-        if(body!=null)
-            res.key("body").value(body);
+            if(body!=null)
+                res.key("body").value(body);
 
-        if(type!=null)
-            res.key("type").value(type.name);
+            if(type!=null)
+                res.key("type").value(type.name);
 
-        if(subject!=null)
-            res.key("subject").value(subject);
+            if(subject!=null)
+                res.key("subject").value(subject);
 
-        res.endObject();
+            res.endObject();
 
-        return new JSONObject(res.toString());
+            resJS= new JSONObject(res.toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return resJS;
     }
 
     @Override

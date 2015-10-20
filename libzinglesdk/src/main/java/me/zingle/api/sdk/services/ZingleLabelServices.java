@@ -1,12 +1,14 @@
 package me.zingle.api.sdk.services;
 
+import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.awt.Color;
 
 import me.zingle.api.sdk.Exceptions.MappingErrorEx;
 import me.zingle.api.sdk.model.ZingleLabel;
 import me.zingle.api.sdk.model.ZingleService;
+
+//import android.graphics.Color;
+//import java.awt.Color;
 
 /**
  * Created by SLAVA 08 2015.
@@ -44,19 +46,24 @@ public class ZingleLabelServices extends ZingleBaseService<ZingleLabel> {
     public ZingleLabel mapper(JSONObject source) throws MappingErrorEx {
         ZingleLabel result=new ZingleLabel();
 
-        result.setId(source.getString("id"));
-        result.setDisplayName(source.getString("display_name"));
-        result.setIsGlobal(source.optBoolean("is_global"));
+        try {
+            result.setId(source.getString("id"));
+            result.setDisplayName(source.getString("display_name"));
+            result.setIsGlobal(source.optBoolean("is_global"));
 
-        String bgc=source.optString("background_color");
-        if(!bgc.isEmpty())
-            result.setBackgroundColor(new Color(Integer.parseInt(bgc.substring(1), 16)));
+            String bgc = source.optString("background_color");
+            if (!bgc.isEmpty())
+                result.setBackgroundColor(bgc);
 
-        String tc=source.optString("text_color");
-        if(!tc.isEmpty())
-            result.setTextColor(new Color(Integer.parseInt(tc.substring(1), 16)));
+            String tc = source.optString("text_color");
+            if (!tc.isEmpty())
+                result.setTextColor(tc);
 
-        result.setService(parent);
+            result.setService(parent);
+        }catch (JSONException e) {
+            e.printStackTrace();
+            throw new MappingErrorEx(this.getClass().getName(),source.toString(),e.getMessage());
+        }
 
         return result;
     }

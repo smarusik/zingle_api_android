@@ -23,6 +23,6 @@ public class UnsuccessfullRequestEx extends RuntimeException{
 
     @Override
     public String getMessage() {
-        return String.format("HTTP request failed:\nError code: %i\nError descr: %s",responceCode,responceStr);
+        return String.format("HTTP request failed:\nError code: %d\nError description: %s",responceCode,responceStr);
     }
 }

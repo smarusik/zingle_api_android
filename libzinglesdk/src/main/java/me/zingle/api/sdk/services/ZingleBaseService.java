@@ -1,6 +1,7 @@
 package me.zingle.api.sdk.services;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -90,7 +91,12 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
         try {
             ZingleList<Model> retList = new ZingleList<>();
 
-            JSONObject status=source.getJSONObject("status");
+            JSONObject status= null;
+            try {
+                status = source.getJSONObject("status");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             retList.sortField=status.optString("sort_field");
 
@@ -110,7 +116,12 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
             retList.totalPages=status.optInt("total_pages");
             retList.totalRecords=status.optInt("total_records");
 
-            JSONArray result=source.getJSONArray("result");
+            JSONArray result= null;
+            try {
+                result = source.getJSONArray("result");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             int i = 0;
             JSONObject temp = result.optJSONObject(i++);
 
@@ -148,7 +159,12 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
         ResponseDTO response = ZingleConnection.getInstance().send(query);
 
         if(response.getResponseCode()==200){
-            JSONObject result=response.getData().getJSONObject("result");
+            JSONObject result= null;
+            try {
+                result = response.getData().getJSONObject("result");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return mapper(result);
         }
         else
@@ -330,7 +346,12 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
         ResponseDTO response = ZingleConnection.getInstance().send(query);
 
         if(response.getResponseCode()==200){
-            JSONObject result=response.getData().getJSONObject("result");
+            JSONObject result= null;
+            try {
+                result = response.getData().getJSONObject("result");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return mapper(result);
         }
         else
@@ -382,7 +403,12 @@ public Model update(Model object){
     ResponseDTO response = ZingleConnection.getInstance().send(query);
 
     if(response.getResponseCode()==200){
-        JSONObject result=response.getData().getJSONObject("result");
+        JSONObject result= null;
+        try {
+            result = response.getData().getJSONObject("result");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return mapper(result);
     }
     else

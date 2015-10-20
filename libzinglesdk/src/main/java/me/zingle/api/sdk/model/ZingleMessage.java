@@ -1,7 +1,7 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.util.Arrays;
 import java.util.List;
@@ -215,16 +215,16 @@ public class ZingleMessage extends ZingleBaseModel{
     public JSONObject extractUpdateData() {
         checkForUpdate();
 
-        JSONStringer res=new JSONStringer();
+        JSONObject resJS=new JSONObject();
 
-        res.object();
+        try {
+            resJS.put("read_at",getReadAt());
 
-        res.key("read_at").value(getReadAt());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        res.endObject();
-
-        return new JSONObject(res.toString());
-
+        return resJS;
     }
 
     @Override

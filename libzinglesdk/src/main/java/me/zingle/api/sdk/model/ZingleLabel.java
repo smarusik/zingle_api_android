@@ -1,12 +1,12 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
-
-import java.awt.Color;
 
 import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
 import me.zingle.api.sdk.dao.RequestMethods;
+
+//import java.awt.Color;
 
 /**
  * Created by SLAVA 08 2015.
@@ -15,20 +15,20 @@ public class ZingleLabel extends ZingleBaseModel{
     private String id;
     private ZingleService service;
     private String displayName;
-    private Color backgroundColor;
-    private Color textColor;
+    private String backgroundColor;
+    private String textColor;
     private Boolean isGlobal;
 
     public ZingleLabel() {
     }
 
-    public ZingleLabel(String displayName, Color backgroundColor, Color textColor) {
+    public ZingleLabel(String displayName, String backgroundColor, String textColor) {
         this.displayName = displayName;
         this.backgroundColor = backgroundColor;
         this.textColor = textColor;
     }
 
-    public ZingleLabel(String id, ZingleService service, String displayName, Color backgroundColor, Color textColor) {
+    public ZingleLabel(String id, ZingleService service, String displayName, String backgroundColor, String textColor) {
         this.id = id;
         this.service = service;
         this.displayName = displayName;
@@ -69,19 +69,19 @@ public class ZingleLabel extends ZingleBaseModel{
         this.displayName = displayName;
     }
 
-    public Color getBackgroundColor() {
+    public String getBackgroundColor() {
         return backgroundColor;
     }
 
-    public void setBackgroundColor(Color backgroundColor) {
+    public void setBackgroundColor(String backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
 
-    public Color getTextColor() {
+    public String getTextColor() {
         return textColor;
     }
 
-    public void setTextColor(Color textColor) {
+    public void setTextColor(String textColor) {
         this.textColor = textColor;
     }
 
@@ -100,19 +100,21 @@ public class ZingleLabel extends ZingleBaseModel{
 
     public JSONObject extractData() {
         checkForCreate();
-        JSONStringer res=new JSONStringer();
+        JSONObject resJS=new JSONObject();
 
-        res.object();
+        try {
 
-        res.key("display_name").value(getDisplayName());
-        if(getBackgroundColor()!=null)
-            res.key("background_color").value("#" + Integer.toHexString(getBackgroundColor().getRGB()).substring(2));
-        if(getTextColor()!=null)
-            res.key("text_color").value("#" + Integer.toHexString(getTextColor().getRGB()).substring(2));
+            resJS.put("display_name",getDisplayName());
+            if(getBackgroundColor()!=null)
+                resJS.put("background_color",getBackgroundColor());
+            if(getTextColor()!=null)
+                resJS.put("text_color",getTextColor());
 
-        res.endObject();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        return new JSONObject(res.toString());
+        return resJS;
     }
 
     @Override

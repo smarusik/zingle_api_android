@@ -1,6 +1,7 @@
 package me.zingle.api.sdk.services;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import me.zingle.api.sdk.Exceptions.MappingErrorEx;
@@ -24,21 +25,27 @@ public class ZingleTimeZoneServices extends ZingleBaseService<ZingleTimeZone> {
 
     @Override
     public ZingleTimeZone mapper(JSONObject source) throws MappingErrorEx {
-        return new ZingleTimeZone(source.getString("display_name"));
+        return new ZingleTimeZone(source.optString("display_name"));
     }
 
     @Override
     public ZingleList<ZingleTimeZone> arrayMapper(JSONObject source) throws MappingErrorEx {
         ZingleList<ZingleTimeZone> result=new ZingleList<>();
 
-        JSONArray timeZonesJSON=source.getJSONArray("result");
-        int i=0;
-        String temp=timeZonesJSON.optString(i++);
+        try {
+            JSONArray timeZonesJSON = source.getJSONArray("result");
+            int i = 0;
+            String temp = timeZonesJSON.optString(i++);
 
-        while(!temp.isEmpty()){
-            result.objects.add(new ZingleTimeZone(temp));
-            temp=timeZonesJSON.optString(i++);
+            while (!temp.isEmpty()) {
+                result.objects.add(new ZingleTimeZone(temp));
+                temp = timeZonesJSON.optString(i++);
+            }
+        }catch (JSONException e) {
+            e.printStackTrace();
+            throw new MappingErrorEx(this.getClass().getName(),source.toString(),e.getMessage());
         }
+
         return result;
     }
 }

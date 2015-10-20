@@ -1,5 +1,6 @@
 package me.zingle.api.sdk.services;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -35,11 +36,17 @@ public class ZingleContactFieldValueService extends ZingleBaseService<ZingleCont
     public ZingleContactFieldValue mapper(JSONObject source) throws MappingErrorEx {
         ZingleContactFieldValue result=new ZingleContactFieldValue();
 
-        result.setValue(source.get("value"));
-        result.setSelectedFieldOptionId(source.optString("selected_custom_field_option_id"));
+        try {
+            result.setValue(source.get("value"));
+            result.setSelectedFieldOptionId(source.optString("selected_custom_field_option_id"));
 
-        ZingleContactFieldServices contactFieldServices = new ZingleContactFieldServices(parent);
-        result.setContactField(contactFieldServices.mapper(source.getJSONObject("custom_field")));
+            ZingleContactFieldServices contactFieldServices = new ZingleContactFieldServices(parent);
+            result.setContactField(contactFieldServices.mapper(source.getJSONObject("custom_field")));
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+            throw new MappingErrorEx(this.getClass().getName(),source.toString(),e.getMessage());
+        }
 
         return result;
     }

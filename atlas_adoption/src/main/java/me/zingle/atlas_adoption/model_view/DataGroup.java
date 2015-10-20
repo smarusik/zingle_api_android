@@ -20,6 +20,12 @@ public class DataGroup {
         this.endDate=endDate;
     }
 
+    public DataGroup(DataGroup other) {
+        this.startDate = other.startDate;
+        this.endDate = other.endDate;
+        this.messages = other.messages;
+    }
+
     public Date getStartDate() {
         return startDate;
     }

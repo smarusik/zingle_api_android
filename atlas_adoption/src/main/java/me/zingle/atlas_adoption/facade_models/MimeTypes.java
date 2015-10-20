@@ -7,6 +7,7 @@ public enum MimeTypes {
     MIME_TYPE_TEXT("text/plain"),
     MIME_TYPE_IMAGE_PNG("image/png"),
     MIME_TYPE_IMAGE_JPEG("image/jpeg"),
+    MIME_TYPE_IMAGE_WEBP("image/webp"),
     MIME_TYPE_IMAGE_GIF("image/gif"),
     MIME_TYPE_UNSUPPORTED("unsupported"),
     ;

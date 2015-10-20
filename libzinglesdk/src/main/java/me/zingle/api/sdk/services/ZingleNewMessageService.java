@@ -1,6 +1,7 @@
 package me.zingle.api.sdk.services;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class ZingleNewMessageService extends ZingleBaseService<ZingleNewMessage>
         List<String> ids=new ArrayList<>();
 
         for(int i=0; i<idsJSON.length(); i++){
-            ids.add(idsJSON.getString(i));
+            ids.add(idsJSON.optString(i));
         }
 
         return ids;
@@ -73,8 +74,15 @@ public class ZingleNewMessageService extends ZingleBaseService<ZingleNewMessage>
         ResponseDTO response = ZingleConnection.getInstance().send(query);
 
         if(response.getResponseCode()==200){
-            JSONObject result=response.getData().getJSONObject("result");
-            return mapper(result.getJSONArray("message_ids"));
+            try {
+                JSONObject result = response.getData().getJSONObject("result");
+                JSONArray resultArr = result.getJSONArray("message_ids");
+
+                return mapper(resultArr);
+            }catch (JSONException e) {
+                e.printStackTrace();
+                throw new MappingErrorEx(this.getClass().getName(),response.getData().toString(),e.getMessage());
+            }
         }
         else
             throw new UnsuccessfullRequestEx("Error sendMessage()",response.getResponseCode(),response.getResponseStr());

@@ -1,7 +1,7 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 /**
  * Created by SLAVA 09 2015.
@@ -59,17 +59,18 @@ public class ZingleFieldOption extends ZingleBaseModel {
     public JSONObject extractCreationData() {
         checkForCreate();
 
-        JSONStringer res = new JSONStringer();
+        JSONObject resJS=new JSONObject();
 
-        res.object();
+        try {
+            resJS.put("display_name",displayName);
+            resJS.put("value",value);
+            resJS.put("sort_order",sortOrder);
 
-        res.key("display_name").value(displayName);
-        res.key("value").value(value);
-        res.key("sort_order").value(sortOrder);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-
-        res.endObject();
-        return new JSONObject(res.toString());
+        return resJS;
     }
 
     @Override

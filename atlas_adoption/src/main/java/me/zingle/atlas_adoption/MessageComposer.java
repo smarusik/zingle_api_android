@@ -146,20 +146,19 @@ public class MessageComposer extends FrameLayout {
                     createdMessage.setBody(text);
                     createdMessage.setSender(client.getAuthContact());
                     createdMessage.setRecipient(client.getConnectedService());
+                    createdMessage.setChannelTypeId(client.getChannelTypeId());
                     createdMessage.setCreatedAt(new Date());
-
-
 
                     if (listener != null) {
                         boolean proceed = listener.beforeSend(createdMessage);
                         if (!proceed) return;
                     }
-
                     messageText.setText("");
                     createdMessage=new Message();
                 }
             }
         });
+
         applyStyle();
     }
 

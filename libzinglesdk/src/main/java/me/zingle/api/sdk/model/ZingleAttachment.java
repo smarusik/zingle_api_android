@@ -1,7 +1,7 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -63,16 +63,16 @@ public class ZingleAttachment extends ZingleBaseModel{
     public JSONObject extractCreationData() {
         checkForCreate();
 
-        JSONStringer res=new JSONStringer();
+        JSONObject resJS=new JSONObject();
 
-        res.object();
+        try {
+            resJS.put("content_type", mimeType);
+            resJS.put("base64", new String(data));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        res.key("content_type").value(mimeType);
-        res.key("base64").value(new String(data));//Encoding???
-
-        res.endObject();
-
-        return new JSONObject(res.toString());
+        return resJS;
     }
 
     @Override

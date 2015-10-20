@@ -1,5 +1,6 @@
 package me.zingle.api.sdk.services;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import me.zingle.api.sdk.Exceptions.MappingErrorEx;
@@ -39,12 +40,17 @@ public class ZingleAutomationServices extends ZingleBaseService<ZingleAutomation
     public ZingleAutomation mapper(JSONObject source) throws MappingErrorEx {
         ZingleAutomation result=new ZingleAutomation();
 
-        result.setId(source.getString("id"));
-        result.setDisplayName(source.getString("display_name"));
-        result.setIsGlobal(source.getBoolean("is_global"));
-        result.setType(source.getString("type"));
-        result.setStatus(source.getString("status"));
+        try {
+            result.setId(source.getString("id"));
+            result.setDisplayName(source.getString("display_name"));
+            result.setIsGlobal(source.getBoolean("is_global"));
+            result.setType(source.getString("type"));
+            result.setStatus(source.getString("status"));
 
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new MappingErrorEx(this.getClass().getName(),source.toString(),e.getMessage());
+        }
         result.setService(parent);
 
         return result;

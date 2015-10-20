@@ -1,7 +1,7 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
 import me.zingle.api.sdk.dao.RequestMethods;
@@ -57,36 +57,42 @@ public class ZingleContactFieldValue extends ZingleBaseModel {
     public JSONObject extractCreationData() {
         checkForCreate();
 
-        JSONStringer res = new JSONStringer();
+        JSONObject resJS=new JSONObject();
 
-        res.object();
+        try {
 
-        res.key("custom_field_id").value(contactField.getId());
+            resJS.put("custom_field_id",contactField.getId());
 
-        if(value!=null)
-            res.key("value").value(value);
-        else if (selectedFieldOptionId !=null)
-            res.key("selected_custom_field_option_id").value(selectedFieldOptionId);
+            if(value!=null)
+                resJS.put("value",value);
+            else if (selectedFieldOptionId !=null)
+                resJS.put("selected_custom_field_option_id",selectedFieldOptionId);
 
-        res.endObject();
-        return new JSONObject(res.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return resJS;
     }
 
     @Override
     public JSONObject extractUpdateData() {
         checkForUpdate();
 
-        JSONStringer res = new JSONStringer();
+        JSONObject resJS=new JSONObject();
 
-        res.object();
+        try {
 
-        if(value!=null)
-            res.key("value").value(value);
-        else if (selectedFieldOptionId !=null)
-            res.key("selected_custom_field_option_id").value(selectedFieldOptionId);
+            if(value!=null)
+                resJS.put("value",value);
+            else if (selectedFieldOptionId !=null)
+                resJS.put("selected_custom_field_option_id",selectedFieldOptionId);
 
-        res.endObject();
-        return new JSONObject(res.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return resJS;
     }
 
     @Override

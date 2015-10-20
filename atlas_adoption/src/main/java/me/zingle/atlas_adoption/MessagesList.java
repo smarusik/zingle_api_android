@@ -86,7 +86,10 @@ public class MessagesList extends FrameLayout{
 
     public void showLastMessage(){
         int numGroups=adapter.getGroupCount();
-        messagesList.setSelectedChild(numGroups - 1, adapter.getChildrenCount(numGroups - 1), true);
+        if(numGroups>0) {
+            messagesList.expandGroup(numGroups - 1);
+            messagesList.setSelectedChild(numGroups - 1, adapter.getChildrenCount(numGroups - 1), true);
+        }
     }
 
     public void reloadMessagesList(){

@@ -1,5 +1,6 @@
 package me.zingle.api.sdk.services;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import me.zingle.api.sdk.Exceptions.MappingErrorEx;
@@ -57,38 +58,43 @@ public class ZingleServiceServices extends ZingleBaseService<ZingleService>{
     public ZingleService mapper(JSONObject source) throws MappingErrorEx {
         ZingleService mapResult=new ZingleService();
 
-        mapResult.setId(source.getString("id"));
-        mapResult.setDisplayName(source.getString("display_name"));
-        mapResult.setTimeZone(new ZingleTimeZone(source.getString("time_zone")));
-        mapResult.setCreated_at(source.getInt("created_at"));
-        mapResult.setUpdated_at(source.getInt("updated_at"));
+        try {
+            mapResult.setId(source.getString("id"));
+            mapResult.setDisplayName(source.getString("display_name"));
+            mapResult.setTimeZone(new ZingleTimeZone(source.getString("time_zone")));
+            mapResult.setCreated_at(source.getInt("created_at"));
+            mapResult.setUpdated_at(source.getInt("updated_at"));
 
-        ZingleAccountServices accountServices=new ZingleAccountServices();
-        ZingleAccount account=accountServices.mapper(source.getJSONObject("account"));
-        mapResult.setAccount(account);
+            ZingleAccountServices accountServices = new ZingleAccountServices();
+            ZingleAccount account = accountServices.mapper(source.getJSONObject("account"));
+            mapResult.setAccount(account);
 
-        ZinglePlanServices planServices=new ZinglePlanServices(account);
-        mapResult.setPlan(planServices.mapper(source.getJSONObject("plan")));
+            ZinglePlanServices planServices = new ZinglePlanServices(account);
+            mapResult.setPlan(planServices.mapper(source.getJSONObject("plan")));
 
-        ZingleServiceChannelServices channelServices= new ZingleServiceChannelServices(mapResult);
-        mapResult.setChannels(channelServices.arrayMapper(source.getJSONArray("channels")));
+            ZingleServiceChannelServices channelServices = new ZingleServiceChannelServices(mapResult);
+            mapResult.setChannels(channelServices.arrayMapper(source.getJSONArray("channels")));
 
-        ZingleChannelTypeServices channelTypeServices= new ZingleChannelTypeServices();
-        mapResult.setChannelTypes(channelTypeServices.arrayMapper(source.getJSONArray("channel_types")));
+            ZingleChannelTypeServices channelTypeServices = new ZingleChannelTypeServices();
+            mapResult.setChannelTypes(channelTypeServices.arrayMapper(source.getJSONArray("channel_types")));
 
-        ZingleLabelServices labelServices=new ZingleLabelServices(mapResult);
-        mapResult.setContactLabels(labelServices.arrayMapper(source.getJSONArray("contact_labels")));
+            ZingleLabelServices labelServices = new ZingleLabelServices(mapResult);
+            mapResult.setContactLabels(labelServices.arrayMapper(source.getJSONArray("contact_labels")));
 
-        ZingleContactFieldServices customFieldServices=new ZingleContactFieldServices(mapResult);
-        mapResult.setCustomFields(customFieldServices.arrayMapper(source.getJSONArray("contact_custom_fields")));
+            ZingleContactFieldServices customFieldServices = new ZingleContactFieldServices(mapResult);
+            mapResult.setCustomFields(customFieldServices.arrayMapper(source.getJSONArray("contact_custom_fields")));
 
-        ZingleServiceAddressServices addressServices=new ZingleServiceAddressServices();
-        mapResult.setAddress(addressServices.mapper(source.getJSONObject("service_address")));
+            ZingleServiceAddressServices addressServices = new ZingleServiceAddressServices();
+            mapResult.setAddress(addressServices.mapper(source.getJSONObject("service_address")));
 
-        ZingleServiceSettingService settingService=new ZingleServiceSettingService(mapResult);
-        mapResult.setSettings(settingService.arrayMapper(source.getJSONArray("settings")));
+            ZingleServiceSettingService settingService = new ZingleServiceSettingService(mapResult);
+            mapResult.setSettings(settingService.arrayMapper(source.getJSONArray("settings")));
 
-        //"customFieldValues": [] ?????
+            //"customFieldValues": [] ?????
+        }catch (JSONException e) {
+            e.printStackTrace();
+            throw new MappingErrorEx(this.getClass().getName(),source.toString(),e.getMessage());
+        }
 
         return mapResult;
     }
@@ -105,7 +111,12 @@ public class ZingleServiceServices extends ZingleBaseService<ZingleService>{
         ResponseDTO response = ZingleConnection.getInstance().send(query);
 
         if(response.getResponseCode()==200){
-            JSONObject result=response.getData().getJSONObject("result");
+            JSONObject result= null;
+            try {
+                result = response.getData().getJSONObject("result");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return mapper(result);
         }
         else

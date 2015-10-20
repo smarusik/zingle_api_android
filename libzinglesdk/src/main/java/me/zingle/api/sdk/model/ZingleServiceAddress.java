@@ -1,7 +1,7 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
 import me.zingle.api.sdk.dao.RequestMethods;
@@ -87,19 +87,19 @@ public class ZingleServiceAddress extends ZingleBaseModel{
     }
 
     private JSONObject extractData(){
-        JSONStringer res = new JSONStringer();
+        JSONObject resJS=new JSONObject();
 
-        res.object();
+        try {
+            resJS.put("address",address);
+            resJS.put("city",city);
+            resJS.put("state",state);
+            resJS.put("country",country);
+            resJS.put("postalCode",postalCode);
 
-        res.key("address").value(address);
-        res.key("city").value(city);
-        res.key("state").value(state);
-        res.key("country").value(country);
-        res.key("postalCode").value(postalCode);
-
-        res.endObject();
-
-        return new JSONObject(res.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return resJS;
     }
 
     @Override

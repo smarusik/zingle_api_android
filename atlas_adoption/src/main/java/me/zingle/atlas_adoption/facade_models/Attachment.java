@@ -3,6 +3,8 @@ package me.zingle.atlas_adoption.facade_models;
 
 import android.net.Uri;
 
+import java.net.URL;
+
 import static me.zingle.atlas_adoption.facade_models.MimeTypes.MIME_TYPE_IMAGE_GIF;
 import static me.zingle.atlas_adoption.facade_models.MimeTypes.MIME_TYPE_IMAGE_JPEG;
 import static me.zingle.atlas_adoption.facade_models.MimeTypes.MIME_TYPE_IMAGE_PNG;
@@ -15,6 +17,7 @@ import static me.zingle.atlas_adoption.facade_models.MimeTypes.MIME_TYPE_UNSUPPO
 public class Attachment {
     private MimeTypes mimeType;
     private Uri uri;
+    private URL url;
     private String localPath;
     private String textContent;
 
@@ -67,6 +70,14 @@ public class Attachment {
 
     public void setUri(Uri uri) {
         this.uri = uri;
+    }
+
+    public URL getUrl() {
+        return url;
+    }
+
+    public void setUrl(URL url) {
+        this.url = url;
     }
 
     public String getTextContent() {

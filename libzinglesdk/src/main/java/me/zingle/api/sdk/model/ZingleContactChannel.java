@@ -1,7 +1,7 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
 import me.zingle.api.sdk.dao.RequestMethods;
@@ -97,50 +97,53 @@ public class ZingleContactChannel extends ZingleBaseModel{
 
         checkForCreate();
 
-        JSONStringer res = new JSONStringer();
+        JSONObject resJS=new JSONObject();
 
-        res.object();
+        try {
 
-        res.key("channel_type_id").value(getType().getId());
-        res.key("value").value(getValue());
-        res.key("country").value(getCountry());
+            resJS.put("channel_type_id", getType().getId());
+            resJS.put("value", getValue());
+            resJS.put("country", getCountry());
 
 
-        if (!getDisplayName().isEmpty())
-            res.key("display_name").value(getDisplayName());
+            if (!(getDisplayName()==null || getDisplayName().isEmpty()))
+                resJS.put("display_name", getDisplayName());
 
-        if (getIsDefaultForType() != null)
-            res.key("is_default_for_type").value(getIsDefaultForType());
+            if (getIsDefaultForType() != null)
+                resJS.put("is_default_for_type", getIsDefaultForType());
 
-        if (getIsDefault() != null)
-            res.key("is_default").value(getIsDefault());
+            if (getIsDefault() != null)
+                resJS.put("is_default", getIsDefault());
 
-        res.endObject();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        return new JSONObject(res.toString());
+        return resJS;
     }
 
     @Override
     public JSONObject extractUpdateData() {
         checkForUpdate();
 
-        JSONStringer res = new JSONStringer();
+        JSONObject resJS=new JSONObject();
 
-        res.object();
+        try {
 
-        if (!getDisplayName().isEmpty())
-            res.key("display_name").value(getDisplayName());
+            if (!(getDisplayName()==null || getDisplayName().isEmpty()))
+                resJS.put("display_name",getDisplayName());
 
-        if (getIsDefault() != null)
-            res.key("is_default").value(getIsDefault());
+            if (getIsDefault() != null)
+                resJS.put("is_default",getIsDefault());
 
-        if (getIsDefaultForType() != null)
-            res.key("is_default_for_type").value(getIsDefaultForType());
+            if (getIsDefaultForType() != null)
+                resJS.put("is_default_for_type",getIsDefaultForType());
 
-        res.endObject();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        return new JSONObject(res.toString());
-
+        return resJS;
     }
 
     @Override

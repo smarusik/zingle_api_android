@@ -1,7 +1,8 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.util.List;
 
@@ -153,29 +154,29 @@ public class ZingleContact extends ZingleBaseModel{
     }
 
     private JSONObject extractData(){
-        JSONStringer res = new JSONStringer();
+        JSONObject resJS=new JSONObject();
 
-        res.object();
+        try {
 
-        if (customFieldValues!=null) {
-            res.key("custom_field_values");
-            res.array();
-            for(ZingleContactFieldValue fv:customFieldValues){
-                res.value(fv.extractCreationData());
+            if (customFieldValues!=null) {
+                JSONArray arrJS=new JSONArray();
+                for(ZingleContactFieldValue fv:customFieldValues){
+                    arrJS.put(fv.extractCreationData());
+                }
+                resJS.put("custom_field_values",arrJS);
             }
-            res.endArray();
+
+            if(isStarred!=null){
+                resJS.put("is_starred",isStarred);
+            }
+            if(isConfirmed!=null){
+                resJS.put("is_confirmed",isConfirmed);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
-        if(isStarred!=null){
-            res.key("is_starred").value(isStarred);
-        }
-        if(isConfirmed!=null){
-            res.key("is_confirmed").value(isConfirmed);
-        }
-
-        res.endObject();
-
-        return new JSONObject(res.toString());
+        return resJS;
     }
 
     @Override

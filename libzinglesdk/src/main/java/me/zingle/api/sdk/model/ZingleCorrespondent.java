@@ -1,9 +1,7 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
-
-import java.util.Arrays;
 
 import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
 import me.zingle.api.sdk.dao.RequestMethods;
@@ -12,24 +10,6 @@ import me.zingle.api.sdk.dao.RequestMethods;
  * Created by SLAVA 09 2015.
  */
 public class ZingleCorrespondent extends ZingleBaseModel{
-    //Correspondent types
-    private class CorrespondentTypes{
-        final String[] correspondentTypes ={"contact", "service","label"};
-        public CorrespondentTypes(String name) {
-            if(Arrays.asList(correspondentTypes).contains(name)) {
-                this.name = name;
-            }
-            else
-                throw new RuntimeException("Unsupported Correspondent type.");
-        }
-
-        private String name;
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
 
     //Correspondent's channel
     public static class Channel{
@@ -64,21 +44,17 @@ public class ZingleCorrespondent extends ZingleBaseModel{
     }
 
     //Correspondent itself
-    private CorrespondentTypes type;
     private String id;
     private Channel channel=new Channel();
 
     public ZingleCorrespondent() {
     }
 
-    public String getType() {
-        return type.name;
+    public ZingleCorrespondent(String id, String chTypeClass, String chValue) {
+        this.id = id;
+        this.setChannelTypeClass(chTypeClass);
+        this.setChannelValue(chValue);
     }
-
-    public void setType(String senderType) {
-        this.type = new CorrespondentTypes(senderType);
-    }
-
 
     public String getId() {
         return id;
@@ -110,25 +86,21 @@ public class ZingleCorrespondent extends ZingleBaseModel{
     public JSONObject extractCreationData() {
         checkForCreate();
 
-        JSONStringer res=new JSONStringer();
+        JSONObject resJS=new JSONObject();
 
-        res.object();
+        try {
+            if(id!=null)
+                resJS.put("id",id);
 
-        res.key("id").value(id);
-        res.key("type").value(type.name);
+            if(!(channel==null || channel.getValue().isEmpty())) {
+                resJS.put("channel_value", channel.getValue());
+            }
 
-        if(!(channel==null || channel.getValue().isEmpty())) {
-            res.key("channel");
-            res.object();
-            res.key("type").value(channel.getTypeClass());
-            res.key("value").value(channel.getValue());
-            res.endObject();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
-        res.endObject();
-
-        return new JSONObject(res.toString());
-
+        return resJS;
     }
 
     @Override
@@ -138,12 +110,9 @@ public class ZingleCorrespondent extends ZingleBaseModel{
 
     @Override
     public void checkForCreate() {
-        if(type==null)
-            throw new RequestBodyCreationEx(RequestMethods.POST,"type",getClass().getName()+".type");
 
-        if(id==null)
-            throw new RequestBodyCreationEx(RequestMethods.POST,"id",getClass().getName()+".id");
-
+        if(id==null && channel.getValue()==null)
+            throw new RequestBodyCreationEx(RequestMethods.POST,"id,channel_value",getClass().getName()+".id,channel.value");
     }
 
     @Override

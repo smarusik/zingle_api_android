@@ -1,5 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="me.zingle.zingleapiandroid">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+     package="me.zingle.zingleapiandroid">
 
-    <application/>
-</manifest>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+
+            android.permission.INTERNET
+
+
+        <activity
+            android:name=".StartScreen"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="me.zingle.atlas_adoption.ZingleMessagingActivity"
+            android:label="ZingleMessageList">
+
+        </activity>
+        <service
+            android:name="me.zingle.atlas_adoption.daemons.MessageSender"
+            android:exported="false">
+
+        </service>
+        <service
+            android:name="me.zingle.atlas_adoption.daemons.MessageReceiver"
+            android:exported="false">
+
+        </service>
+
+    </application></manifest>

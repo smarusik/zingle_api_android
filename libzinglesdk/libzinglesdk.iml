@@ -27,9 +27,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="json-20150729" level="project" />
     <orderEntry type="library" exported="" name="org.apache.commons.codec-1.8" level="project" />
     <orderEntry type="library" exported="" name="commons-codec-1.8" level="project" />
+    <orderEntry type="library" exported="" name="json-20140107" level="project" />
     <orderEntry type="library" exported="" name="libzinglesdk.libzinglesdk" level="project" />
   </component>
 </module>
