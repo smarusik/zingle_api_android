@@ -4,15 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import me.zingle.atlas_adoption.facade_models.Message;
-
 /**
  * Created by SLAVA 09 2015.
  */
 public class DataGroup {
     Date startDate;
     Date endDate;
-    List<Message> messages;
+    List<String> messages;
 
     public DataGroup(Date startDate, Date endDate) {
         this.messages=new ArrayList<>();
@@ -42,27 +40,12 @@ public class DataGroup {
         this.endDate = endDate;
     }
 
-    public List<Message> getMessages() {
+    public List<String> getMessages() {
         return messages;
     }
 
-    public void setMessages(List<Message> messages) {
+    public void setMessages(List<String> messages) {
         this.messages = messages;
     }
 
-    public void addMessage(Message message) {
-        if(messages.isEmpty() || messages.get(messages.size()-1).getCreatedAt().before(message.getCreatedAt())){
-            messages.add(message);
-            return;
-        }
-        else{
-            for(int i=messages.size()-2;i>=0;i--){
-                if(messages.get(i).getCreatedAt().before(message.getCreatedAt())){
-                    messages.add(i+1,message);
-                    return;
-                }
-            }
-        }
-        messages.add(0,message);
-    }
 }

@@ -18,11 +18,8 @@ public class Attachment {
     private MimeTypes mimeType;
     private Uri uri;
     private URL url;
-    private String localPath;
+    private String cachePath;
     private String textContent;
-
-    private Long bytesDownloaded;
-    private boolean downloadCompleted;
 
     public Attachment() {
     }
@@ -56,12 +53,12 @@ public class Attachment {
         }
     }
 
-    public String getLocalPath() {
-        return localPath;
+    public String getCachePath() {
+        return cachePath;
     }
 
-    public void setLocalPath(String localPath) {
-        this.localPath = localPath;
+    public void setCachePath(String cachePath) {
+        this.cachePath = cachePath;
     }
 
     public Uri getUri() {
@@ -88,19 +85,4 @@ public class Attachment {
         this.textContent = textContent;
     }
 
-    public Long getBytesDownloaded() {
-        return bytesDownloaded;
-    }
-
-    public void setBytesDownloaded(Long bytesDownloaded) {
-        this.bytesDownloaded = bytesDownloaded;
-    }
-
-    public boolean isDownloadCompleted() {
-        return downloadCompleted;
-    }
-
-    public void setDownloadCompleted(boolean downloadCompleted) {
-        this.downloadCompleted = downloadCompleted;
-    }
 }

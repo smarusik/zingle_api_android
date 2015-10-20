@@ -33,7 +33,7 @@ public class MessageSender extends IntentService{
         String msgLocalId=intent.getStringExtra(Message.SEND_INTENT_MSG_ID);
         String serviceId=intent.getStringExtra(Message.SEND_INTENT_SERVICE_ID);
 
-        Message msgForSend=dataServices.popUnsentMessage(serviceId,msgLocalId);
+        Message msgForSend=dataServices.popMessage(msgLocalId);
 
         ZingleService service=new ZingleService(msgForSend.getRecipient().getId(),msgForSend.getRecipient().getName());
         ZingleNewMessage message = Converters.fromMessage(msgForSend);
@@ -49,7 +49,7 @@ public class MessageSender extends IntentService{
                 if(!ids.isEmpty()){
                     msgForSend.setSent(true);
                     msgForSend.setId(ids.get(0));
-                    dataServices.updateItem(serviceId,msgLocalId,msgForSend);
+                    dataServices.updateItem(msgLocalId,msgForSend);
                 }
 
             } catch (UnsuccessfullRequestEx e) {

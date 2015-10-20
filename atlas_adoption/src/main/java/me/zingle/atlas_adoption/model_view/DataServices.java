@@ -2,9 +2,13 @@ package me.zingle.atlas_adoption.model_view;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import me.zingle.atlas_adoption.MessagesList;
 import me.zingle.atlas_adoption.facade_models.Message;
+import me.zingle.atlas_adoption.utils.Client;
 
 /**
  * Created by SLAVA 09 2015.
@@ -20,164 +24,183 @@ public class DataServices {
     }
 
     final ZingleDataModel dataModel = ZingleDataModel.getItem();
+    MessagesList listView;
 
     private DataServices() {
     }
 
 
-    public void initConversation(String serviceId){
+    public void initConversation(MessagesList list){
         synchronized (dataModel){
-            dataModel.addConversation(serviceId,new Conversation());
+            dataModel.setConversation(new Conversation());
+            listView=list;
+
+            Iterator<Map.Entry<String,Message>> i=dataModel.getStraightList().entrySet().iterator();
+
+            while(i.hasNext()){
+                addToConversation(i.next().getValue());
+            }
         }
     }
 
-    public DataGroup getGroupData(String serviceId,int index) {
+    public DataGroup getGroupData(int index) {
         DataGroup res;
         synchronized (dataModel) {
-            res =new DataGroup(dataModel.getConversation(serviceId).getGroups().get(index));
+            res =new DataGroup(dataModel.getConversation().getGroups().get(index));
         }
         return res;
     }
 
-    public int getGroupCount(String serviceId) {
+    public int getGroupCount() {
         int res = 0;
         synchronized (dataModel) {
 
-            if(dataModel.getConversation(serviceId)!=null &&
-                    dataModel.getConversation(serviceId).getGroups()!=null)
+            if(dataModel.getConversation()!=null &&
+                    dataModel.getConversation().getGroups()!=null)
 
-                res = dataModel.getConversation(serviceId).getGroups().size();
+                res = dataModel.getConversation().getGroups().size();
         }
         return res;
     }
 
-    public int getItemCount(String serviceId,int groupIndex){
+    public int getItemCount(int groupIndex){
         int res = 0;
         synchronized (dataModel) {
-            if(dataModel.getConversation(serviceId)!=null &&
-                    dataModel.getConversation(serviceId).getGroups().get(groupIndex)!=null &&
-                    dataModel.getConversation(serviceId).getGroups().get(groupIndex).getMessages()!=null)
+            if(dataModel.getConversation()!=null &&
+                    dataModel.getConversation().getGroups().get(groupIndex)!=null &&
+                    dataModel.getConversation().getGroups().get(groupIndex).getMessages()!=null)
 
-                res = dataModel.getConversation(serviceId).getGroups().get(groupIndex).getMessages().size();
+                res = dataModel.getConversation().getGroups().get(groupIndex).getMessages().size();
         }
         return res;
     }
 
-    public Message getItemData(String serviceId,int groupIndex, int childIndex){
+    public Message getItemData(int groupIndex, int childIndex){
         Message res = null;
         synchronized (dataModel) {
-            if(dataModel.getConversation(serviceId)!=null &&
-                    dataModel.getConversation(serviceId).getGroups().get(groupIndex)!=null &&
-                    dataModel.getConversation(serviceId).getGroups().get(groupIndex).getMessages()!=null)
+            if(dataModel.getConversation()!=null &&
+                    dataModel.getConversation().getGroups().get(groupIndex)!=null &&
+                    dataModel.getConversation().getGroups().get(groupIndex).getMessages()!=null) {
 
-                res = new Message(dataModel.getConversation(serviceId).getGroups().get(groupIndex).getMessages().get(childIndex));
+                String msgId = dataModel.getConversation().getGroups().get(groupIndex).getMessages().get(childIndex);
+
+                res = new Message(dataModel.getStraightList().get(msgId));
+            }
         }
         return res;
     }
 
-    public String getItemId(String serviceId,int groupIndex, int childIndex){
+    public String getItemId(int groupIndex, int childIndex){
         String res=null;
 
         synchronized (dataModel) {
-            if(dataModel.getConversation(serviceId)!=null &&
-                    dataModel.getConversation(serviceId).getGroups().get(groupIndex)!=null &&
-                    dataModel.getConversation(serviceId).getGroups().get(groupIndex).getMessages()!=null &&
-                    dataModel.getConversation(serviceId).getGroups().get(groupIndex).getMessages().get(childIndex)!=null)
+            if(dataModel.getConversation()!=null &&
+                    dataModel.getConversation().getGroups().get(groupIndex)!=null &&
+                    dataModel.getConversation().getGroups().get(groupIndex).getMessages()!=null &&
+                    dataModel.getConversation().getGroups().get(groupIndex).getMessages().get(childIndex)!=null)
 
-                res = dataModel.getConversation(serviceId).getGroups().get(groupIndex).getMessages().get(childIndex).getId();
+                res = dataModel.getConversation().getGroups().get(groupIndex).getMessages().get(childIndex);
         }
         return res;
 
     }
 
-    public void addItem(String serviceId,Message message){
-
+    public void addToConversation(Message message){
         synchronized (dataModel) {
-            DataGroup group = null;
-            Date cntlDate = message.getCreatedAt();
+            Client client = Client.getItem();
+            if (message.getSender().equals(client.getAuthContact()) || message.getRecipient().equals(client.getAuthContact())) {
 
-            Conversation conversation=dataModel.getConversations().get(serviceId);
-            if(conversation==null){
-                conversation=new Conversation();
-                dataModel.addConversation(serviceId,conversation);
-            }
+                DataGroup group = null;
+                Date cntlDate = message.getCreatedAt();
 
-            for (DataGroup g : conversation.getGroups()) {
-                if (cntlDate.after(g.getStartDate()) && cntlDate.before(g.getEndDate())) {
-                    group = g;
-                    break;
-                }
-            }
+                Conversation conversation = dataModel.getConversation();
 
-            if (group == null) {
-                group = new DataGroup(startOfDay(cntlDate), endOfDay(cntlDate));
-                group.addMessage(message);
-                conversation.addGroup(group);
-            } else {
-                conversation.addMessage(group, message);
-            }
-
-        }
-    }
-
-    public Message popUnsentMessage(String serviceId,String id){
-        synchronized (dataModel) {
-            Conversation conversation=dataModel.getConversations().get(serviceId);
-
-            Message result=null;
-
-            for(int i=conversation.getGroups().size()-1;i>=0;--i){
-                List<Message> grp=conversation.getGroups().get(i).getMessages();
-                for(int j=grp.size()-1;j>=0;--j){
-                    Message cm=grp.get(j);
-                    if(!cm.isSent() && cm.getId().equals(id)){
-                        result=new Message(cm);
+                for (DataGroup g : conversation.getGroups()) {
+                    if (cntlDate.after(g.getStartDate()) && cntlDate.before(g.getEndDate())) {
+                        group = g;
                         break;
                     }
                 }
+
+                if (group == null) {
+                    group = new DataGroup(startOfDay(cntlDate), endOfDay(cntlDate));
+
+
+                    if (!group.getMessages().contains(message.getId()))
+                        addMessageToGroup(group, message);
+
+
+                    conversation.addGroup(group);
+                } else {
+                    addMessageToGroup(group, message);
+                }
+                listView.reloadMessagesList();
             }
-            return result;
         }
     }
 
-    public void updateItem(String serviceId,String oldId,Message msg){
-        synchronized (dataModel) {
-            Conversation conversation=dataModel.getConversations().get(serviceId);
+    public void addItem(Message message){
 
-            for(int i=conversation.getGroups().size()-1;i>=0;--i){
-                List<Message> grp=conversation.getGroups().get(i).getMessages();
-                for(int j=grp.size()-1;j>=0;--j){
-                    Message cm=grp.get(j);
-                    if(!cm.isSent() && cm.getId().equals(oldId)){
-                        grp.set(j,msg);
-                        break;
-                    }
+        synchronized (dataModel) {
+            dataModel.getStraightList().put(message.getId(), message);
+            addToConversation(message);
+        }
+    }
+
+    private void addMessageToGroup(DataGroup group,Message message) {
+
+        List<String> messages=group.getMessages();
+        Message lastMessage=null;
+
+        if(messages!=null && messages.size()>0) {
+            lastMessage = dataModel.getStraightList().get(messages.get(messages.size() - 1));
+        }
+
+        if(lastMessage==null || lastMessage.getCreatedAt().before(message.getCreatedAt())){
+            messages.add(message.getId());
+            return;
+        }
+        else{
+            for(int i=messages.size()-2;i>=0;i--){
+                lastMessage=dataModel.getStraightList().get(messages.get(i));
+                if(lastMessage!=null && lastMessage.getCreatedAt().before(message.getCreatedAt())){
+                    messages.add(i+1,message.getId());
+                    return;
                 }
             }
         }
+        messages.add(0,message.getId());
     }
 
 
-    public boolean updateItemIfExists(String serviceId,Message msg){
+    public Message popMessage(String id){
         synchronized (dataModel) {
-            Conversation conversation=dataModel.getConversations().get(serviceId);
-
-            if(conversation==null) return false;
-
-            for(int i=conversation.getGroups().size()-1;i>=0;--i){
-                List<Message> grp=conversation.getGroups().get(i).getMessages();
-                for(int j=grp.size()-1;j>=0;--j){
-                    Message cm=grp.get(j);
-                    if(!cm.isSent() && cm.getId().equals(msg.getId())){
-                        grp.set(j,msg);
-                        return true;
-                    }
-                }
-            }
-            return false;
+            return dataModel.getStraightList().get(id);
         }
     }
 
+    public void updateItem(String oldId,Message msg){
+        synchronized (dataModel) {
+            Conversation conversation=dataModel.getConversation();
+
+        }
+    }
+
+    public byte[] getCachedItem(String key){
+        byte[] result;
+
+        synchronized (dataModel){
+            result=dataModel.getFromMemCache(key);
+        }
+
+        return result;
+    }
+
+    public void addCachedItem(String key,byte[] item){
+        synchronized (dataModel){
+            dataModel.addToMemoryCache(key,item);
+        }
+    }
 
     private Date startOfDay(Date date){
         Calendar c=Calendar.getInstance();

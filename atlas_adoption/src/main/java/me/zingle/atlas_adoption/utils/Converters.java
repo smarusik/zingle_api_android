@@ -3,13 +3,17 @@ package me.zingle.atlas_adoption.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.util.Base64;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Date;
 
 import me.zingle.api.sdk.model.ZingleAttachment;
@@ -21,6 +25,7 @@ import me.zingle.atlas_adoption.facade_models.Attachment;
 import me.zingle.atlas_adoption.facade_models.Message;
 import me.zingle.atlas_adoption.facade_models.MimeTypes;
 import me.zingle.atlas_adoption.facade_models.Participant;
+import me.zingle.atlas_adoption.model_view.DataServices;
 
 /**
  * Created by SLAVA 10 2015.
@@ -83,49 +88,86 @@ public class Converters {
                     attachment.getMimeType() == MimeTypes.MIME_TYPE_IMAGE_JPEG ||
                     attachment.getMimeType() == MimeTypes.MIME_TYPE_IMAGE_PNG) {
 
-                ParcelFileDescriptor is = null;
-                try {
-                    is = context.getContentResolver().openFileDescriptor(attachment.getUri(), "r");
-                    if (is != null) {
-                        FileDescriptor fd = is.getFileDescriptor();
 
-                        Bitmap bitmap = BitmapFactory.decodeFileDescriptor(fd);
+                byte[] data=uriToByteArray(attachment.getMimeType(),attachment.getUri(),context);
 
-                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        //TODO create and cache thumbnail
 
-                        Bitmap.CompressFormat format;
+                        DataServices dataServices=DataServices.getItem();
+                        dataServices.addCachedItem(attachment.getUri().toString(),data);
+                        attachment.setCachePath(attachment.getUri().toString());
 
-                        switch (attachment.getMimeType()){
-                            case MIME_TYPE_IMAGE_JPEG: format= Bitmap.CompressFormat.JPEG; break;
-                            case MIME_TYPE_IMAGE_PNG: format= Bitmap.CompressFormat.PNG; break;
-                            case MIME_TYPE_IMAGE_WEBP: format= Bitmap.CompressFormat.WEBP; break;
-                            default: format= Bitmap.CompressFormat.JPEG; result.setMimeType(MimeTypes.MIME_TYPE_IMAGE_JPEG.toString()); break;
-                        }
+                        result.setData(Base64.encode(data, Base64.DEFAULT));
 
-                        bitmap.compress(format, 100, bos);
-
-                        result.setData(Base64.encode(bos.toByteArray(), Base64.DEFAULT));
-
-                        is.close();
-                    }
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (is != null)
-                            is.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         }
 
         return result;
+    }
+
+    public static byte[] uriToByteArray(MimeTypes type,Uri uri,Context context){
+        ParcelFileDescriptor is = null;
+        try {
+            is = context.getContentResolver().openFileDescriptor(uri, "r");
+            if (is != null) {
+                FileDescriptor fd = is.getFileDescriptor();
+
+                Bitmap bitmap = BitmapFactory.decodeFileDescriptor(fd);
+
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+                Bitmap.CompressFormat format;
+
+                switch (type){
+                    case MIME_TYPE_IMAGE_JPEG: format= Bitmap.CompressFormat.JPEG; break;
+                    case MIME_TYPE_IMAGE_PNG: format= Bitmap.CompressFormat.PNG; break;
+                    case MIME_TYPE_IMAGE_WEBP: format= Bitmap.CompressFormat.WEBP; break;
+                    default: format= Bitmap.CompressFormat.JPEG; type=MimeTypes.MIME_TYPE_IMAGE_JPEG; break;
+                }
+
+                bitmap.compress(format, 100, bos);
+                byte[] result=bos.toByteArray();
+                is.close();
+                bos.close();
+
+                return result;
+            }
+            else
+                return null;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (is != null)
+                    is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    public static byte[] urlToByteArray(URL url){
+        InputStream in = null;
+        try {
+            in = new BufferedInputStream(url.openStream());
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] buf = new byte[1024];
+            int n = 0;
+            while (-1!=(n=in.read(buf)))
+            {
+                out.write(buf, 0, n);
+            }
+            out.close();
+            in.close();
+
+            return out.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static Message fromZingleMessage(ZingleMessage msg){

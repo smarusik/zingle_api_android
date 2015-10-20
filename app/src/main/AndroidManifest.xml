@@ -38,5 +38,10 @@
             android:exported="false">
 
         </service>
+        <service
+            android:name="me.zingle.atlas_adoption.daemons.AttachmentDownloader"
+            android:exported="false">
+
+        </service>
 
     </application></manifest>

@@ -63,7 +63,7 @@ public class ZingleMessagingActivity extends AppCompatActivity {
 
         messagesList = (MessagesList) findViewById(R.id.atlas_screen_messages_messages_list);
 
-        messagesList.init(this, client);
+        messagesList.init(this);
         final DataServices dataGroupServices = DataServices.getItem();
 
         messageComposer = (MessageComposer) findViewById(R.id.atlas_screen_messages_message_composer);
@@ -71,7 +71,7 @@ public class ZingleMessagingActivity extends AppCompatActivity {
         messageComposer.setListener(new MessageComposer.Listener() {
             public boolean beforeSend(Message message) {
 
-                dataGroupServices.addItem(client.getConnectedService().getId(), message);
+                dataGroupServices.addItem(message);
 
                 if(messagesList!=null){
                     messagesList.reloadMessagesList();
@@ -151,7 +151,7 @@ public class ZingleMessagingActivity extends AppCompatActivity {
                     att.setMimeType(type);
 
                     att.setUri(data.getData());
-                    att.setTextContent("Image from camera.\n" + att.getLocalPath());
+                    att.setTextContent("Image from camera.\n" + att.getUri());
                 }
 
                 break;
@@ -164,7 +164,7 @@ public class ZingleMessagingActivity extends AppCompatActivity {
                     att.setMimeType(type);
 
                     att.setUri(data.getData());
-                    att.setTextContent("Image from gallery.\n" + att.getLocalPath());
+                    att.setTextContent("Image from gallery.\n" + att.getUri());
                 }
                break;
 

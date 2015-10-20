@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 
 import java.text.DateFormat;
 
+import me.zingle.atlas_adoption.model_view.DataServices;
 import me.zingle.atlas_adoption.model_view.MessageListStyleSettings;
 import me.zingle.atlas_adoption.model_view.ZingleListAdapter;
 import me.zingle.atlas_adoption.utils.Client;
@@ -23,7 +24,7 @@ public class MessagesList extends FrameLayout{
     //properties from Atlas
     private final DateFormat timeFormat;
     private ExpandableListView messagesList;
-    private Client client;
+    private Client client=Client.getItem();
     ZingleListAdapter adapter;
 
 
@@ -64,9 +65,13 @@ public class MessagesList extends FrameLayout{
     }
 
 
-    public void init(Activity activity, Client client){
+    public void init(Activity activity){
         LayoutInflater.from(getContext()).inflate(R.layout.atlas_messages_list, this);
         messagesList = (ExpandableListView) findViewById(R.id.atlas_messages_list);
+
+        DataServices dataServices=DataServices.getItem();
+        dataServices.initConversation(this);
+
         adapter=new ZingleListAdapter(activity, client, styleSettings);
         messagesList.setAdapter(adapter);
 
@@ -74,15 +79,6 @@ public class MessagesList extends FrameLayout{
 
         showLastMessage();
     }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
 
     public void showLastMessage(){
         int numGroups=adapter.getGroupCount();

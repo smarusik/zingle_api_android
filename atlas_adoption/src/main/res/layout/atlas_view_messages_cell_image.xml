@@ -22,44 +22,46 @@
 
     >
 
-    <me.zingle.atlas_adoption.ShapedFrameLayout
+    <FrameLayout
         android:id="@+id/atlas_view_messages_cell_image_container_my"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|center_horizontal"
+        android:layout_gravity="end|center_horizontal"
         >
-        <me.zingle.atlas_adoption.AtlasImageView
+        <ImageView
             android:id="@+id/atlas_view_messages_cell_image_my" 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/atlas_background_gray"
-            />
-        <me.zingle.atlas_adoption.AtlasProgressView
+            android:contentDescription="MyImage" />
+        <ProgressBar
+            style="@android:style/Widget.ProgressBar.Large"
             android:id="@+id/atlas_view_messages_cell_image_my_progress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
-    </me.zingle.atlas_adoption.ShapedFrameLayout>
+    </FrameLayout>
 
-    <me.zingle.atlas_adoption.ShapedFrameLayout
+    <FrameLayout
         android:id="@+id/atlas_view_messages_cell_image_container_their"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left|center_horizontal"
+        android:layout_gravity="start|center_horizontal"
         >
-        <me.zingle.atlas_adoption.AtlasImageView
+        <ImageView
             android:id="@+id/atlas_view_messages_cell_image_their" 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left|center_horizontal"
+            android:layout_gravity="start|center_horizontal"
             android:background="@color/atlas_background_gray"
-            />
-        <me.zingle.atlas_adoption.AtlasProgressView
+            android:contentDescription="TheirImage" />
+        <ProgressBar
+            style="@android:style/Widget.ProgressBar.Large"
             android:id="@+id/atlas_view_messages_cell_image_their_progress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
-    </me.zingle.atlas_adoption.ShapedFrameLayout>
+    </FrameLayout>
     
 </FrameLayout>
 

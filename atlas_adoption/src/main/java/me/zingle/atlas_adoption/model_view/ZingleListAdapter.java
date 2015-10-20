@@ -2,12 +2,17 @@ package me.zingle.atlas_adoption.model_view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.GradientDrawable;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -103,7 +108,7 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return dataGroupServices.getItemData(client.getConnectedService().getId(), groupPosition,childPosition);
+        return dataGroupServices.getItemData(groupPosition,childPosition);
     }
 
     @Override
@@ -113,7 +118,7 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final Message msg=dataGroupServices.getItemData(client.getConnectedService().getId(),groupPosition,childPosition);
+        final Message msg=dataGroupServices.getItemData(groupPosition,childPosition);
 
         if(convertView==null){
             convertView=layoutInflater.inflate(R.layout.atlas_view_messages_convert,null);
@@ -166,14 +171,18 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
                     break;
                     case MIME_TYPE_IMAGE_PNG:
                         //image processing
-                        cellContainer.addView(generateTextCell(attachment.getTextContent(),attachments.size(),msg.getSender().equals(client.getAuthContact()),cellContainer));
+                        cellContainer.addView(generateImageCell(attachment,msg.getSender().equals(client.getAuthContact()),cellContainer));
                         break;
                     case MIME_TYPE_IMAGE_JPEG:
                         //image processing
-                        cellContainer.addView(generateTextCell(attachment.getTextContent(),attachments.size(),msg.getSender().equals(client.getAuthContact()),cellContainer));
+                        cellContainer.addView(generateImageCell(attachment, msg.getSender().equals(client.getAuthContact()), cellContainer));
+                        break;
+                    case MIME_TYPE_IMAGE_WEBP:
+                        //image processing
+                        cellContainer.addView(generateImageCell(attachment, msg.getSender().equals(client.getAuthContact()), cellContainer));
                         break;
                     case MIME_TYPE_IMAGE_GIF:
-                        //image processing
+                        //gif processing
                         cellContainer.addView(generateTextCell(attachment.getTextContent(),attachments.size(),msg.getSender().equals(client.getAuthContact()),cellContainer));
                     break;
                     case MIME_TYPE_UNSUPPORTED:
@@ -218,17 +227,17 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return dataGroupServices.getItemCount(client.getConnectedService().getId(),groupPosition);
+        return dataGroupServices.getItemCount(groupPosition);
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return dataGroupServices.getGroupData(client.getConnectedService().getId(),groupPosition);
+        return dataGroupServices.getGroupData(groupPosition);
     }
 
     @Override
     public int getGroupCount() {
-        return dataGroupServices.getGroupCount(client.getConnectedService().getId());
+        return dataGroupServices.getGroupCount();
     }
 
     @Override
@@ -301,6 +310,57 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
         }
         return timeBarDayText;
     }
+
+    private View generateImageCell(Attachment attachment, boolean msgFromContact,ViewGroup cellContainer){
+        View cellImage = layoutInflater.inflate(R.layout.atlas_view_messages_cell_image, cellContainer, false);
+
+        FrameLayout containerContact = (FrameLayout) cellImage.findViewById(R.id.atlas_view_messages_cell_image_container_my);
+        ImageView imgContact = (ImageView) cellImage.findViewById(R.id.atlas_view_messages_cell_image_my);
+        ProgressBar progrContact = (ProgressBar) cellImage.findViewById(R.id.atlas_view_messages_cell_image_my_progress);
+
+        FrameLayout containerService = (FrameLayout) cellImage.findViewById(R.id.atlas_view_messages_cell_image_container_their);
+        ImageView imgService = (ImageView) cellImage.findViewById(R.id.atlas_view_messages_cell_image_their);
+        ProgressBar progrService = (ProgressBar) cellImage.findViewById(R.id.atlas_view_messages_cell_image_their_progress);
+
+        if (msgFromContact) {
+            containerContact.setVisibility(View.VISIBLE);
+            containerService.setVisibility(View.GONE);
+
+            byte[] data=dataGroupServices.getCachedItem(attachment.getCachePath());
+            if(data!=null && data.length>0){
+                Bitmap bitmap= BitmapFactory.decodeByteArray(data,0,data.length);
+                imgContact.setImageBitmap(bitmap);
+
+                imgContact.setVisibility(View.VISIBLE);
+                progrContact.setVisibility(View.GONE);
+            }
+            else{
+                imgContact.setVisibility(View.GONE);
+                progrContact.setVisibility(View.VISIBLE);
+            }
+
+        }
+        else {
+            containerService.setVisibility(View.VISIBLE);
+            containerContact.setVisibility(View.GONE);
+
+            byte[] data=dataGroupServices.getCachedItem(attachment.getCachePath());
+            if(data!=null && data.length>0){
+                Bitmap bitmap= BitmapFactory.decodeByteArray(data,0,data.length);
+                imgService.setImageBitmap(bitmap);
+
+                imgService.setVisibility(View.VISIBLE);
+                progrService.setVisibility(View.GONE);
+            }
+            else{
+                imgService.setVisibility(View.GONE);
+                progrService.setVisibility(View.VISIBLE);
+            }
+        }
+
+        return cellImage;
+    }
+
 
     private View generateTextCell(String text,int numAttachments,boolean msgFromContact,ViewGroup cellContainer){
         View cellText = layoutInflater.inflate(R.layout.atlas_view_messages_cell_text, cellContainer, false);

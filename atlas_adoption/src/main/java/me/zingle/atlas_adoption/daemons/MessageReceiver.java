@@ -11,9 +11,9 @@ import me.zingle.api.sdk.model.ZingleList;
 import me.zingle.api.sdk.model.ZingleMessage;
 import me.zingle.api.sdk.model.ZingleSortOrder;
 import me.zingle.api.sdk.services.ZingleMessageServices;
+import me.zingle.atlas_adoption.facade_models.Attachment;
 import me.zingle.atlas_adoption.facade_models.Message;
 import me.zingle.atlas_adoption.model_view.DataServices;
-import me.zingle.atlas_adoption.utils.Client;
 import me.zingle.atlas_adoption.utils.Converters;
 
 /**
@@ -21,16 +21,17 @@ import me.zingle.atlas_adoption.utils.Converters;
  */
 public class MessageReceiver extends IntentService {
 
+    DataServices dataServices=DataServices.getItem();
+
     public MessageReceiver() {
         super("MessageReceiver");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        final WorkingDataSet wds=WorkingDataSet.getItem();
-        Client clnt=Client.getItem();
+        final WorkingDataSet wds = WorkingDataSet.getItem();
 
-        while(true) {
+        while (true) {
             synchronized (this) {
                 try {
                     wait(5000);
@@ -45,32 +46,49 @@ public class MessageReceiver extends IntentService {
         }
     }
 
-    private void updateMessageListForContact(ZingleContact contact,boolean all){
-        DataServices dataServices=DataServices.getItem();
-        ZingleMessageServices messageServices=new ZingleMessageServices(contact.getService());
+    private void updateMessageListForContact(ZingleContact contact, boolean all) {
+        ZingleMessageServices messageServices = new ZingleMessageServices(contact.getService());
 
-        List<QueryPart> conds=messageServices.createConditions("contact_id,page_number,sort_field,sort_direction",contact.getId(),"1","created_at", ZingleSortOrder.ZINGLE_DESC.toString());
+        List<QueryPart> conds = messageServices.createConditions("contact_id,page,sort_field,sort_direction", contact.getId(), "1", "created_at", ZingleSortOrder.ZINGLE_DESC.toString());
 
-        ZingleList<ZingleMessage> messages=messageServices.list(conds);
-        if(messages!=null){
+        ZingleList<ZingleMessage> messages = messageServices.list(conds);
+        if (messages != null) {
             for (ZingleMessage message : messages.objects) {
-                Message msg=Converters.fromZingleMessage(message);
-                if(!dataServices.updateItemIfExists(contact.getService().getId(),msg))
-                    dataServices.addItem(contact.getService().getId(),msg);
+                Message msg = Converters.fromZingleMessage(message);
+                dataServices.addItem(msg);
+                processAttachments(msg);
+            }
+
+            if (all) {
+                int pagesNum = messages.totalPages;
+                for (int i = 2; i <= pagesNum; i++) {
+                    conds = messageServices.createConditions("contact_id,page,sort_field,sort_direction", contact.getId(), String.valueOf(i), "created_at", ZingleSortOrder.ZINGLE_DESC.toString());
+
+                    messages = messageServices.list(conds);
+                    if (messages != null) {
+                        for (ZingleMessage message : messages.objects) {
+                            Message msg = Converters.fromZingleMessage(message);
+                            dataServices.addItem(msg);
+                            processAttachments(msg);
+                        }
+                    }
+                }
             }
         }
+    }
 
-        if(all) {
-            int pagesNum = messages.totalPages;
-            for (int i = 2; i <= pagesNum; i++) {
-                conds = messageServices.createConditions("contact_id,page_number,sort_field,sort_direction", contact.getId(), String.valueOf(i), "created_at", ZingleSortOrder.ZINGLE_DESC.toString());
+    private void processAttachments(Message msg){
+        List<Attachment> attachments=msg.getAttachments();
 
-                messages = messageServices.list(conds);
-                if (messages != null) {
-                    for (ZingleMessage message : messages.objects) {
-                        Message msg=Converters.fromZingleMessage(message);
-                        if(!dataServices.updateItemIfExists(contact.getService().getId(),msg))
-                            dataServices.addItem(contact.getService().getId(),msg);
+        if(attachments!=null && attachments.size()>0){
+            for(int i=0;i<attachments.size();i++) {
+                String key=attachments.get(i).getCachePath();
+                if(!key.isEmpty()) {
+                    if (dataServices.getCachedItem(key)==null) {
+                        Intent intent = new Intent(this, AttachmentDownloader.class);
+                        intent.putExtra("key",msg.getId());
+                        intent.putExtra("i",i);
+                        startService(intent);
                     }
                 }
             }
