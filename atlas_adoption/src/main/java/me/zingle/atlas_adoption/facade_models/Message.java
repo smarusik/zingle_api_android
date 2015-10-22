@@ -24,6 +24,7 @@ public class Message {
     private Date readAt;
     private boolean sent;
     private boolean read;
+    private boolean failed;
     List<Attachment> attachments=new ArrayList<>();
 
     private String genUuid(){
@@ -136,6 +137,13 @@ public class Message {
         this.read = read;
     }
 
+    public boolean isFailed() {
+        return failed;
+    }
+
+    public void setFailed(boolean failed) {
+        this.failed = failed;
+    }
 
     public void markAsRead(){
         setRead(true);

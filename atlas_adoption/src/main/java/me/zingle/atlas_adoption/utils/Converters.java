@@ -10,7 +10,6 @@ import android.util.Base64;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -91,13 +90,9 @@ public class Converters {
 
                 byte[] data=uriToByteArray(attachment.getMimeType(),attachment.getUri(),context);
 
-
                         DataServices dataServices=DataServices.getItem();
                         dataServices.addCachedItem(attachment.getUri().toString(),data);
-                        attachment.setCachePath(attachment.getUri().toString());
-
                         result.setData(Base64.encode(data, Base64.DEFAULT));
-
             }
         }
 
@@ -105,9 +100,8 @@ public class Converters {
     }
 
     public static byte[] uriToByteArray(MimeTypes type,Uri uri,Context context){
-        ParcelFileDescriptor is = null;
         try {
-            is = context.getContentResolver().openFileDescriptor(uri, "r");
+            ParcelFileDescriptor is= context.getContentResolver().openFileDescriptor(uri, "r");
             if (is != null) {
                 FileDescriptor fd = is.getFileDescriptor();
 
@@ -131,20 +125,12 @@ public class Converters {
 
                 return result;
             }
-            else
+            else {
                 return null;
+            }
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (is != null)
-                    is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             return null;
         }
     }

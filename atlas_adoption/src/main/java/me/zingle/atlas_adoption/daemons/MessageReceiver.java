@@ -2,6 +2,7 @@ package me.zingle.atlas_adoption.daemons;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Handler;
 
 import java.util.List;
 
@@ -21,10 +22,22 @@ import me.zingle.atlas_adoption.utils.Converters;
  */
 public class MessageReceiver extends IntentService {
 
+    private Handler handler;
+
+    private void updateListView(){
+        handler.post(new MessageListUpdater());
+    }
+
     DataServices dataServices=DataServices.getItem();
 
     public MessageReceiver() {
         super("MessageReceiver");
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        handler=new Handler();
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
@@ -43,6 +56,7 @@ public class MessageReceiver extends IntentService {
             for (ZingleContact contact : wds.getContacts()) {
                 updateMessageListForContact(contact, true);
             }
+            updateListView();
         }
     }
 

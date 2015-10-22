@@ -141,7 +141,7 @@ public class MessageComposer extends FrameLayout {
 
                 String text = messageText.getText().toString();
 
-                if (text.trim().length() > 0) {
+                if (text.trim().length() > 0 || createdMessage.getAttachments().size()>0) {
 
                     createdMessage.setBody(text);
                     createdMessage.setSender(client.getAuthContact());

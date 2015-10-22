@@ -112,25 +112,17 @@ public class ZingleMessagingActivity extends AppCompatActivity {
 
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_zingle_messaging, menu);
-
-
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        if (id == R.id.action_exit) {
-
-            this.finish();
-
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -151,6 +143,7 @@ public class ZingleMessagingActivity extends AppCompatActivity {
                     att.setMimeType(type);
 
                     att.setUri(data.getData());
+                    att.setCachePath(data.getData().toString());
                     att.setTextContent("Image from camera.\n" + att.getUri());
                 }
 
@@ -164,6 +157,7 @@ public class ZingleMessagingActivity extends AppCompatActivity {
                     att.setMimeType(type);
 
                     att.setUri(data.getData());
+                    att.setCachePath(data.getData().toString());
                     att.setTextContent("Image from gallery.\n" + att.getUri());
                 }
                break;

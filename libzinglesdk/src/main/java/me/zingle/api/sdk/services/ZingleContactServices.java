@@ -132,7 +132,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
             }
             return mapper(result);
         } else
-            throw new UnsuccessfullRequestEx("Error create()", response.getResponseCode(), response.getResponseStr());
+            throw new UnsuccessfullRequestEx(response.getData(), response.getResponseCode(), response.getResponseStr());
     }
 
     public boolean detachLabelAsync(final ZingleContact contact, final String labelId,final ServiceDelegate<ZingleContact> delegate) {
@@ -147,7 +147,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
                     ZingleContact result=detachLabel(contact, labelId);
                     delegate.processResult(result);
                 }catch (UnsuccessfullRequestEx e){
-                    delegate.processError(e.getResponceCode(),e.getResponceStr());
+                    delegate.processError(e.getErrMessage(),e.getResponceCode(),e.getResponceStr());
                 }
             }
         });
@@ -181,7 +181,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
             }
             return mapper(result);
         } else
-            throw new UnsuccessfullRequestEx("Error attachLabel()", response.getResponseCode(), response.getResponseStr());
+            throw new UnsuccessfullRequestEx(response.getData(), response.getResponseCode(), response.getResponseStr());
     }
 
     public boolean attachLabelAsync(final ZingleContact contact, final String labelId,final ServiceDelegate<ZingleContact> delegate) {
@@ -196,7 +196,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
                     ZingleContact result=attachLabel(contact, labelId);
                     delegate.processResult(result);
                 }catch (UnsuccessfullRequestEx e){
-                    delegate.processError(e.getResponceCode(),e.getResponceStr());
+                    delegate.processError(e.getErrMessage(),e.getResponceCode(),e.getResponceStr());
                 }
             }
         });
@@ -227,7 +227,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
         if (response.getResponseCode() == 200) {
             return true;
         } else
-            throw new UnsuccessfullRequestEx("Error triggerAutomation()", response.getResponseCode(), response.getResponseStr());
+            throw new UnsuccessfullRequestEx(response.getData(), response.getResponseCode(), response.getResponseStr());
     }
 
     public boolean triggerAutomationAsync(final ZingleContact contact, final String automationId,final ServiceDelegate<Boolean> delegate) {
@@ -242,7 +242,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
                     Boolean result=triggerAutomation(contact, automationId);
                     delegate.processResult(result);
                 }catch (UnsuccessfullRequestEx e){
-                    delegate.processError(e.getResponceCode(),e.getResponceStr());
+                    delegate.processError(e.getErrMessage(),e.getResponceCode(),e.getResponceStr());
                 }
             }
         });
@@ -285,7 +285,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
             }
             return mapper(result);
         } else
-            throw new UnsuccessfullRequestEx("Error setFieldValue()", response.getResponseCode(), response.getResponseStr());
+            throw new UnsuccessfullRequestEx(response.getData(), response.getResponseCode(), response.getResponseStr());
     }
 
     public boolean setFieldValueAsync(final ZingleContact contact, final ZingleContactFieldValue fieldValue,final ServiceDelegate<ZingleContact> delegate) {
@@ -300,7 +300,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
                     ZingleContact result=setFieldValue(contact, fieldValue);
                     delegate.processResult(result);
                 }catch (UnsuccessfullRequestEx e){
-                    delegate.processError(e.getResponceCode(),e.getResponceStr());
+                    delegate.processError(e.getErrMessage(),e.getResponceCode(),e.getResponceStr());
                 }
             }
         });

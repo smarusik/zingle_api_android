@@ -73,4 +73,8 @@ public class Participant {
     public void setChannelValue(String channelValue) {
         this.channelValue = channelValue;
     }
+
+    public boolean equals(Participant o) {
+        return this.id.equals(o.getId()) && this.type.equals(o.getType());
+    }
 }

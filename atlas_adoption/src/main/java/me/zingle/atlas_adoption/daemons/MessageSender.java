@@ -2,6 +2,7 @@ package me.zingle.atlas_adoption.daemons;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Handler;
 
 import java.util.List;
 
@@ -20,11 +21,24 @@ import me.zingle.atlas_adoption.utils.Converters;
  */
 public class MessageSender extends IntentService{
 
-    DataServices dataServices=DataServices.getItem();
+    private Handler handler;
 
+    final int MAX_TRIES=3;
+
+    DataServices dataServices=DataServices.getItem();
 
     public MessageSender() {
         super("Message sending service.");
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        handler=new Handler();
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    private void updateListView(){
+        handler.post(new MessageListUpdater());
     }
 
     @Override
@@ -43,7 +57,8 @@ public class MessageSender extends IntentService{
         }
 
         ZingleNewMessageService messageService=new ZingleNewMessageService(service);
-        while(!msgForSend.isSent()) {
+        int triesCount=0;
+        while(!msgForSend.isSent() && triesCount<MAX_TRIES) {
             try {
                 List<String> ids=messageService.sendMessage(message);
                 if(!ids.isEmpty()){
@@ -54,8 +69,12 @@ public class MessageSender extends IntentService{
 
             } catch (UnsuccessfullRequestEx e) {
                 Log.err("Error sending message\n" + message + "\n" + e.getResponceCode() + "\n" + e.getResponceStr());
-
             }
+            triesCount++;
         }
+        if(triesCount>=MAX_TRIES){
+            msgForSend.setFailed(true);
+        }
+        updateListView();
     }
 }

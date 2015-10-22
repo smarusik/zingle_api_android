@@ -1,8 +1,9 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<menu xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ZingleMessagingActivity">
 
+<!--
     <item android:id="@+id/action_exit"
         android:title="@string/action_exit"/>
+-->
 
 </menu>

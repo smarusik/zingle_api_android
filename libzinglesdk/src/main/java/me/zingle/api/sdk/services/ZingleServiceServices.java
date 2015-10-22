@@ -120,7 +120,7 @@ public class ZingleServiceServices extends ZingleBaseService<ZingleService>{
             return mapper(result);
         }
         else
-            throw new UnsuccessfullRequestEx("Error create()",response.getResponseCode(),response.getResponseStr());
+            throw new UnsuccessfullRequestEx(response.getData(),response.getResponseCode(),response.getResponseStr());
     }
 
     public boolean updateSettingAsync(final ZingleServiceSetting object,final ServiceDelegate<ZingleService> delegate){
@@ -135,7 +135,7 @@ public class ZingleServiceServices extends ZingleBaseService<ZingleService>{
                     ZingleService result=updateSetting(object);
                     delegate.processResult(result);
                 }catch (UnsuccessfullRequestEx e){
-                    delegate.processError(e.getResponceCode(),e.getResponceStr());
+                    delegate.processError(e.getErrMessage(),e.getResponceCode(),e.getResponceStr());
                 }
             }
         });

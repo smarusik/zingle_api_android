@@ -137,45 +137,47 @@ public class ZingleConnection {
 
             connection.connect();
 
-            Log.info(ZingleConnection.class, "send()", connection.getRequestMethod() + ": " + connection.getURL().toString());
-
             if(query.getPayload()!=null){
                 OutputStream os = connection.getOutputStream();
                 os.write(query.getPayload().toString().getBytes());
                 os.flush();
                 os.close();
-
-                Log.info(ZingleConnection.class, "send()", "Payload transmitted:\n" + query.getPayload().toString());
             }
 
             result.setResponseCode(connection.getResponseCode());
             result.setResponseStr(connection.getResponseMessage());
 
-            Log.info(ZingleConnection.class, "send()", "Responce:\n" + connection.getResponseCode() + ":" + connection.getResponseMessage());
+            InputStream dataStream;
 
             if (result.getResponseCode() == 200) {
-
-                InputStream dataStream;
                 dataStream = connection.getInputStream();
+            }
+            else {
+                dataStream = connection.getErrorStream();
+            }
 
-                Scanner channel = new Scanner(dataStream);
-                channel.useDelimiter("\\A");
+            Scanner channel = new Scanner(dataStream);
+            channel.useDelimiter("\\A");
 
-                StringBuilder res = new StringBuilder();
+            StringBuilder res = new StringBuilder();
 
+            while (channel.hasNext()) {
+                res.append(channel.next());
+            }
 
-                while (channel.hasNext()) {
-                    res.append(channel.next());
-                }
+            result.setDataWithStr(res.toString());
 
+            channel.close();
+            dataStream.close();
 
-                result.setDataWithStr(res.toString());
-
-                channel.close();
-                dataStream.close();
-
+            if (result.getResponseCode() == 200) {
                 Log.info(ZingleConnection.class, "send()", "Receive data:\n" + res);
-
+            }
+            else {
+                Log.err(ZingleConnection.class, "send()", connection.getRequestMethod() + ": " + connection.getURL().toString());
+                Log.err(ZingleConnection.class, "send()", "Payload transmitted:\n" + query.getPayload().toString());
+                Log.err(ZingleConnection.class, "send()", "Responce:\n" + connection.getResponseCode() + ":" + connection.getResponseMessage());
+                Log.err(ZingleConnection.class, "send()", "Receive data:\n" + res);
             }
 
             connection.disconnect();

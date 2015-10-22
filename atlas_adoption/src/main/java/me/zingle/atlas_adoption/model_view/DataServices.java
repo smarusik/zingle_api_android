@@ -29,6 +29,23 @@ public class DataServices {
     private DataServices() {
     }
 
+    public MessagesList getListView() {
+        return listView;
+    }
+
+    public void setListView(MessagesList listView) {
+        this.listView = listView;
+    }
+
+    public void updateMessagesList(){
+        if(listView!=null)
+            listView.reloadMessagesList();
+    }
+
+    public void showEndOfMessagesList(){
+        if(listView!=null)
+            listView.showLastMessage();
+    }
 
     public void initConversation(MessagesList list){
         synchronized (dataModel){
@@ -134,7 +151,6 @@ public class DataServices {
                 } else {
                     addMessageToGroup(group, message);
                 }
-                listView.reloadMessagesList();
             }
         }
     }
@@ -144,6 +160,7 @@ public class DataServices {
         synchronized (dataModel) {
             dataModel.getStraightList().put(message.getId(), message);
             addToConversation(message);
+            listView.reloadMessagesList();
         }
     }
 

@@ -136,7 +136,7 @@ public class StartScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_list);
 
-        Log.init(ZingleVerbosityLevel.ZINGLE_VERBOSITY_INFO, System.err);
+        Log.init(ZingleVerbosityLevel.ZINGLE_VERBOSITY_ERROR, System.err);
 
         wds =WorkingDataSet.getItem();
         wds.setLogin(name);

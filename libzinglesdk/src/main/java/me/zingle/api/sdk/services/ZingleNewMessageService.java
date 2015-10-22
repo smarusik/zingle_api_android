@@ -85,7 +85,7 @@ public class ZingleNewMessageService extends ZingleBaseService<ZingleNewMessage>
             }
         }
         else
-            throw new UnsuccessfullRequestEx("Error sendMessage()",response.getResponseCode(),response.getResponseStr());
+            throw new UnsuccessfullRequestEx(response.getData(),response.getResponseCode(),response.getResponseStr());
     }
 
     public boolean sendMessageAsync(final ZingleNewMessage msg, final ServiceDelegate<List<String>> delegate){
@@ -100,7 +100,7 @@ public class ZingleNewMessageService extends ZingleBaseService<ZingleNewMessage>
                     List<String> result=sendMessage(msg);
                     delegate.processResult(result);
                 }catch (UnsuccessfullRequestEx e){
-                    delegate.processError(e.getResponceCode(),e.getResponceStr());
+                    delegate.processError(e.getErrMessage(),e.getResponceCode(),e.getResponceStr());
                 }
             }
         });

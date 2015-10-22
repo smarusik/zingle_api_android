@@ -2,6 +2,7 @@ package me.zingle.atlas_adoption.daemons;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Handler;
 
 import me.zingle.atlas_adoption.facade_models.Attachment;
 import me.zingle.atlas_adoption.facade_models.Message;
@@ -13,6 +14,11 @@ import me.zingle.atlas_adoption.utils.Converters;
  * Created by SLAVA 10 2015.
  */
 public class AttachmentDownloader extends IntentService {
+    private Handler handler;
+
+    private void updateListView(){
+        handler.post(new MessageListUpdater());
+    }
 
     DataServices dataServices=DataServices.getItem();
 
@@ -43,6 +49,7 @@ public class AttachmentDownloader extends IntentService {
                     dataServices.addCachedItem(attachment.getUri().toString(),data);
                 }
             }
+            updateListView();
         }
     }
 }

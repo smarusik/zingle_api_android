@@ -168,7 +168,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
             return mapper(result);
         }
         else
-            throw new UnsuccessfullRequestEx("Error get()",response.getResponseCode(),response.getResponseStr());
+            throw new UnsuccessfullRequestEx(response.getData(),response.getResponseCode(),response.getResponseStr());
     }
 
     public boolean getAsync(final String id,final ServiceDelegate<Model> delegate){
@@ -183,7 +183,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
                     Model result = get(id);
                     delegate.processResult(result);
                 } catch (UnsuccessfullRequestEx e) {
-                    delegate.processError(e.getResponceCode(), e.getResponceStr());
+                    delegate.processError(e.getErrMessage(),e.getResponceCode(),e.getResponceStr());
                 }
             }
         });
@@ -211,7 +211,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
             return arrayMapper(response.getData());
         }
         else
-            throw new UnsuccessfullRequestEx("Error list()",response.getResponseCode(),response.getResponseStr());
+            throw new UnsuccessfullRequestEx(response.getData(),response.getResponseCode(),response.getResponseStr());
     }
 
     public boolean listAsync(final ServiceDelegate<ZingleList<Model>> delegate){
@@ -226,7 +226,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
                     ZingleList<Model> result = list();
                     delegate.processResult(result);
                 } catch (UnsuccessfullRequestEx e) {
-                    delegate.processError(e.getResponceCode(), e.getResponceStr());
+                    delegate.processError(e.getErrMessage(),e.getResponceCode(),e.getResponceStr());
                 }
             }
         });
@@ -254,7 +254,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
             return arrayMapper(response.getData());
         }
         else
-            throw new UnsuccessfullRequestEx("Error list()",response.getResponseCode(),response.getResponseStr());
+            throw new UnsuccessfullRequestEx(response.getData(),response.getResponseCode(),response.getResponseStr());
     }
 
     public boolean listAsync(final List<QueryPart> conditions,final ServiceDelegate<ZingleList<Model>> delegate){
@@ -269,7 +269,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
                     ZingleList<Model> result=list(conditions);
                     delegate.processResult(result);
                 }catch (UnsuccessfullRequestEx e){
-                    delegate.processError(e.getResponceCode(),e.getResponceStr());
+                    delegate.processError(e.getErrMessage(),e.getResponceCode(),e.getResponceStr());
                 }
             }
         });
@@ -299,7 +299,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
             return true;
         }
         else
-            throw new UnsuccessfullRequestEx("Error delete ",response.getResponseCode(),response.getResponseStr());
+            throw new UnsuccessfullRequestEx(response.getData(),response.getResponseCode(),response.getResponseStr());
     }
 
     public boolean deleteAsync(final String id,final ServiceDelegate<Boolean> delegate){
@@ -313,7 +313,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
                 try {
                     delegate.processResult(delete(id));
                 } catch (UnsuccessfullRequestEx e) {
-                    delegate.processError(e.getResponceCode(), e.getResponceStr());
+                    delegate.processError(e.getErrMessage(),e.getResponceCode(),e.getResponceStr());
                 }
             }
         });
@@ -355,7 +355,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
             return mapper(result);
         }
         else
-            throw new UnsuccessfullRequestEx("Error create()",response.getResponseCode(),response.getResponseStr());
+            throw new UnsuccessfullRequestEx(response.getData(),response.getResponseCode(),response.getResponseStr());
     }
 
     public boolean createAsync(final Model object,final ServiceDelegate<Model> delegate){
@@ -370,7 +370,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
                     Model result=create(object);
                     delegate.processResult(result);
                 }catch (UnsuccessfullRequestEx e){
-                    delegate.processError(e.getResponceCode(),e.getResponceStr());
+                    delegate.processError(e.getErrMessage(),e.getResponceCode(),e.getResponceStr());
                 }
             }
         });
@@ -412,7 +412,7 @@ public Model update(Model object){
         return mapper(result);
     }
     else
-        throw new UnsuccessfullRequestEx("Error create()",response.getResponseCode(),response.getResponseStr());
+        throw new UnsuccessfullRequestEx(response.getData(),response.getResponseCode(),response.getResponseStr());
 }
 
     public boolean updateAsync(final Model object,final ServiceDelegate<Model> delegate){
@@ -427,7 +427,7 @@ public Model update(Model object){
                     Model result=update(object);
                     delegate.processResult(result);
                 }catch (UnsuccessfullRequestEx e){
-                    delegate.processError(e.getResponceCode(),e.getResponceStr());
+                    delegate.processError(e.getErrMessage(),e.getResponceCode(),e.getResponceStr());
                 }
             }
         });

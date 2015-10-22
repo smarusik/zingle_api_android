@@ -59,51 +59,6 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
         TIME_WEEKDAYS_NAMES=context.getResources().getStringArray(R.array.weekdays_names);
         timeFormat=android.text.format.DateFormat.getTimeFormat(context);
 
-
-
-
-/*
-        //Example data
-        Date today=new Date();
-
-        dataGroupServices.addItem(new Message("Message 2_1", client.getAuthContact(), client.getConnectedService(), new Date(today.getTime()-86401000)));
-        dataGroupServices.addItem(new Message("Message 2_2", client.getConnectedService(), client.getAuthContact(), new Date(today.getTime()-86403000)));
-        dataGroupServices.addItem(new Message("Message 2_3 And it would be a veeeeeeeery long message in order to fill space from left to right.....",
-                client.getAuthContact(), client.getConnectedService(), new Date(today.getTime()-86402000)));
-
-        dataGroupServices.addItem(new Message("Message 1_1", client.getAuthContact(), client.getConnectedService(), new Date(today.getTime()-1)));
-        dataGroupServices.addItem(new Message("Message 1_2", client.getConnectedService(), client.getAuthContact(), new Date(today.getTime()-2)));
-
-        Message msg=new Message("Message 1_3 It's a very loooong message too. See how it looks like.",
-                client.getConnectedService(), client.getAuthContact(), new Date(today.getTime()-3));
-        Attachment att=new Attachment();
-
-        att.setMimeType(MIME_TYPE_UNSUPPORTED);
-        att.setUri(Uri.parse("https://qa3-dashboard.zingle.me/service/612/contacts"));
-        att.setTextContent("URL attached");
-
-        msg.addAttachment(att);
-
-        dataGroupServices.addItem(msg);
-
-
-        dataGroupServices.addItem(new Message("Message 1_4 Continue to fill all the space with messages from both sides.",
-                client.getConnectedService(), client.getAuthContact(), new Date(today.getTime()-4)));
-
-        dataGroupServices.addItem(new Message("Message 4_1", client.getAuthContact(), client.getConnectedService(), new Date(today.getTime()-86400000*5+1000)));
-        dataGroupServices.addItem(new Message("Message 4_2", client.getConnectedService(), client.getAuthContact(), new Date(today.getTime()-86400000*5+4000)));
-        dataGroupServices.addItem(new Message("Message 4_3 It's a very loooong message too. See how it looks like.",
-                client.getConnectedService(), client.getAuthContact(), new Date(today.getTime()-86400000*5+2000)));
-        dataGroupServices.addItem(new Message("Message 4_4 Continue to fill all the space with messages from both sides.",
-                client.getConnectedService(), client.getAuthContact(), new Date(today.getTime()-86400000*5+3000)));
-
-        dataGroupServices.addItem(new Message("Message 3_4", client.getAuthContact(), client.getConnectedService(), new Date(today.getTime()-86400000*2+1000)));
-        dataGroupServices.addItem(new Message("Message 3_1", client.getConnectedService(), client.getAuthContact(), new Date(today.getTime()-86400000*2+4000)));
-        dataGroupServices.addItem(new Message("Message 3_3 Another day with veeeeeeeery long message in order to fill space from left to right.....",
-                client.getAuthContact(), client.getConnectedService(), new Date(today.getTime()-86400000*2+2000)));
-        dataGroupServices.addItem(new Message("Message 3_2", client.getConnectedService(), client.getAuthContact(), new Date(today.getTime()-86400000*2+3000)));
-*/
-
     }
 
     @Override
@@ -210,11 +165,13 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
         if(msg.getSender().equals(client.getAuthContact())){
             receiptView.setVisibility(View.VISIBLE);
             if(msg.isRead())
-                receiptView.setText("Read");
+                receiptView.setText(R.string.message_status_read);
             else if(msg.isSent())
-                receiptView.setText("Sent");
+                receiptView.setText(R.string.message_status_sent);
+            else if (msg.isFailed())
+                receiptView.setText(R.string.message_status_failed);
             else
-                receiptView.setText("Pending");
+                receiptView.setText(R.string.message_status_pending);
         }
         else
             receiptView.setVisibility(View.GONE);
