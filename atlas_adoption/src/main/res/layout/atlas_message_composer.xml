@@ -54,6 +54,6 @@
         android:textColor="@color/atlas_text_gray"
         android:text="SEND"
         />
-            
+
 </LinearLayout>
     

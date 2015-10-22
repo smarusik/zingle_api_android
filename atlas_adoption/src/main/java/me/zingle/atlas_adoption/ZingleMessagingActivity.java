@@ -3,7 +3,7 @@ package me.zingle.atlas_adoption;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
+import java.util.UUID;
 
 import me.zingle.atlas_adoption.daemons.MessageSender;
 import me.zingle.atlas_adoption.facade_models.Attachment;
@@ -91,12 +94,10 @@ public class ZingleMessagingActivity extends AppCompatActivity {
         messageComposer.registerMenuItem("Photo", new View.OnClickListener() {
             public void onClick(View v) {
 
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                String fileName = "cameraOutput" + System.currentTimeMillis() + ".jpg";
-                photoFile = new File(getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES), fileName);
-                final Uri outputUri = Uri.fromFile(photoFile);
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
-                startActivityForResult(cameraIntent, REQUEST_CODE_CAMERA);
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(cameraIntent, REQUEST_CODE_CAMERA);
+                }
             }
         });
 
@@ -139,12 +140,29 @@ public class ZingleMessagingActivity extends AppCompatActivity {
                     att = new Attachment();
                     ContentResolver cR = this.getContentResolver();
                     String type = cR.getType(data.getData());
-
                     att.setMimeType(type);
 
-                    att.setUri(data.getData());
-                    att.setCachePath(data.getData().toString());
-                    att.setTextContent("Image from camera.\n" + att.getUri());
+                    InputStream stream = null;
+                    UUID cachePath=UUID.randomUUID();
+
+                    Bundle extras = data.getExtras();
+                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+                    if(imageBitmap!=null) {
+                        Bitmap.CompressFormat format;
+                        format = Bitmap.CompressFormat.JPEG;
+
+                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        imageBitmap.compress(format, 100, bos);
+
+                        DataServices dataServices = DataServices.getItem();
+
+                        dataServices.addCachedItem(cachePath.toString(), bos.toByteArray());
+
+                        att.setUri(null);
+                        att.setCachePath(cachePath.toString());
+                        att.setTextContent("Image from camera.\n" + att.getUri());
+                    }
                 }
 
                 break;

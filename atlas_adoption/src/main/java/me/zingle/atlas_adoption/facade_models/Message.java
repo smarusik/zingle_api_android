@@ -54,6 +54,7 @@ public class Message {
         this.readAt = other.readAt;
         this.sent = other.sent;
         this.read = other.read;
+        this.failed=other.failed;
         this.attachments = other.attachments;
     }
 

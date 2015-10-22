@@ -15,6 +15,10 @@ import me.zingle.atlas_adoption.utils.Converters;
  */
 public class AttachmentDownloader extends IntentService {
     private Handler handler;
+/*
+    private int screenWidthDp;
+    private int smallestScreenWidthDp;
+*/
 
     private void updateListView(){
         handler.post(new MessageListUpdater());
@@ -24,6 +28,13 @@ public class AttachmentDownloader extends IntentService {
 
     public AttachmentDownloader() {
         super("DataDownloader");
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        handler=new Handler();
+
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
@@ -39,6 +50,10 @@ public class AttachmentDownloader extends IntentService {
             if (attachment.getMimeType() == MimeTypes.MIME_TYPE_IMAGE_WEBP ||
                     attachment.getMimeType() == MimeTypes.MIME_TYPE_IMAGE_JPEG ||
                     attachment.getMimeType() == MimeTypes.MIME_TYPE_IMAGE_PNG) {
+
+                //Configuration configuration = dataServices.getListView().getResources().getConfiguration();
+                //screenWidthDp = configuration.screenWidthDp;
+                //smallestScreenWidthDp = configuration.smallestScreenWidthDp;
 
                 if(attachment.getUri()!=null){
                     byte[] data=Converters.uriToByteArray(attachment.getMimeType(), attachment.getUri(), this);

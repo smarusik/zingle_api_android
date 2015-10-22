@@ -78,6 +78,7 @@ public class Converters {
 
     public static ZingleAttachment fromAttachment(Attachment attachment, Context context) {
         ZingleAttachment result = null;
+        DataServices dataServices=DataServices.getItem();
 
         if (attachment != null) {
             result = new ZingleAttachment();
@@ -87,12 +88,16 @@ public class Converters {
                     attachment.getMimeType() == MimeTypes.MIME_TYPE_IMAGE_JPEG ||
                     attachment.getMimeType() == MimeTypes.MIME_TYPE_IMAGE_PNG) {
 
+                byte[] data;
+                if(attachment.getUri()!=null) {
+                    data = uriToByteArray(attachment.getMimeType(), attachment.getUri(), context);
+                    dataServices.addCachedItem(attachment.getUri().toString(),data);
+                }
+                else{
+                    data=dataServices.getCachedItem(attachment.getCachePath());
+                }
 
-                byte[] data=uriToByteArray(attachment.getMimeType(),attachment.getUri(),context);
-
-                        DataServices dataServices=DataServices.getItem();
-                        dataServices.addCachedItem(attachment.getUri().toString(),data);
-                        result.setData(Base64.encode(data, Base64.DEFAULT));
+                result.setData(Base64.encode(data, Base64.DEFAULT));
             }
         }
 
