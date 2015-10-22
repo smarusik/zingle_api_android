@@ -53,7 +53,8 @@ public class MessageReceiver extends IntentService {
                 }
             }
 
-            for (ZingleContact contact : wds.getContacts()) {
+            for (int i=0; i<wds.getContacts().size();i++) {
+                ZingleContact contact=wds.getContact(i);
                 updateMessageListForContact(contact, true);
             }
             updateListView();

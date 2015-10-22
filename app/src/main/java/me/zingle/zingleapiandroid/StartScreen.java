@@ -10,9 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.List;
-
-import me.zingle.api.sdk.dao.QueryPart;
 import me.zingle.api.sdk.dao.ZingleConnection;
 import me.zingle.api.sdk.logger.Log;
 import me.zingle.api.sdk.logger.ZingleVerbosityLevel;
@@ -94,12 +91,12 @@ public class StartScreen extends AppCompatActivity {
 
 
             //TODO Temporary contact GET substitution
-            List<QueryPart> conditions=contactServices.createConditions("channel_value", "*044*");
-            ZingleList<ZingleContact> contacts=contactServices.list(conditions);
+            //List<QueryPart> conditions=contactServices.createConditions("channel_value", "*044*");
+            ZingleList<ZingleContact> contacts=contactServices.list(/*conditions*/);
 
             if(contacts!=null && contacts.objects.size()>0){
                 publishProgress("\nAssigning contact...");
-                wds.addContacts(contacts.objects);
+                wds.setContacts(contacts.objects);
                 publishProgress(contacts.toString());
 
                 Intent receiveIntent=new Intent(getBaseContext(), MessageReceiver.class);
@@ -218,10 +215,13 @@ public class StartScreen extends AppCompatActivity {
 
             service=wds.getAllowedServices().get(id);
 
+            continueApp.setClickable(false);
+            wds.setContacts(null);
             new SetUpContact().execute(id);
 
             return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }

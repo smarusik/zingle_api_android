@@ -112,7 +112,6 @@ public class ZingleConnection {
             result.setErrorStackTrace(e.getStackTrace().toString());
             result.setErrorString(e.getMessage());
 
-
             Log.err(this.getClass(), "send()", apiPath + apiVersion + query.getResourcePath() + query.getQueryStr() + " is not a proper URL name.");
 
             return result;
@@ -171,11 +170,15 @@ public class ZingleConnection {
             dataStream.close();
 
             if (result.getResponseCode() == 200) {
+                Log.info(ZingleConnection.class, "send()", connection.getRequestMethod() + ": " + connection.getURL().toString());
+                if(query.getPayload()!=null)
+                    Log.info(ZingleConnection.class, "send()", "Payload transmitted:\n" + query.getPayload().toString());
                 Log.info(ZingleConnection.class, "send()", "Receive data:\n" + res);
             }
             else {
                 Log.err(ZingleConnection.class, "send()", connection.getRequestMethod() + ": " + connection.getURL().toString());
-                Log.err(ZingleConnection.class, "send()", "Payload transmitted:\n" + query.getPayload().toString());
+                if(query.getPayload()!=null)
+                    Log.err(ZingleConnection.class, "send()", "Payload transmitted:\n" + query.getPayload().toString());
                 Log.err(ZingleConnection.class, "send()", "Responce:\n" + connection.getResponseCode() + ":" + connection.getResponseMessage());
                 Log.err(ZingleConnection.class, "send()", "Receive data:\n" + res);
             }
