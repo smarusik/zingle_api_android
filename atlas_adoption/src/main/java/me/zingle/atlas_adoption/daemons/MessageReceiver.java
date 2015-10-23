@@ -45,6 +45,13 @@ public class MessageReceiver extends IntentService {
         final WorkingDataSet wds = WorkingDataSet.getItem();
 
         while (true) {
+
+            for (int i=0; i<wds.getContacts().size();i++) {
+                ZingleContact contact=wds.getContact(i);
+                updateMessageListForContact(contact, true);
+            }
+            updateListView();
+
             synchronized (this) {
                 try {
                     wait(5000);
@@ -52,12 +59,6 @@ public class MessageReceiver extends IntentService {
                     e.printStackTrace();
                 }
             }
-
-            for (int i=0; i<wds.getContacts().size();i++) {
-                ZingleContact contact=wds.getContact(i);
-                updateMessageListForContact(contact, true);
-            }
-            updateListView();
         }
     }
 
@@ -89,12 +90,7 @@ public class MessageReceiver extends IntentService {
                     }
                 }
             }
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    dataServices.updateMessagesList();
-                }
-            });
+            handler.post(new MessageListUpdater(false));
         }
     }
 
