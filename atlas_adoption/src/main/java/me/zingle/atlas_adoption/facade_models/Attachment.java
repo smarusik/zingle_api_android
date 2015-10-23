@@ -34,7 +34,8 @@ public class Attachment {
 
     public void setMimeType(String mimeType)
     {
-        String unifiedType=mimeType.toLowerCase();
+        String unifiedType="";
+        if(mimeType!=null) unifiedType=mimeType.toLowerCase();
 
         if (unifiedType.equals(MIME_TYPE_TEXT.toString())) {
             this.mimeType = MIME_TYPE_TEXT;

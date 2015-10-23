@@ -89,6 +89,12 @@ public class MessageReceiver extends IntentService {
                     }
                 }
             }
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    dataServices.updateMessagesList();
+                }
+            });
         }
     }
 

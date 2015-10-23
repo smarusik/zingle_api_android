@@ -45,6 +45,15 @@ public class WorkingDataSet {
         return contacts.get(index);
     }
 
+    synchronized public ZingleContact getContactById(String id){
+
+        for(ZingleContact c:contacts){
+            if(c.getId().equals(id)) return c;
+        }
+
+        return null;
+    }
+
     synchronized public void setContacts(List<ZingleContact> contacts) {
         this.contacts = contacts;
     }

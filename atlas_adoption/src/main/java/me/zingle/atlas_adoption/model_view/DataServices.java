@@ -139,16 +139,12 @@ public class DataServices {
                     }
                 }
 
-                if (group == null) {
-                    group = new DataGroup(startOfDay(cntlDate), endOfDay(cntlDate));
-
-
+                if (group != null) {
                     if (!group.getMessages().contains(message.getId()))
                         addMessageToGroup(group, message);
-
-
-                    conversation.addGroup(group);
                 } else {
+                    group = new DataGroup(startOfDay(cntlDate), endOfDay(cntlDate));
+                    conversation.addGroup(group);
                     addMessageToGroup(group, message);
                 }
             }
@@ -160,7 +156,6 @@ public class DataServices {
         synchronized (dataModel) {
             dataModel.getStraightList().put(message.getId(), message);
             addToConversation(message);
-            listView.reloadMessagesList();
         }
     }
 

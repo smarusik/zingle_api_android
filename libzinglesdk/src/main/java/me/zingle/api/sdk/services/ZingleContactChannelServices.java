@@ -43,12 +43,12 @@ public class ZingleContactChannelServices extends ZingleBaseService<ZingleContac
 
         try{
             result.setId(source.getString("id"));
-            result.setValue(source.getString("value"));
-            result.setCountry(source.getString("country"));
-            result.setDisplayName(source.getString("display_name"));
-            result.setFormattedValue(source.getString("formatted_value"));
-            result.setIsDefault(source.getBoolean("is_default"));
-            result.setIsDefaultForType(source.getBoolean("is_default_for_type"));
+            result.setValue(source.optString("value"));
+            result.setCountry(source.optString("country"));
+            result.setDisplayName(source.optString("display_name"));
+            result.setFormattedValue(source.optString("formatted_value"));
+            result.setIsDefault(source.optBoolean("is_default"));
+            result.setIsDefaultForType(source.optBoolean("is_default_for_type"));
 
         } catch (JSONException e) {
             e.printStackTrace();

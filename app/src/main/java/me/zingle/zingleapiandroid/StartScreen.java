@@ -10,6 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import me.zingle.api.sdk.dao.QueryPart;
 import me.zingle.api.sdk.dao.ZingleConnection;
 import me.zingle.api.sdk.logger.Log;
 import me.zingle.api.sdk.logger.ZingleVerbosityLevel;
@@ -91,8 +95,8 @@ public class StartScreen extends AppCompatActivity {
 
 
             //TODO Temporary contact GET substitution
-            //List<QueryPart> conditions=contactServices.createConditions("channel_value", "*044*");
-            ZingleList<ZingleContact> contacts=contactServices.list(/*conditions*/);
+            List<QueryPart> conditions=contactServices.createConditions("page_size,page", "10","2");
+            ZingleList<ZingleContact> contacts=contactServices.list(conditions);
 
             if(contacts!=null && contacts.objects.size()>0){
                 publishProgress("\nAssigning contact...");
@@ -153,8 +157,8 @@ public class StartScreen extends AppCompatActivity {
                     Intent intent = new Intent(getBaseContext(), ZingleMessagingActivity.class);
                     intent.putExtra("Token", wds.getLogin());
                     intent.putExtra("Key", wds.getPassword());
-                    intent.putExtra(Client.CONTACT_ID, wds.getContact(0).getId());
-                    intent.putExtra(Client.CONTACT_CH_VALUE, wds.getContact(0).getChannels().get(0).getValue());
+                    intent.putExtra(Client.CONTACT_ID, "be404cbd-cf83-4c2e-9a32-add302cf2939");
+                    intent.putExtra(Client.CONTACT_CH_VALUE, "+16190067078");
                     intent.putExtra(Client.SERVICE_ID, service.getId());
                     intent.putExtra(Client.SERVICE_NAME, service.getDisplayName());
                     intent.putExtra(Client.SERVICE_CH_VALUE, service.getChannels().get(0).getValue());
@@ -216,7 +220,7 @@ public class StartScreen extends AppCompatActivity {
             service=wds.getAllowedServices().get(id);
 
             continueApp.setClickable(false);
-            wds.setContacts(null);
+            wds.setContacts(new ArrayList<ZingleContact>());
             new SetUpContact().execute(id);
 
             return true;

@@ -75,6 +75,7 @@ public class Participant {
     }
 
     public boolean equals(Participant o) {
-        return this.id.equals(o.getId()) && this.type.equals(o.getType());
+        if(o==null) return false;
+        return (this.id.equals(o.getId()) || this.channelValue.equals(o.getChannelValue())) && this.type.equals(o.getType());
     }
 }

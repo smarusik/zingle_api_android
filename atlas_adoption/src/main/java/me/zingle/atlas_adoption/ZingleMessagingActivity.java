@@ -75,6 +75,7 @@ public class ZingleMessagingActivity extends AppCompatActivity {
             public boolean beforeSend(Message message) {
 
                 dataGroupServices.addItem(message);
+                dataGroupServices.updateMessagesList();
 
                 if(messagesList!=null){
                     messagesList.reloadMessagesList();
@@ -136,7 +137,7 @@ public class ZingleMessagingActivity extends AppCompatActivity {
 
         switch (requestCode) {
             case REQUEST_CODE_CAMERA:
-                if(data!=null) {
+                if(data.getData()!=null) {
                     att = new Attachment();
                     ContentResolver cR = this.getContentResolver();
                     String type = cR.getType(data.getData());
