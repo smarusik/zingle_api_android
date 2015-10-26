@@ -13,7 +13,10 @@ import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import me.zingle.api.sdk.model.ZingleAttachment;
 import me.zingle.api.sdk.model.ZingleChannelType;
@@ -44,8 +47,12 @@ public class Converters {
         return result;
     }
 
-    public static ZingleChannelType fromTypeId(String tid){
-        return new ZingleChannelType(tid);
+    public static List<ZingleChannelType> fromTypeId(Set<String> tid){
+        List<ZingleChannelType> result=new ArrayList<>();
+        for(String t:tid){
+            result.add(new ZingleChannelType(t));
+        }
+        return result;
     }
 
     public static ZingleNewMessage fromMessage(Message msg){
@@ -60,7 +67,7 @@ public class Converters {
             result.setRecipientType(convertType(msg.getRecipient().getType()));
             result.addRecipient(Converters.fromParticipant(msg.getRecipient()));
 
-            result.addChannelType(fromTypeId(msg.getChannelTypeId()));
+            result.addChannelTypes(fromTypeId(msg.getChannelTypeId()));
 
             result.setBody(msg.getBody());
 

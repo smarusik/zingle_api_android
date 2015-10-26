@@ -1,5 +1,8 @@
 package me.zingle.atlas_adoption.utils;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import me.zingle.atlas_adoption.facade_models.Participant;
 
 /**
@@ -28,14 +31,17 @@ public class Client {
 
     private Participant authContact;
     private Participant connectedService;
-    private String channelTypeId;
-
-    synchronized public String getChannelTypeId() {
+    private Set<String> channelTypeId=new HashSet<String>();
+    synchronized public Set<String> getChannelTypeId() {
         return channelTypeId;
     }
 
-    synchronized public void setChannelTypeId(String channelTypeId) {
+    synchronized public void setChannelTypeId(Set<String> channelTypeId) {
         this.channelTypeId = channelTypeId;
+    }
+
+    synchronized public void addChannelTypeId(String channelTypeId) {
+        this.channelTypeId.add(channelTypeId);
     }
 
     synchronized public Participant getAuthContact() {

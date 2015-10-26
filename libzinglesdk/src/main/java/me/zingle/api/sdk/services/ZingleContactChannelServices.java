@@ -24,7 +24,7 @@ public class ZingleContactChannelServices extends ZingleBaseService<ZingleContac
 
     @Override
     protected String resourcePath(boolean specific) {
-        String base=String.format("/services/%s/contact/%s/channels",parentService.getId(),parentContact.getId());
+        String base=String.format("/services/%s/contacts/%s/channels",parentService.getId(),parentContact.getId());
 
         if(specific)
             return base+"/%s";

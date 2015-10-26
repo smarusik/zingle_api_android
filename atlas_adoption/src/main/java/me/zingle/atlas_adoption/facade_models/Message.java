@@ -2,7 +2,9 @@ package me.zingle.atlas_adoption.facade_models;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -19,7 +21,7 @@ public class Message {
     private String body;
     private Participant sender;
     private Participant recipient;
-    private String channelTypeId;
+    private Set<String> channelTypeId;
     private Date createdAt;
     private Date readAt;
     private boolean sent;
@@ -58,12 +60,17 @@ public class Message {
         this.attachments = other.attachments;
     }
 
-    public String getChannelTypeId() {
+    public Set<String> getChannelTypeId() {
         return channelTypeId;
     }
 
-    public void setChannelTypeId(String channelTypeId) {
+    public void setChannelTypeId(Set<String> channelTypeId) {
         this.channelTypeId = channelTypeId;
+    }
+
+    public void addChannelTypeId(String channelTypeId){
+        if(this.channelTypeId==null) this.channelTypeId=new HashSet<>();
+        this.channelTypeId.add(channelTypeId);
     }
 
     public String getId() {

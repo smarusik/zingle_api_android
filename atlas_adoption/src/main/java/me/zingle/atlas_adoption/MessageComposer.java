@@ -146,7 +146,8 @@ public class MessageComposer extends FrameLayout {
                     createdMessage.setBody(text);
                     createdMessage.setSender(client.getAuthContact());
                     createdMessage.setRecipient(client.getConnectedService());
-                    createdMessage.setChannelTypeId(client.getChannelTypeId());
+                    for(String tid:client.getChannelTypeId())
+                        createdMessage.addChannelTypeId(tid);
                     createdMessage.setCreatedAt(new Date());
 
                     if (listener != null) {

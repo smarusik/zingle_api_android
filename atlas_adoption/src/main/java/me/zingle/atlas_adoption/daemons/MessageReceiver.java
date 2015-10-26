@@ -1,8 +1,14 @@
 package me.zingle.atlas_adoption.daemons;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 
 import java.util.List;
 
@@ -12,16 +18,22 @@ import me.zingle.api.sdk.model.ZingleList;
 import me.zingle.api.sdk.model.ZingleMessage;
 import me.zingle.api.sdk.model.ZingleSortOrder;
 import me.zingle.api.sdk.services.ZingleMessageServices;
+import me.zingle.atlas_adoption.R;
+import me.zingle.atlas_adoption.ZingleMessagingActivity;
 import me.zingle.atlas_adoption.facade_models.Attachment;
 import me.zingle.atlas_adoption.facade_models.Message;
+import me.zingle.atlas_adoption.facade_models.Participant;
 import me.zingle.atlas_adoption.model_view.DataServices;
 import me.zingle.atlas_adoption.utils.Converters;
+
+//import android.app.Notification;
 
 /**
  * Created by SLAVA 10 2015.
  */
 public class MessageReceiver extends IntentService {
 
+    public static final int NOTIFICATION_ID=5060;
     private Handler handler;
 
     private void updateListView(){
@@ -62,6 +74,33 @@ public class MessageReceiver extends IntentService {
         }
     }
 
+    private void parseMsgList(ZingleList<ZingleMessage> messages){
+        for (ZingleMessage message : messages.objects) {
+            Message msg = Converters.fromZingleMessage(message);
+            dataServices.addItem(msg);
+            processAttachments(msg);
+            if(!dataServices.addToConversation(msg) && msg.getSender().getType()== Participant.ParticipantType.SERVICE){
+                //Use notification if conversation inactive.
+                Intent intent = new Intent(this, ZingleMessagingActivity.class);
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+                stackBuilder.addParentStack(ZingleMessagingActivity.class);
+                stackBuilder.addNextIntent(intent);
+                PendingIntent pendingIntent =  stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                Notification notification = new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_zingle_notify)
+                        .setContentTitle(msg.getSender().getName())
+                        .setAutoCancel(true)
+                        .setPriority(Notification.PRIORITY_MAX)
+                        .setDefaults(Notification.DEFAULT_VIBRATE)
+                        .setContentIntent(pendingIntent)
+                        .setContentText(msg.getBody().substring(0,25)+"...")
+                        .build();
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE); notificationManager.notify(NOTIFICATION_ID, notification);
+            }
+        }
+    }
+
     private void updateMessageListForContact(ZingleContact contact, boolean all) {
         ZingleMessageServices messageServices = new ZingleMessageServices(contact.getService());
 
@@ -69,11 +108,7 @@ public class MessageReceiver extends IntentService {
 
         ZingleList<ZingleMessage> messages = messageServices.list(conds);
         if (messages != null) {
-            for (ZingleMessage message : messages.objects) {
-                Message msg = Converters.fromZingleMessage(message);
-                dataServices.addItem(msg);
-                processAttachments(msg);
-            }
+            parseMsgList(messages);
 
             if (all) {
                 int pagesNum = messages.totalPages;
@@ -82,11 +117,7 @@ public class MessageReceiver extends IntentService {
 
                     messages = messageServices.list(conds);
                     if (messages != null) {
-                        for (ZingleMessage message : messages.objects) {
-                            Message msg = Converters.fromZingleMessage(message);
-                            dataServices.addItem(msg);
-                            processAttachments(msg);
-                        }
+                        parseMsgList(messages);
                     }
                 }
             }

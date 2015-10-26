@@ -122,7 +122,7 @@ public class DataServices {
 
     }
 
-    public void addToConversation(Message message){
+    public boolean addToConversation(Message message){
         synchronized (dataModel) {
             Client client = Client.getItem();
             if (message.getSender().equals(client.getAuthContact()) || message.getRecipient().equals(client.getAuthContact())) {
@@ -147,7 +147,10 @@ public class DataServices {
                     conversation.addGroup(group);
                     addMessageToGroup(group, message);
                 }
+
+                return true;
             }
+            else return false;
         }
     }
 
@@ -155,7 +158,7 @@ public class DataServices {
 
         synchronized (dataModel) {
             dataModel.getStraightList().put(message.getId(), message);
-            addToConversation(message);
+            //addToConversation(message);
         }
     }
 

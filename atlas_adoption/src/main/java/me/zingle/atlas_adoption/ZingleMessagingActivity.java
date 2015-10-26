@@ -19,7 +19,6 @@ import java.util.UUID;
 import me.zingle.atlas_adoption.daemons.MessageSender;
 import me.zingle.atlas_adoption.facade_models.Attachment;
 import me.zingle.atlas_adoption.facade_models.Message;
-import me.zingle.atlas_adoption.facade_models.Participant;
 import me.zingle.atlas_adoption.model_view.DataServices;
 import me.zingle.atlas_adoption.utils.Client;
 
@@ -45,25 +44,6 @@ public class ZingleMessagingActivity extends AppCompatActivity {
         setContentView(R.layout.zingle_messaging_activity);
         client =Client.getItem();
 
-        Bundle credentials = getIntent().getExtras();
-        if (credentials != null) {
-            Participant p=new Participant();
-
-            p.setType( Participant.ParticipantType.CONTACT);
-            p.setId(credentials.getString(Client.CONTACT_ID));
-            p.setChannelValue(credentials.getString(Client.CONTACT_CH_VALUE));
-            client.setAuthContact(p);
-
-            p=new Participant();
-            p.setType(Participant.ParticipantType.SERVICE);
-            p.setId(credentials.getString(Client.SERVICE_ID));
-            p.setName(credentials.getString(Client.SERVICE_NAME));
-            p.setChannelValue(credentials.getString(Client.SERVICE_CH_VALUE));
-            client.setConnectedService(p);
-
-            client.setChannelTypeId(credentials.getString(Client.CH_TYPE_ID));
-        }
-
         messagesList = (MessagesList) findViewById(R.id.atlas_screen_messages_messages_list);
 
         messagesList.init(this);
@@ -75,6 +55,7 @@ public class ZingleMessagingActivity extends AppCompatActivity {
             public boolean beforeSend(Message message) {
 
                 dataGroupServices.addItem(message);
+                dataGroupServices.addToConversation(message);
                 dataGroupServices.updateMessagesList();
 
                 if(messagesList!=null){

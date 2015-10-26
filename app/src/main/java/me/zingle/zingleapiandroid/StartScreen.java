@@ -25,6 +25,7 @@ import me.zingle.api.sdk.services.ZingleServiceServices;
 import me.zingle.atlas_adoption.ZingleMessagingActivity;
 import me.zingle.atlas_adoption.daemons.MessageReceiver;
 import me.zingle.atlas_adoption.daemons.WorkingDataSet;
+import me.zingle.atlas_adoption.facade_models.Participant;
 import me.zingle.atlas_adoption.utils.Client;
 
 //import android.util.Log;
@@ -32,9 +33,7 @@ import me.zingle.atlas_adoption.utils.Client;
 public class StartScreen extends AppCompatActivity {
     final String name="viacheslav.marusyk@cyberhull.com";
     final String password="20cheVrolet15";
-    final String serviceId="b1037b83-f2b6-4258-9b62-655c2478a329";
-    final String contactId="e68a7c1e-fb5c-4b20-a68e-aca5731399fc";
-    final String serviceChannelTypeId="7c3b4034-f4df-4b85-9617-7571c46d7388";
+    final String contactId="27e4198e-1f07-414c-beef-5094916e56c1";
 
     WorkingDataSet wds;
     Button continueApp;
@@ -96,11 +95,13 @@ public class StartScreen extends AppCompatActivity {
 
             //TODO Temporary contact GET substitution
             List<QueryPart> conditions=contactServices.createConditions("page_size,page", "10","2");
-            ZingleList<ZingleContact> contacts=contactServices.list(conditions);
+            ZingleContact contact=contactServices.get(contactId);
 
-            if(contacts!=null && contacts.objects.size()>0){
+            if(contact!=null){
                 publishProgress("\nAssigning contact...");
-                wds.setContacts(contacts.objects);
+                List<ZingleContact> contacts=new ArrayList<ZingleContact>();
+                contacts.add(contact);
+                wds.setContacts(contacts);
                 publishProgress(contacts.toString());
 
                 Intent receiveIntent=new Intent(getBaseContext(), MessageReceiver.class);
@@ -154,15 +155,28 @@ public class StartScreen extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
+                    Client client=Client.getItem();
+
+                    Participant p=new Participant();
+
+                    p.setType( Participant.ParticipantType.CONTACT);
+                    p.setId(contactId);
+                    p.setChannelValue("smarusik@gmail.com");
+                    client.setAuthContact(p);
+
+                    p=new Participant();
+                    p.setType(Participant.ParticipantType.SERVICE);
+                    p.setId(service.getId());
+                    p.setName(service.getDisplayName());
+                    p.setChannelValue(service.getChannels().get(0).getValue());
+                    client.setConnectedService(p);
+
+                    client.addChannelTypeId(service.getChannels().get(0).getType().getId());
+                    //client.addChannelTypeId(wds.getContacts().get(0).getChannels().get(0).getType().getId());
+
                     Intent intent = new Intent(getBaseContext(), ZingleMessagingActivity.class);
                     intent.putExtra("Token", wds.getLogin());
                     intent.putExtra("Key", wds.getPassword());
-                    intent.putExtra(Client.CONTACT_ID, "be404cbd-cf83-4c2e-9a32-add302cf2939");
-                    intent.putExtra(Client.CONTACT_CH_VALUE, "+16190067078");
-                    intent.putExtra(Client.SERVICE_ID, service.getId());
-                    intent.putExtra(Client.SERVICE_NAME, service.getDisplayName());
-                    intent.putExtra(Client.SERVICE_CH_VALUE, service.getChannels().get(0).getValue());
-                    intent.putExtra(Client.CH_TYPE_ID, service.getChannelTypes().get(0).getId());
 
                     startActivity(intent);
 

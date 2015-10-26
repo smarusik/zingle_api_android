@@ -25,6 +25,12 @@ public class ZingleContactField extends ZingleBaseModel{
     public ZingleContactField() {
     }
 
+    public ZingleContactField(ZingleService service, String id) {
+        this.service = service;
+        this.id = id;
+    }
+
+
     public ZingleContactField(ZingleService service, String id, String displayName, String dataType, Boolean isGlobal, List<ZingleFieldOption> options) {
         this.service = service;
         this.id = id;

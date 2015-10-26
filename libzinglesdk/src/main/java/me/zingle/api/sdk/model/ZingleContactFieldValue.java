@@ -24,8 +24,9 @@ public class ZingleContactFieldValue extends ZingleBaseModel {
         this.selectedFieldOptionId = selectedFieldOptionId;
     }
 
-    public ZingleContactFieldValue(ZingleContactField contactField) {
+    public ZingleContactFieldValue(ZingleContactField contactField, Object value) {
         this.contactField = contactField;
+        this.value=value;
     }
 
     public ZingleContactField getContactField() {

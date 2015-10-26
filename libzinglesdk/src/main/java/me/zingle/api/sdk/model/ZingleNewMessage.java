@@ -95,8 +95,8 @@ public class ZingleNewMessage extends ZingleBaseModel {
         this.channelTypes = channelTypes;
     }
 
-    public void addChannelType(ZingleChannelType channelType) {
-        this.channelTypes.add(channelType);
+    public void addChannelTypes(List<ZingleChannelType> channelType) {
+        this.channelTypes.addAll(channelType);
     }
 
     public String getBody() {

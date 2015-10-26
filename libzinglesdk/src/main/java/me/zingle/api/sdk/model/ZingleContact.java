@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -113,14 +114,20 @@ public class ZingleContact extends ZingleBaseModel{
     }
 
     public void addCustomFieldValue(ZingleContactFieldValue contactFieldValue){
-        for(ZingleContactFieldValue v:customFieldValues){
-            if(v.getContactField().equals(contactFieldValue.getContactField())){
-                v.setValue(contactFieldValue.getValue());
-                v.setSelectedFieldOptionId(contactFieldValue.getSelectedFieldOptionId());
-                return;
+        if(customFieldValues!=null) {
+            for (ZingleContactFieldValue v : customFieldValues) {
+                if (v.getContactField().equals(contactFieldValue.getContactField())) {
+                    v.setValue(contactFieldValue.getValue());
+                    v.setSelectedFieldOptionId(contactFieldValue.getSelectedFieldOptionId());
+                    return;
+                }
             }
+            customFieldValues.add(contactFieldValue);
         }
-        customFieldValues.add(contactFieldValue);
+        else{
+            customFieldValues=new ArrayList<>();
+            customFieldValues.add(contactFieldValue);
+        }
     }
 
     public List<ZingleLabel> getLabels() {
