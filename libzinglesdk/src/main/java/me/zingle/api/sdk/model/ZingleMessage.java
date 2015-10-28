@@ -77,6 +77,11 @@ public class ZingleMessage extends ZingleBaseModel{
         this.recipient = recipient;
     }
 
+    public ZingleMessage(String id, Long readAt) {
+        this.readAt = readAt;
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }
@@ -208,7 +213,19 @@ public class ZingleMessage extends ZingleBaseModel{
 
     @Override
     public JSONObject extractCreationData() {
-        return null;
+        checkForCreate();
+
+        JSONObject resJS=new JSONObject();
+
+        try {
+            resJS.put("read_at",getReadAt());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return resJS;
+
     }
 
     @Override
@@ -229,7 +246,7 @@ public class ZingleMessage extends ZingleBaseModel{
 
     @Override
     public void checkForCreate() {
-
+        if(readAt==null) throw new RequestBodyCreationEx(RequestMethods.POST,"read_at",getClass().getName()+".readAt");
     }
 
     @Override

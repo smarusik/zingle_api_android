@@ -13,9 +13,6 @@ import java.util.UUID;
 public class Message {
 
     public static String SEND_INTENT_MSG_ID="send_intent_message_id";
-    public static String SEND_INTENT_SERVICE_ID="send_intent_service_id";
-    //public static String RECEIVE_INTENT_CONTACT_ID="receive_intent_contact_id";
-
 
     private String id;
     private String body;

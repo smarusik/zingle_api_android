@@ -169,8 +169,10 @@ public class DataServices {
                 oldMsg.setId(message.getId());
                 oldMsg.setFailed(message.isFailed());
                 oldMsg.setSent(message.isSent());
+/*
                 oldMsg.setRead(message.isRead());
                 oldMsg.setReadAt(message.getReadAt());
+*/
 
                 return false;
             }

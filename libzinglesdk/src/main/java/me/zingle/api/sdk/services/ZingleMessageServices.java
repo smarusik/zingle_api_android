@@ -5,8 +5,15 @@ import org.json.JSONObject;
 
 import me.zingle.api.sdk.Exceptions.MappingErrorEx;
 import me.zingle.api.sdk.Exceptions.UndefinedServiceDelegateEx;
+import me.zingle.api.sdk.Exceptions.UnsuccessfullRequestEx;
+import me.zingle.api.sdk.dao.ZingleConnection;
+import me.zingle.api.sdk.dao.ZingleQuery;
+import me.zingle.api.sdk.dto.RequestDTO;
+import me.zingle.api.sdk.dto.ResponseDTO;
 import me.zingle.api.sdk.model.ZingleMessage;
 import me.zingle.api.sdk.model.ZingleService;
+
+import static me.zingle.api.sdk.dao.RequestMethods.POST;
 
 /**
  * Created by SLAVA 08 2015.
@@ -30,7 +37,7 @@ public class ZingleMessageServices extends ZingleBaseService<ZingleMessage>{
         String base=String.format("/services/%s/messages",parent.getId());
 
         if(specific)
-            return base+"/%s";
+            return base+"/%s/read";
         else
             return base;
 
@@ -85,8 +92,32 @@ public class ZingleMessageServices extends ZingleBaseService<ZingleMessage>{
         return result;
     }
 
-    public ZingleMessage markRead(ZingleMessage message){
-        return update(message);
+    public ZingleMessage markRead(ZingleMessage msg){
+        ZingleQuery query = new ZingleQuery(POST, String.format(resourcePath(true),msg.getId()));
+
+        RequestDTO payload=new RequestDTO();
+
+        payload.setData(msg.extractCreationData());
+        query.setPayload(payload);
+
+        ResponseDTO response = ZingleConnection.getInstance().send(query);
+
+        if(response.getResponseCode()==200){
+            try {
+                JSONObject result = response.getData().optJSONObject("result");
+                if(result!=null) {
+                    return mapper(result);
+                }
+                else return null;
+
+            }catch (JSONException e) {
+                e.printStackTrace();
+                throw new MappingErrorEx(this.getClass().getName(),response.getData().toString(),e.getMessage());
+            }
+        }
+        else
+            throw new UnsuccessfullRequestEx(response.getData(),response.getResponseCode(),response.getResponseStr());
+
     }
 
     public boolean markReadAsync(ZingleMessage message,ServiceDelegate<ZingleMessage> delegate){

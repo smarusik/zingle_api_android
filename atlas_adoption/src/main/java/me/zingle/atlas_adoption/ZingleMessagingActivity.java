@@ -65,10 +65,9 @@ public class ZingleMessagingActivity extends AppCompatActivity {
                     messagesList.showLastMessage();
                 }
 
-
                 Intent sendIntent=new Intent(messageComposer.getContext(), MessageSender.class);
                 sendIntent.putExtra(Message.SEND_INTENT_MSG_ID,message.getId());
-                sendIntent.putExtra(Message.SEND_INTENT_SERVICE_ID,message.getRecipient().getId());
+                startService(sendIntent);
 
                 return startService(sendIntent) != null;
             }

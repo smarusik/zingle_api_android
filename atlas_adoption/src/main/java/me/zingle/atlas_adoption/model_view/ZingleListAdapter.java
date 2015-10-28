@@ -2,6 +2,7 @@ package me.zingle.atlas_adoption.model_view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.GradientDrawable;
@@ -23,8 +24,10 @@ import java.util.List;
 import java.util.Locale;
 
 import me.zingle.atlas_adoption.R;
+import me.zingle.atlas_adoption.daemons.MessageSender;
 import me.zingle.atlas_adoption.facade_models.Attachment;
 import me.zingle.atlas_adoption.facade_models.Message;
+import me.zingle.atlas_adoption.facade_models.Participant;
 import me.zingle.atlas_adoption.utils.Client;
 
 /**
@@ -74,6 +77,12 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         final Message msg=dataGroupServices.getItemData(groupPosition,childPosition);
+
+        if(!msg.isRead() && msg.getSender().getType()== Participant.ParticipantType.SERVICE) {
+            Intent sendIntent = new Intent(activity.getBaseContext(), MessageSender.class);
+            sendIntent.putExtra(Message.SEND_INTENT_MSG_ID, msg.getId());
+            activity.startService(sendIntent);
+        }
 
         if(convertView==null){
             convertView=layoutInflater.inflate(R.layout.atlas_view_messages_convert,null);

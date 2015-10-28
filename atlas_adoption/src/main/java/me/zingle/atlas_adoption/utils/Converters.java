@@ -173,8 +173,12 @@ public class Converters {
 
         facadeMessage.setCreatedAt(new Date(msg.getCreatedAt()));
         facadeMessage.setReadAt(new Date(msg.getReadAt()));
+        if(msg.getReadAt()>0)
+            facadeMessage.setRead(true);
+        else
+            facadeMessage.setRead(false);
+
         facadeMessage.setId(msg.getId());
-        facadeMessage.setRead(false);
         facadeMessage.setSent(true);
         //facadeMessage.setChannelTypeId();
         facadeMessage.setBody(msg.getBody());
