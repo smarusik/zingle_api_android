@@ -62,8 +62,8 @@ public class ZingleServiceServices extends ZingleBaseService<ZingleService>{
             mapResult.setId(source.getString("id"));
             mapResult.setDisplayName(source.getString("display_name"));
             mapResult.setTimeZone(new ZingleTimeZone(source.getString("time_zone")));
-            mapResult.setCreated_at(source.getInt("created_at"));
-            mapResult.setUpdated_at(source.getInt("updated_at"));
+            mapResult.setCreated_at(source.getLong("created_at")*1000);
+            mapResult.setUpdated_at(source.getLong("updated_at")*1000);
 
             ZingleAccountServices accountServices = new ZingleAccountServices();
             ZingleAccount account = accountServices.mapper(source.getJSONObject("account"));

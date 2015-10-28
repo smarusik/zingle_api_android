@@ -127,7 +127,7 @@ public class Converters {
                     case MIME_TYPE_IMAGE_JPEG: format= Bitmap.CompressFormat.JPEG; break;
                     case MIME_TYPE_IMAGE_PNG: format= Bitmap.CompressFormat.PNG; break;
                     case MIME_TYPE_IMAGE_WEBP: format= Bitmap.CompressFormat.WEBP; break;
-                    default: format= Bitmap.CompressFormat.JPEG; type=MimeTypes.MIME_TYPE_IMAGE_JPEG; break;
+                    default: return null;
                 }
 
                 bitmap.compress(format, 100, bos);
@@ -208,6 +208,7 @@ public class Converters {
         Attachment result=new Attachment();
         result.setMimeType(attachment.getMimeType());
         result.setUrl(attachment.getUrl());
+        result.setCachePath(attachment.getUrl().toString());
 
         return result;
     }

@@ -56,8 +56,10 @@ public class ZingleNewMessageService extends ZingleBaseService<ZingleNewMessage>
     public List<String> mapper(JSONArray idsJSON){
         List<String> ids=new ArrayList<>();
 
-        for(int i=0; i<idsJSON.length(); i++){
-            ids.add(idsJSON.optString(i));
+        if(idsJSON!=null) {
+            for (int i = 0; i < idsJSON.length(); i++) {
+                ids.add(idsJSON.optString(i));
+            }
         }
 
         return ids;
@@ -75,10 +77,13 @@ public class ZingleNewMessageService extends ZingleBaseService<ZingleNewMessage>
 
         if(response.getResponseCode()==200){
             try {
-                JSONObject result = response.getData().getJSONObject("result");
-                JSONArray resultArr = result.getJSONArray("message_ids");
+                JSONObject result = response.getData().optJSONObject("result");
+                if(result!=null) {
+                    JSONArray resultArr = result.getJSONArray("message_ids");
+                    return mapper(resultArr);
+                }
+                else return new ArrayList<>();
 
-                return mapper(resultArr);
             }catch (JSONException e) {
                 e.printStackTrace();
                 throw new MappingErrorEx(this.getClass().getName(),response.getData().toString(),e.getMessage());

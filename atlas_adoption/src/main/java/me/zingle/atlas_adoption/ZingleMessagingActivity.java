@@ -44,6 +44,8 @@ public class ZingleMessagingActivity extends AppCompatActivity {
         setContentView(R.layout.zingle_messaging_activity);
         client =Client.getItem();
 
+        client.setListVisible(true);
+
         messagesList = (MessagesList) findViewById(R.id.atlas_screen_messages_messages_list);
 
         messagesList.init(this);
@@ -95,7 +97,17 @@ public class ZingleMessagingActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStop() {
+        client.setListVisible(false);
+        super.onStop();
+    }
 
+    @Override
+    protected void onRestart() {
+        client.setListVisible(true);
+        super.onRestart();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

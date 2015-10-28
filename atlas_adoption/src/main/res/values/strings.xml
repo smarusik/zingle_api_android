@@ -9,6 +9,7 @@
     <string name="message_status_sent">Sent</string>
     <string name="message_status_pending">Pending</string>
     <string name="message_status_failed">Failed</string>
+    <string name="attachment_unale_to_display">Unable to display.</string>
 
     <string-array name="weekdays_names">
         <item>Sunday</item>

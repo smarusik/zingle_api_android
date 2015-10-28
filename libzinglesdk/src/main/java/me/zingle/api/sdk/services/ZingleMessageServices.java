@@ -58,8 +58,8 @@ public class ZingleMessageServices extends ZingleBaseService<ZingleMessage>{
         try {
             result.setId(source.getString("id"));
             result.setBody(source.optString("body"));
-            result.setCreatedAt(source.getInt("created_at"));
-            result.setReadAt(source.optInt("read_at"));
+            result.setCreatedAt(source.getLong("created_at")*1000);
+            result.setReadAt(source.optLong("read_at")*1000);
             result.setSenderType(source.getString("sender_type"));
 
             ZingleCorrespondentServices correspondentServices = new ZingleCorrespondentServices();

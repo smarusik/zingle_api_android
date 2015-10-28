@@ -46,8 +46,8 @@ public class ZingleContact extends ZingleBaseModel{
     private List<ZingleContactChannel> channels;
     private List<ZingleContactFieldValue> customFieldValues;
     private List<ZingleLabel> labels;
-    private Integer createdAt;
-    private Integer updatedAt;
+    private Long createdAt;
+    private Long updatedAt;
 
     public ZingleContact() {
     }
@@ -138,19 +138,19 @@ public class ZingleContact extends ZingleBaseModel{
         this.labels = labels;
     }
 
-    public Integer getCreatedAt() {
+    public Long getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Integer created_at) {
+    public void setCreatedAt(Long created_at) {
         this.createdAt = created_at;
     }
 
-    public Integer getUpdatedAt() {
+    public Long getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Integer updated_at) {
+    public void setUpdatedAt(Long updated_at) {
         this.updatedAt = updated_at;
     }
 

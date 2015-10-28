@@ -99,6 +99,10 @@ public class ZingleNewMessage extends ZingleBaseModel {
         this.channelTypes.addAll(channelType);
     }
 
+    public void addChannelType(ZingleChannelType channelType) {
+        this.channelTypes.add(channelType);
+    }
+
     public String getBody() {
         return body;
     }

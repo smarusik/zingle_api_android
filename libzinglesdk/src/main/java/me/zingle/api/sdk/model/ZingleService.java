@@ -19,8 +19,8 @@ public class ZingleService extends ZingleBaseModel{
     private ZinglePlan plan;
     private ZingleServiceAddress address;
     private ZingleAccount account;
-    private Integer created_at;
-    private Integer updated_at;
+    private Long created_at;
+    private Long updated_at;
 
     private List<ZingleServiceChannel> channels;
     private List<ZingleChannelType> channelTypes;
@@ -86,19 +86,19 @@ public class ZingleService extends ZingleBaseModel{
         this.account = account;
     }
 
-    public Integer getCreated_at() {
+    public Long getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(Integer created_at) {
+    public void setCreated_at(Long created_at) {
         this.created_at = created_at;
     }
 
-    public Integer getUpdated_at() {
+    public Long getUpdated_at() {
         return updated_at;
     }
 
-    public void setUpdated_at(Integer updated_at) {
+    public void setUpdated_at(Long updated_at) {
         this.updated_at = updated_at;
     }
 

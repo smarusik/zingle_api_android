@@ -34,23 +34,21 @@ public class Attachment {
 
     public void setMimeType(String mimeType)
     {
-        String unifiedType="";
-        if(mimeType!=null) unifiedType=mimeType.toLowerCase();
+        if(mimeType!=null) {
+            String unifiedType = "";
+            unifiedType = mimeType.toLowerCase();
 
-        if (unifiedType.equals(MIME_TYPE_TEXT.toString())) {
-            this.mimeType = MIME_TYPE_TEXT;
-        }
-        else if (unifiedType.equals(MIME_TYPE_IMAGE_PNG.toString())) {
-            this.mimeType = MIME_TYPE_IMAGE_PNG;
-        }
-        else if (unifiedType.equals(MIME_TYPE_IMAGE_JPEG.toString())) {
-            this.mimeType = MIME_TYPE_IMAGE_JPEG;
-        }
-        else if (unifiedType.equals(MIME_TYPE_IMAGE_GIF.toString())) {
-            this.mimeType = MIME_TYPE_IMAGE_GIF;
-        }
-        else {
-            this.mimeType = MIME_TYPE_UNSUPPORTED;
+            if (unifiedType.equals(MIME_TYPE_TEXT.toString())) {
+                this.mimeType = MIME_TYPE_TEXT;
+            } else if (unifiedType.equals(MIME_TYPE_IMAGE_PNG.toString())) {
+                this.mimeType = MIME_TYPE_IMAGE_PNG;
+            } else if (unifiedType.equals(MIME_TYPE_IMAGE_JPEG.toString())) {
+                this.mimeType = MIME_TYPE_IMAGE_JPEG;
+            } else if (unifiedType.equals(MIME_TYPE_IMAGE_GIF.toString())) {
+                this.mimeType = MIME_TYPE_IMAGE_GIF;
+            } else {
+                this.mimeType = MIME_TYPE_UNSUPPORTED;
+            }
         }
     }
 

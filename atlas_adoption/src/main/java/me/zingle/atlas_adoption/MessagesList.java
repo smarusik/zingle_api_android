@@ -91,4 +91,8 @@ public class MessagesList extends FrameLayout{
     public void reloadMessagesList(){
        adapter.notifyDataSetChanged();
     }
+
+    public boolean isOnScreen(){
+        return client.isListVisible();
+    }
 }

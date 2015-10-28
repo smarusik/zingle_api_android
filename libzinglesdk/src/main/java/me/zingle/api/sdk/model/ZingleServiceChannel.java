@@ -24,9 +24,12 @@ public class ZingleServiceChannel extends ZingleBaseModel{
     public ZingleServiceChannel() {
     }
 
-    public ZingleServiceChannel(String id, ZingleChannelType type) {
-        this.id = id;
+    public ZingleServiceChannel(String displayName, ZingleChannelType type, Boolean isDefaultForType, String value,String country) {
+        this.displayName = displayName;
         this.type = type;
+        this.isDefaultForType = isDefaultForType;
+        this.value = value;
+        this.country = country;
     }
 
     public ZingleService getService() {

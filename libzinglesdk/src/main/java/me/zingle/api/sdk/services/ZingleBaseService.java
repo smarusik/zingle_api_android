@@ -142,7 +142,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
             List<Model> retList = new ArrayList<>();
 
             for (int i=0; i<source.length(); i++) {
-                JSONObject temp = source.optJSONObject(i++);
+                JSONObject temp = source.optJSONObject(i);
                 retList.add(mapper(temp));
             }
 

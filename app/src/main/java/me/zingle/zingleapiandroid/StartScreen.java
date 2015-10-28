@@ -98,6 +98,7 @@ public class StartScreen extends AppCompatActivity {
             ZingleContact contact=contactServices.get(contactId);
 
             if(contact!=null){
+
                 publishProgress("\nAssigning contact...");
                 List<ZingleContact> contacts=new ArrayList<ZingleContact>();
                 contacts.add(contact);
@@ -138,7 +139,7 @@ public class StartScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_list);
 
-        Log.init(ZingleVerbosityLevel.ZINGLE_VERBOSITY_ERROR, System.err);
+        Log.init(ZingleVerbosityLevel.ZINGLE_VERBOSITY_INFO, System.err);
 
         wds =WorkingDataSet.getItem();
         wds.setLogin(name);
@@ -161,7 +162,7 @@ public class StartScreen extends AppCompatActivity {
 
                     p.setType( Participant.ParticipantType.CONTACT);
                     p.setId(contactId);
-                    p.setChannelValue("smarusik@gmail.com");
+                    p.setChannelValue("+15152935566");
                     client.setAuthContact(p);
 
                     p=new Participant();

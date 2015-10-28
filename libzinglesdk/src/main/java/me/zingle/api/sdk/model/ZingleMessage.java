@@ -63,8 +63,8 @@ public class ZingleMessage extends ZingleBaseModel{
     private CorrespondentTypes recipientType;
     private ZingleCorrespondent recipient;
     private List<ZingleAttachment> attachments;
-    private Integer createdAt;
-    private Integer readAt;
+    private Long createdAt;
+    private Long readAt;
 
     public ZingleMessage() {
     }
@@ -190,19 +190,19 @@ public class ZingleMessage extends ZingleBaseModel{
     }
 
 
-    public Integer getCreatedAt() {
+    public Long getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Integer createdAt) {
+    public void setCreatedAt(Long createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Integer getReadAt() {
+    public Long getReadAt() {
         return readAt;
     }
 
-    public void setReadAt(Integer readAt) {
+    public void setReadAt(Long readAt) {
         this.readAt = readAt;
     }
 

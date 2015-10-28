@@ -52,7 +52,7 @@
             android:id="@+id/atlas_view_messages_cell_image_their" 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start|center_horizontal"
+            android:layout_gravity="center_horizontal"
             android:background="@color/atlas_background_gray"
             android:contentDescription="TheirImage" />
         <ProgressBar

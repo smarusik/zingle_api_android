@@ -27,6 +27,7 @@ public class DataServices {
     MessagesList listView;
 
     private DataServices() {
+
     }
 
     public MessagesList getListView() {
@@ -154,11 +155,29 @@ public class DataServices {
         }
     }
 
-    public void addItem(Message message){
+    public boolean conversationVisible(){
+        Client client = Client.getItem();
+        return client.isListVisible();
+    }
+
+    public boolean addItem(Message message){
 
         synchronized (dataModel) {
-            dataModel.getStraightList().put(message.getId(), message);
-            //addToConversation(message);
+            Message oldMsg=dataModel.getStraightList().get(message.getId());
+            if(oldMsg!=null){
+                oldMsg.setBody(message.getBody());
+                oldMsg.setId(message.getId());
+                oldMsg.setFailed(message.isFailed());
+                oldMsg.setSent(message.isSent());
+                oldMsg.setRead(message.isRead());
+                oldMsg.setReadAt(message.getReadAt());
+
+                return false;
+            }
+            else {
+                dataModel.getStraightList().put(message.getId(), message);
+                return true;
+            }
         }
     }
 
@@ -213,7 +232,7 @@ public class DataServices {
 
     public void addCachedItem(String key,byte[] item){
         synchronized (dataModel){
-            dataModel.addToMemoryCache(key,item);
+            dataModel.addToMemoryCache(key, item);
         }
     }
 

@@ -75,8 +75,8 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
             result.setId(source.getString("id"));
             result.setIsConfirmed(source.optBoolean("is_confirmed"));
             result.setIsStarred(source.optBoolean("is_starred"));
-            result.setCreatedAt(source.optInt("created_at"));
-            result.setUpdatedAt(source.optInt("updated_at"));
+            result.setCreatedAt(source.optLong("created_at")*1000);
+            result.setUpdatedAt(source.optLong("updated_at")*1000);
 
             JSONObject lastMessageJSON = source.optJSONObject("last_message");
             if (lastMessageJSON != null) {

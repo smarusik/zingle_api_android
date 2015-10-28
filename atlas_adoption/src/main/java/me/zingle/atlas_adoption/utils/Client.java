@@ -29,6 +29,7 @@ public class Client {
     private Client() {
     }
 
+    private boolean listVisible;
     private Participant authContact;
     private Participant connectedService;
     private Set<String> channelTypeId=new HashSet<String>();
@@ -60,4 +61,11 @@ public class Client {
         this.connectedService = connectedService;
     }
 
+    synchronized public boolean isListVisible() {
+        return listVisible;
+    }
+
+    synchronized public void setListVisible(boolean listVisible) {
+        this.listVisible = listVisible;
+    }
 }

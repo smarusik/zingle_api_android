@@ -120,34 +120,43 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
         if(attachments!=null) {
             for (Attachment attachment : attachments) {
 
-                switch (attachment.getMimeType()) {
-                    case MIME_TYPE_TEXT:
-                        cellContainer.addView(generateTextCell(attachment.getTextContent(),attachments.size(),msg.getSender().equals(client.getAuthContact()),cellContainer));
-                    break;
-                    case MIME_TYPE_IMAGE_PNG:
-                        //image processing
-                        cellContainer.addView(generateImageCell(attachment,msg.getSender().equals(client.getAuthContact()),cellContainer));
-                        break;
-                    case MIME_TYPE_IMAGE_JPEG:
-                        //image processing
-                        cellContainer.addView(generateImageCell(attachment, msg.getSender().equals(client.getAuthContact()), cellContainer));
-                        break;
-                    case MIME_TYPE_IMAGE_WEBP:
-                        //image processing
-                        cellContainer.addView(generateImageCell(attachment, msg.getSender().equals(client.getAuthContact()), cellContainer));
-                        break;
-                    case MIME_TYPE_IMAGE_GIF:
-                        //gif processing
-                        cellContainer.addView(generateTextCell(attachment.getTextContent(),attachments.size(),msg.getSender().equals(client.getAuthContact()),cellContainer));
-                    break;
-                    case MIME_TYPE_UNSUPPORTED:
-                        cellContainer.addView(generateTextCell(attachment.getUri().toString(),attachments.size(),msg.getSender().equals(client.getAuthContact()),cellContainer));
-                    break;
-                    default:
-                        cellContainer.addView(generateTextCell(attachment.getUri().toString(),attachments.size(),msg.getSender().equals(client.getAuthContact()),cellContainer));
-                    break;
+                if(attachment.getMimeType()!=null) {
+                    switch (attachment.getMimeType()) {
+                        case MIME_TYPE_TEXT:
+                            cellContainer.addView(generateTextCell(attachment.getTextContent(), attachments.size(), msg.getSender().equals(client.getAuthContact()), cellContainer));
+                            break;
+                        case MIME_TYPE_IMAGE_PNG:
+                            //image processing
+                            cellContainer.addView(generateImageCell(attachment, msg.getSender().equals(client.getAuthContact()), cellContainer));
+                            break;
+                        case MIME_TYPE_IMAGE_JPEG:
+                            //image processing
+                            cellContainer.addView(generateImageCell(attachment, msg.getSender().equals(client.getAuthContact()), cellContainer));
+                            break;
+                        case MIME_TYPE_IMAGE_WEBP:
+                            //image processing
+                            cellContainer.addView(generateImageCell(attachment, msg.getSender().equals(client.getAuthContact()), cellContainer));
+                            break;
+                        case MIME_TYPE_IMAGE_GIF:
+                            //gif processing
+                            cellContainer.addView(generateTextCell(attachment.getTextContent(), attachments.size(), msg.getSender().equals(client.getAuthContact()), cellContainer));
+                            break;
+                        case MIME_TYPE_UNSUPPORTED:
+                            String cellText = String.valueOf(R.string.attachment_unale_to_display);
+                            if (attachment.getUri() != null)
+                                cellText = attachment.getUri().toString();
+                            else if (attachment.getUrl() != null)
+                                cellText = attachment.getUrl().toString();
+                            cellContainer.addView(generateTextCell(cellText, attachments.size(), msg.getSender().equals(client.getAuthContact()), cellContainer));
+                            break;
+                        default:
+                            cellContainer.addView(generateTextCell(String.valueOf(R.string.attachment_unale_to_display), attachments.size(), msg.getSender().equals(client.getAuthContact()), cellContainer));
+                            break;
+                    }
                 }
-
+                else{
+                    cellContainer.addView(generateTextCell(String.valueOf(R.string.attachment_unale_to_display), attachments.size(), msg.getSender().equals(client.getAuthContact()), cellContainer));
+                }
             }
         }
 

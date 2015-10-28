@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 
 import java.util.List;
 
@@ -35,6 +34,8 @@ public class MessageReceiver extends IntentService {
 
     public static final int NOTIFICATION_ID=5060;
     private Handler handler;
+    private boolean showNitification=false;
+
 
     private void updateListView(){
         handler.post(new MessageListUpdater());
@@ -48,6 +49,8 @@ public class MessageReceiver extends IntentService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+
         handler=new Handler();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -71,32 +74,39 @@ public class MessageReceiver extends IntentService {
                     e.printStackTrace();
                 }
             }
+            showNitification=true;
         }
     }
 
     private void parseMsgList(ZingleList<ZingleMessage> messages){
         for (ZingleMessage message : messages.objects) {
             Message msg = Converters.fromZingleMessage(message);
-            dataServices.addItem(msg);
+            boolean isNewMessage=dataServices.addItem(msg);
             processAttachments(msg);
-            if(!dataServices.addToConversation(msg) && msg.getSender().getType()== Participant.ParticipantType.SERVICE){
-                //Use notification if conversation inactive.
-                Intent intent = new Intent(this, ZingleMessagingActivity.class);
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-                stackBuilder.addParentStack(ZingleMessagingActivity.class);
-                stackBuilder.addNextIntent(intent);
-                PendingIntent pendingIntent =  stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-                Notification notification = new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_zingle_notify)
-                        .setContentTitle(msg.getSender().getName())
-                        .setAutoCancel(true)
-                        .setPriority(Notification.PRIORITY_MAX)
-                        .setDefaults(Notification.DEFAULT_VIBRATE)
-                        .setContentIntent(pendingIntent)
-                        .setContentText(msg.getBody().substring(0,25)+"...")
-                        .build();
-                NotificationManager notificationManager =
-                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE); notificationManager.notify(NOTIFICATION_ID, notification);
+            boolean isAddedToConversation=dataServices.addToConversation(msg);
+            if(isNewMessage && showNitification) {
+                if (!(isAddedToConversation && dataServices.conversationVisible()) && msg.getSender().getType() == Participant.ParticipantType.SERVICE) {
+                    //Use notification if conversation inactive.
+                    Intent intent = new Intent(this, ZingleMessagingActivity.class);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(this,NOTIFICATION_ID,intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    String contentText=msg.getBody();
+                    if(contentText.length()>25)
+                        contentText=msg.getBody().substring(0, 24) + "...";
+
+                    Notification notification = new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.ic_zingle_notify)
+                            .setContentTitle(msg.getSender().getName())
+                            .setAutoCancel(true)
+                            .setPriority(Notification.PRIORITY_MAX)
+                            .setDefaults(Notification.DEFAULT_VIBRATE)
+                            .setContentIntent(pendingIntent)
+                            .setContentText(contentText)
+                            .build();
+                    NotificationManager notificationManager =
+                            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.notify(NOTIFICATION_ID, notification);
+                }
             }
         }
     }
