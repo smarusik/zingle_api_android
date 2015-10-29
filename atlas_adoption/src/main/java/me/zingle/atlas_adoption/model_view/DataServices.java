@@ -48,7 +48,7 @@ public class DataServices {
             listView.showLastMessage();
     }
 
-    public void initConversation(MessagesList list){
+    public void initConversation(String id, MessagesList list){
         synchronized (dataModel){
             dataModel.setConversation(new Conversation());
             listView=list;
@@ -56,7 +56,7 @@ public class DataServices {
             Iterator<Map.Entry<String,Message>> i=dataModel.getStraightList().entrySet().iterator();
 
             while(i.hasNext()){
-                addToConversation(i.next().getValue());
+                addToConversation(id,i.next().getValue());
             }
         }
     }
@@ -123,10 +123,12 @@ public class DataServices {
 
     }
 
-    public boolean addToConversation(Message message){
+    public boolean addToConversation(String conversationId,Message message){
         synchronized (dataModel) {
-            Client client = Client.getItem();
-            if (message.getSender().equals(client.getAuthContact()) || message.getRecipient().equals(client.getAuthContact())) {
+
+            Client.ConversationClient client = Client.getItem().getClient(conversationId);
+            if (client.isListVisible() &&
+                    (message.getSender().equals(client.getAuthContact()) || message.getRecipient().equals(client.getAuthContact()))) {
 
                 DataGroup group = null;
                 Date cntlDate = message.getCreatedAt();
@@ -155,8 +157,8 @@ public class DataServices {
         }
     }
 
-    public boolean conversationVisible(){
-        Client client = Client.getItem();
+    public boolean conversationVisible(String serviceId){
+        Client.ConversationClient client = Client.getItem().getClient(serviceId);
         return client.isListVisible();
     }
 
@@ -218,7 +220,13 @@ public class DataServices {
     public void updateItem(String oldId,Message msg){
         synchronized (dataModel) {
             Conversation conversation=dataModel.getConversation();
-
+            for(DataGroup g:conversation.getGroups()){
+                int ind=g.messages.indexOf(oldId);
+                if(ind>0){
+                    g.messages.set(ind,msg.getId());
+                    break;
+                }
+            }
         }
     }
 

@@ -35,6 +35,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -86,6 +88,32 @@ public class ScalingUtilities {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static Options decodeResourceOptions(FileDescriptor fd, int dstWidth, int dstHeight,
+                                        ScalingLogic scalingLogic) {
+
+        InputStream input = new FileInputStream(fd);
+
+        Options options = new Options();
+
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(input,null,options);
+        options.inJustDecodeBounds = false;
+
+        options.inSampleSize = calculateSampleSize(options.outWidth, options.outHeight, dstWidth,
+                dstHeight, scalingLogic);
+
+        return options;
+    }
+
+
+    public static Bitmap decodeResource(FileDescriptor fd, Options options) {
+
+        InputStream input = new FileInputStream(fd);
+        Bitmap unscaledBitmap = BitmapFactory.decodeStream(input,null,options);
+
+        return unscaledBitmap;
     }
 
     /**

@@ -35,7 +35,6 @@ public class MessageComposer extends FrameLayout {
     Message createdMessage=new Message();
 
     private Listener listener;
-    private Client layerClient;
 
     private ArrayList<MenuItem> menuItems = new ArrayList<MenuItem>();
 
@@ -77,11 +76,9 @@ public class MessageComposer extends FrameLayout {
      *
      * @param client - must be not null
      */
-    public void init(final Client client) {
+    public void init(final Client.ConversationClient client) {
         if (client == null) throw new IllegalArgumentException("LayerClient cannot be null");
         if (messageText != null) throw new IllegalStateException("AtlasMessageComposer is already initialized!");
-
-        this.layerClient = client;
 
         LayoutInflater.from(getContext()).inflate(R.layout.atlas_message_composer, this);
 

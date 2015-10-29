@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.util.UUID;
 
@@ -24,31 +23,44 @@ import me.zingle.atlas_adoption.utils.Client;
 
 public class ZingleMessagingActivity extends AppCompatActivity {
 
+    public static final String BASE_SERVICE_ID="base_service_id";
+
     private MessagesList messagesList;
     private MessageComposer messageComposer;
-    private Client client;
+    private Client.ConversationClient client;
 
-    /**
-     * used to take photos from camera
-     */
-    private File photoFile = null;
-
-    public static final int REQUEST_CODE_SETTINGS = 101;
     public static final int REQUEST_CODE_GALLERY = 111;
     public static final int REQUEST_CODE_CAMERA = 112;
 
+
+    public Client.ConversationClient getClient() {
+        return client;
+    }
+
+    public void setClient(Client.ConversationClient client) {
+        this.client = client;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.zingle_messaging_activity);
-        client =Client.getItem();
+
+        String incomingService=getIntent().getStringExtra(BASE_SERVICE_ID);
+
+/*
+        if(incomingService==null){
+
+        }
+*/
+
+        client =Client.getItem().getClient(incomingService);
 
         client.setListVisible(true);
 
         messagesList = (MessagesList) findViewById(R.id.atlas_screen_messages_messages_list);
+        //messagesList.init(this);
 
-        messagesList.init(this);
         final DataServices dataGroupServices = DataServices.getItem();
 
         messageComposer = (MessageComposer) findViewById(R.id.atlas_screen_messages_message_composer);
@@ -57,7 +69,7 @@ public class ZingleMessagingActivity extends AppCompatActivity {
             public boolean beforeSend(Message message) {
 
                 dataGroupServices.addItem(message);
-                dataGroupServices.addToConversation(message);
+                dataGroupServices.addToConversation(client.getConnectedService().getId(),message);
                 dataGroupServices.updateMessagesList();
 
                 if(messagesList!=null){
@@ -66,8 +78,7 @@ public class ZingleMessagingActivity extends AppCompatActivity {
                 }
 
                 Intent sendIntent=new Intent(messageComposer.getContext(), MessageSender.class);
-                sendIntent.putExtra(Message.SEND_INTENT_MSG_ID,message.getId());
-                startService(sendIntent);
+                sendIntent.putExtra(Message.SEND_INTENT_MSG_ID, message.getId());
 
                 return startService(sendIntent) != null;
             }
@@ -98,14 +109,15 @@ public class ZingleMessagingActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        client.setListVisible(false);
         super.onStop();
+        client.setListVisible(false);
     }
 
     @Override
-    protected void onRestart() {
+    protected void onStart() {
+        super.onStart();
         client.setListVisible(true);
-        super.onRestart();
+        messagesList.init(this);
     }
 
     @Override

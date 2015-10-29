@@ -32,10 +32,11 @@ import me.zingle.atlas_adoption.utils.Converters;
  */
 public class MessageReceiver extends IntentService {
 
-    public static final int NOTIFICATION_ID=5060;
+    private String MESSAGES_QUERY_PAGE_SIZE;
+    private int NOTIFICATION_STRING_LENGTH;
+    private int RECEIVE_FREQUENCY;
+    private final int NOTIFICATION_ID=5060;
     private Handler handler;
-    private boolean showNitification=false;
-
 
     private void updateListView(){
         handler.post(new MessageListUpdater());
@@ -50,6 +51,9 @@ public class MessageReceiver extends IntentService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+        MESSAGES_QUERY_PAGE_SIZE=getResources().getString(R.string.message_query_page_size);
+        NOTIFICATION_STRING_LENGTH=getResources().getInteger(R.integer.notification_string_length);
+        RECEIVE_FREQUENCY=getResources().getInteger(R.integer.message_monitoring_frequency);
 
         handler=new Handler();
         return super.onStartCommand(intent, flags, startId);
@@ -69,12 +73,11 @@ public class MessageReceiver extends IntentService {
 
             synchronized (this) {
                 try {
-                    wait(5000);
+                    wait(RECEIVE_FREQUENCY);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            showNitification=true;
         }
     }
 
@@ -83,16 +86,22 @@ public class MessageReceiver extends IntentService {
             Message msg = Converters.fromZingleMessage(message);
             boolean isNewMessage=dataServices.addItem(msg);
             processAttachments(msg);
-            boolean isAddedToConversation=dataServices.addToConversation(msg);
-            if(isNewMessage && showNitification) {
-                if (!(isAddedToConversation && dataServices.conversationVisible()) && msg.getSender().getType() == Participant.ParticipantType.SERVICE) {
+
+            String conversationId;
+            if(msg.getSender().getType()== Participant.ParticipantType.SERVICE) conversationId=message.getSender().getId();
+            else conversationId=message.getRecipient().getId();
+
+            boolean isAddedToConversation=dataServices.addToConversation(conversationId,msg);
+            if(!msg.isRead() && isNewMessage) {
+                if (!(isAddedToConversation && dataServices.conversationVisible(conversationId)) && msg.getSender().getType() == Participant.ParticipantType.SERVICE) {
                     //Use notification if conversation inactive.
                     Intent intent = new Intent(this, ZingleMessagingActivity.class);
+                    intent.putExtra(ZingleMessagingActivity.BASE_SERVICE_ID,conversationId);
                     PendingIntent pendingIntent = PendingIntent.getActivity(this,NOTIFICATION_ID,intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                     String contentText=msg.getBody();
-                    if(contentText.length()>25)
-                        contentText=msg.getBody().substring(0, 24) + "...";
+                    if(contentText.length()>NOTIFICATION_STRING_LENGTH)
+                        contentText=msg.getBody().substring(0, NOTIFICATION_STRING_LENGTH-1) + "...";
 
                     Notification notification = new NotificationCompat.Builder(this)
                             .setSmallIcon(R.drawable.ic_zingle_notify)
@@ -114,7 +123,8 @@ public class MessageReceiver extends IntentService {
     private void updateMessageListForContact(ZingleContact contact, boolean all) {
         ZingleMessageServices messageServices = new ZingleMessageServices(contact.getService());
 
-        List<QueryPart> conds = messageServices.createConditions("contact_id,page,sort_field,sort_direction", contact.getId(), "1", "created_at", ZingleSortOrder.ZINGLE_DESC.toString());
+        List<QueryPart> conds = messageServices.createConditions("page_size,contact_id,page,sort_field,sort_direction",
+                MESSAGES_QUERY_PAGE_SIZE,contact.getId(),"1", "created_at", ZingleSortOrder.ZINGLE_DESC.toString());
 
         ZingleList<ZingleMessage> messages = messageServices.list(conds);
         if (messages != null) {

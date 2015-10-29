@@ -10,6 +10,7 @@ import android.util.Base64;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -23,6 +24,7 @@ import me.zingle.api.sdk.model.ZingleChannelType;
 import me.zingle.api.sdk.model.ZingleCorrespondent;
 import me.zingle.api.sdk.model.ZingleMessage;
 import me.zingle.api.sdk.model.ZingleNewMessage;
+import me.zingle.atlas_adoption.R;
 import me.zingle.atlas_adoption.facade_models.Attachment;
 import me.zingle.atlas_adoption.facade_models.Message;
 import me.zingle.atlas_adoption.facade_models.MimeTypes;
@@ -91,21 +93,16 @@ public class Converters {
             result = new ZingleAttachment();
             result.setMimeType(attachment.getMimeType().toString());
 
-            if (attachment.getMimeType() == MimeTypes.MIME_TYPE_IMAGE_WEBP ||
-                    attachment.getMimeType() == MimeTypes.MIME_TYPE_IMAGE_JPEG ||
-                    attachment.getMimeType() == MimeTypes.MIME_TYPE_IMAGE_PNG) {
+            byte[] data;
+            data=dataServices.getCachedItem(attachment.getCachePath());
 
-                byte[] data;
+            if(data==null){
                 if(attachment.getUri()!=null) {
                     data = uriToByteArray(attachment.getMimeType(), attachment.getUri(), context);
                     dataServices.addCachedItem(attachment.getUri().toString(),data);
                 }
-                else{
-                    data=dataServices.getCachedItem(attachment.getCachePath());
-                }
-
-                result.setData(Base64.encode(data, Base64.DEFAULT));
             }
+            result.setData(Base64.encode(data, Base64.DEFAULT));
         }
 
         return result;
@@ -117,25 +114,59 @@ public class Converters {
             if (is != null) {
                 FileDescriptor fd = is.getFileDescriptor();
 
-                Bitmap bitmap = BitmapFactory.decodeFileDescriptor(fd);
+                if(type==MimeTypes.MIME_TYPE_IMAGE_JPEG||type==MimeTypes.MIME_TYPE_IMAGE_PNG||type==MimeTypes.MIME_TYPE_IMAGE_WEBP){
 
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    int mDstWidth = context.getResources().getDimensionPixelSize(R.dimen.attachment_image_width);
+                    int mDstHeight = context.getResources().getDimensionPixelSize(R.dimen.attachment_image_height);
 
-                Bitmap.CompressFormat format;
+                    BitmapFactory.Options options=ScalingUtilities.decodeResourceOptions(fd, mDstWidth, mDstHeight, ScalingUtilities.ScalingLogic.FIT);
 
-                switch (type){
-                    case MIME_TYPE_IMAGE_JPEG: format= Bitmap.CompressFormat.JPEG; break;
-                    case MIME_TYPE_IMAGE_PNG: format= Bitmap.CompressFormat.PNG; break;
-                    case MIME_TYPE_IMAGE_WEBP: format= Bitmap.CompressFormat.WEBP; break;
-                    default: return null;
+                    is= context.getContentResolver().openFileDescriptor(uri, "r");
+                    fd = is.getFileDescriptor();
+                    Bitmap bitmap=ScalingUtilities.decodeResource(fd, options);
+
+                    Bitmap scaledBitmap = ScalingUtilities.createScaledBitmap(bitmap, mDstWidth,
+                            mDstHeight, ScalingUtilities.ScalingLogic.FIT);
+                    bitmap.recycle();
+
+
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+                    Bitmap.CompressFormat format;
+
+                    switch (type){
+                        case MIME_TYPE_IMAGE_JPEG: format= Bitmap.CompressFormat.JPEG; break;
+                        case MIME_TYPE_IMAGE_PNG: format= Bitmap.CompressFormat.PNG; break;
+                        case MIME_TYPE_IMAGE_WEBP: format= Bitmap.CompressFormat.WEBP; break;
+                        default: return null;
+                    }
+
+                    scaledBitmap.compress(format, 100, bos);
+                    byte[] result=bos.toByteArray();
+                    is.close();
+                    bos.close();
+
+                    return result;
                 }
+                else{
+                    InputStream in = null;
+                    try {
+                        in = new BufferedInputStream(new FileInputStream(fd));
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        byte[] buf = new byte[1024];
+                        int n = 0;
+                        while (-1!=(n=in.read(buf)))
+                        {
+                            out.write(buf, 0, n);
+                        }
+                        out.close();
+                        in.close();
 
-                bitmap.compress(format, 100, bos);
-                byte[] result=bos.toByteArray();
-                is.close();
-                bos.close();
-
-                return result;
+                        return out.toByteArray();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
             else {
                 return null;
@@ -145,6 +176,7 @@ public class Converters {
             e.printStackTrace();
             return null;
         }
+        return null;
     }
 
     public static byte[] urlToByteArray(URL url){

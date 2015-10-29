@@ -13,12 +13,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.zingle.api.sdk.dao.QueryPart;
 import me.zingle.api.sdk.dao.ZingleConnection;
 import me.zingle.api.sdk.logger.Log;
 import me.zingle.api.sdk.logger.ZingleVerbosityLevel;
 import me.zingle.api.sdk.model.ZingleContact;
-import me.zingle.api.sdk.model.ZingleList;
 import me.zingle.api.sdk.model.ZingleService;
 import me.zingle.api.sdk.services.ZingleContactServices;
 import me.zingle.api.sdk.services.ZingleServiceServices;
@@ -33,7 +31,8 @@ import me.zingle.atlas_adoption.utils.Client;
 public class StartScreen extends AppCompatActivity {
     final String name="viacheslav.marusyk@cyberhull.com";
     final String password="20cheVrolet15";
-    final String contactId="27e4198e-1f07-414c-beef-5094916e56c1";
+    final String[] contactIds={"19197565-6767-4110-951b-610bc7e362fb","27e4198e-1f07-414c-beef-5094916e56c1"};
+    final String[] serviceIds={"4bc8bb76-0d19-48ff-815a-14e950fc776a","b1037b83-f2b6-4258-9b62-655c2478a329"};
 
     WorkingDataSet wds;
     Button continueApp;
@@ -53,17 +52,80 @@ public class StartScreen extends AppCompatActivity {
         protected Boolean doInBackground(String... params) {
             ZingleServiceServices serviceServices=new ZingleServiceServices();
 
+            Client clients=Client.getItem();
+
             publishProgress("\nAllowed services:\n");
 
-            ZingleList<ZingleService> serviceList=serviceServices.list();
-            if(serviceList!=null && serviceList.objects.size()>0) {
-                wds.setAllowedServices(serviceList.objects);
+            //Assign 1st service and it's contact
+            ZingleService service=serviceServices.get(serviceIds[0]);
+            wds.addAllowedService(service);
+            publishProgress(wds.getAllowedServices().toString());
 
-                publishProgress(wds.getAllowedServices().toString());
-                return true;
-            }
-            else
-                return false;
+            ZingleContactServices contactServices=new ZingleContactServices(service);
+            ZingleContact contact=contactServices.get(contactIds[0]);
+
+            publishProgress("\nAssigning contact...");
+            List<ZingleContact> contacts=new ArrayList<ZingleContact>();
+            contacts.add(contact);
+            publishProgress(contact.toString());
+
+            Client.ConversationClient client=new Client.ConversationClient();
+
+            client.setToken(name);
+            client.setKey(password);
+
+            Participant p=new Participant();
+            p.setType(Participant.ParticipantType.CONTACT);
+            p.setId(contactIds[0]);
+            p.setChannelValue("+15152935566");
+            client.setAuthContact(p);
+
+            p=new Participant();
+            p.setType(Participant.ParticipantType.SERVICE);
+            p.setId(service.getId());
+            p.setName(service.getDisplayName());
+            p.setChannelValue(service.getChannels().get(0).getValue());
+            client.setConnectedService(p);
+            client.addChannelTypeId(service.getChannels().get(0).getType().getId());
+            clients.addClient(client);
+
+            //Assign 2nd service and it's contact
+            service=serviceServices.get(serviceIds[1]);
+            wds.addAllowedService(service);
+            publishProgress(wds.getAllowedServices().toString());
+
+            contactServices=new ZingleContactServices(service);
+            contact=contactServices.get(contactIds[1]);
+
+            publishProgress("\nAssigning contact...");
+            contacts.add(contact);
+            publishProgress(contact.toString());
+
+            client=new Client.ConversationClient();
+
+            client.setToken(name);
+            client.setKey(password);
+
+            p=new Participant();
+            p.setType(Participant.ParticipantType.CONTACT);
+            p.setId(contactIds[1]);
+            p.setChannelValue("+15152935566");
+            client.setAuthContact(p);
+
+            p=new Participant();
+            p.setType(Participant.ParticipantType.SERVICE);
+            p.setId(service.getId());
+            p.setName(service.getDisplayName());
+            p.setChannelValue(service.getChannels().get(0).getValue());
+            client.setConnectedService(p);
+            client.addChannelTypeId(service.getChannels().get(0).getType().getId());
+            clients.addClient(client);
+
+            wds.setContacts(contacts);
+            Intent receiveIntent=new Intent(getBaseContext(), MessageReceiver.class);
+            startService(receiveIntent);
+
+            return true;
         }
 
         @Override
@@ -77,59 +139,6 @@ public class StartScreen extends AppCompatActivity {
         @Override
         protected void onProgressUpdate(String... values) {
             displayText.append("\n"+values[0]);
-        }
-    }
-
-    private class SetUpContact extends AsyncTask<Integer,String,Boolean> {
-        TextView displayText=null;
-
-        @Override
-        protected void onPreExecute() {
-            displayText=(TextView) findViewById(R.id.start_screen_text);
-            displayText.setText("\nRegistering contact...");        }
-
-        @Override
-        protected Boolean doInBackground(Integer... params) {
-            ZingleContactServices contactServices=new ZingleContactServices(wds.getAllowedServices().get(params[0]));
-
-
-            //TODO Temporary contact GET substitution
-            List<QueryPart> conditions=contactServices.createConditions("page_size,page", "10","2");
-            ZingleContact contact=contactServices.get(contactId);
-
-            if(contact!=null){
-
-                publishProgress("\nAssigning contact...");
-                List<ZingleContact> contacts=new ArrayList<ZingleContact>();
-                contacts.add(contact);
-                wds.setContacts(contacts);
-                publishProgress(contacts.toString());
-
-                Intent receiveIntent=new Intent(getBaseContext(), MessageReceiver.class);
-                //receiveIntent.putExtra(Message.RECEIVE_INTENT_CONTACT_ID,contact.getId());
-                startService(receiveIntent);
-
-                return true;
-            }
-            else
-                return false;
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            displayText.append(values[0]);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            if (aBoolean) {
-                displayText.append("\nContact assigned.");
-                continueApp.setClickable(true);
-
-
-            }
-            else
-                displayText.append("\nContact assignment failed.");
         }
     }
 
@@ -156,28 +165,8 @@ public class StartScreen extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    Client client=Client.getItem();
-
-                    Participant p=new Participant();
-
-                    p.setType( Participant.ParticipantType.CONTACT);
-                    p.setId(contactId);
-                    p.setChannelValue("+15152935566");
-                    client.setAuthContact(p);
-
-                    p=new Participant();
-                    p.setType(Participant.ParticipantType.SERVICE);
-                    p.setId(service.getId());
-                    p.setName(service.getDisplayName());
-                    p.setChannelValue(service.getChannels().get(0).getValue());
-                    client.setConnectedService(p);
-
-                    client.addChannelTypeId(service.getChannels().get(0).getType().getId());
-                    //client.addChannelTypeId(wds.getContacts().get(0).getChannels().get(0).getType().getId());
-
                     Intent intent = new Intent(getBaseContext(), ZingleMessagingActivity.class);
-                    intent.putExtra("Token", wds.getLogin());
-                    intent.putExtra("Key", wds.getPassword());
+                    intent.putExtra(ZingleMessagingActivity.BASE_SERVICE_ID, service.getId());
 
                     startActivity(intent);
 
@@ -191,7 +180,6 @@ public class StartScreen extends AppCompatActivity {
             startScreen.setText("Illegal credentials:\nToken=" + name + "\nKey=" + password + "\n");
         }
     }
-
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -231,12 +219,12 @@ public class StartScreen extends AppCompatActivity {
 
             //Here channel types and values must be defined somehow.
 
-
             service=wds.getAllowedServices().get(id);
-
             continueApp.setClickable(false);
-            wds.setContacts(new ArrayList<ZingleContact>());
-            new SetUpContact().execute(id);
+            Intent intent = new Intent(getBaseContext(), ZingleMessagingActivity.class);
+            intent.putExtra(ZingleMessagingActivity.BASE_SERVICE_ID, service.getId());
+            startActivity(intent);
+
 
             return true;
         }

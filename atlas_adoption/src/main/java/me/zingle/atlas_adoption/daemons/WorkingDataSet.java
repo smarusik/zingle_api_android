@@ -33,8 +33,8 @@ public class WorkingDataSet {
         return allowedServices;
     }
 
-    synchronized public void setAllowedServices(List<ZingleService> allowedServices) {
-        this.allowedServices = allowedServices;
+    synchronized public void addAllowedService(ZingleService allowedService) {
+        this.allowedServices.add(allowedService);
     }
 
     synchronized public List<ZingleContact> getContacts() {
@@ -58,8 +58,8 @@ public class WorkingDataSet {
         this.contacts = contacts;
     }
 
-    synchronized public void addContacts(List<ZingleContact> contacts) {
-        this.contacts.addAll(contacts);
+    synchronized public void addContact(ZingleContact contact) {
+        this.contacts.add(contact);
     }
 
     synchronized public String getLogin() {

@@ -1,6 +1,5 @@
 package me.zingle.atlas_adoption;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
@@ -23,8 +22,8 @@ public class MessagesList extends FrameLayout{
 
     //properties from Atlas
     private final DateFormat timeFormat;
-    private ExpandableListView messagesList;
-    private Client client=Client.getItem();
+    private ExpandableListView messagesListView;
+    private Client.ConversationClient client;
     ZingleListAdapter adapter;
 
 
@@ -65,17 +64,18 @@ public class MessagesList extends FrameLayout{
     }
 
 
-    public void init(Activity activity){
+    public void init(ZingleMessagingActivity activity){
         LayoutInflater.from(getContext()).inflate(R.layout.atlas_messages_list, this);
-        messagesList = (ExpandableListView) findViewById(R.id.atlas_messages_list);
+        messagesListView = (ExpandableListView) findViewById(R.id.atlas_messages_list);
 
+        client=activity.getClient();
         DataServices dataServices=DataServices.getItem();
-        dataServices.initConversation(this);
+        dataServices.initConversation(client.getConnectedService().getId(),this);
 
         adapter=new ZingleListAdapter(activity, client, styleSettings);
-        messagesList.setAdapter(adapter);
+        messagesListView.setAdapter(adapter);
 
-        for(int i=0;i<adapter.getGroupCount();i++) messagesList.expandGroup(i);
+        for(int i=0;i<adapter.getGroupCount();i++) messagesListView.expandGroup(i);
 
         showLastMessage();
     }
@@ -83,8 +83,8 @@ public class MessagesList extends FrameLayout{
     public void showLastMessage(){
         int numGroups=adapter.getGroupCount();
         if(numGroups>0) {
-            messagesList.expandGroup(numGroups - 1);
-            messagesList.setSelectedChild(numGroups - 1, adapter.getChildrenCount(numGroups - 1), true);
+            messagesListView.expandGroup(numGroups - 1);
+            messagesListView.setSelectedChild(numGroups - 1, adapter.getChildrenCount(numGroups - 1), true);
         }
     }
 

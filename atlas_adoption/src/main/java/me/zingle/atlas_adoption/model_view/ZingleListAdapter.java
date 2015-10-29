@@ -46,14 +46,14 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
     public LayoutInflater layoutInflater;
     public Activity activity;
     //private Context context;
-    private final Client client;
+    private final Client.ConversationClient client;
 
     private final MessageListStyleSettings styleSettings;
 
     public static final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm a", Locale.getDefault());
     public static final SimpleDateFormat sdfDayOfWeek = new SimpleDateFormat("EEE, LLL dd,", Locale.getDefault());
 
-    public ZingleListAdapter(Activity activity, Client client, MessageListStyleSettings styleSettings) {
+    public ZingleListAdapter(Activity activity, Client.ConversationClient client, MessageListStyleSettings styleSettings) {
         this.activity = activity;
         this.client = client;
         this.styleSettings = styleSettings;
@@ -151,7 +151,7 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
                             cellContainer.addView(generateTextCell(attachment.getTextContent(), attachments.size(), msg.getSender().equals(client.getAuthContact()), cellContainer));
                             break;
                         case MIME_TYPE_UNSUPPORTED:
-                            String cellText = String.valueOf(R.string.attachment_unale_to_display);
+                            String cellText = String.valueOf(R.string.attachment_unable_to_display);
                             if (attachment.getUri() != null)
                                 cellText = attachment.getUri().toString();
                             else if (attachment.getUrl() != null)
@@ -159,12 +159,12 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
                             cellContainer.addView(generateTextCell(cellText, attachments.size(), msg.getSender().equals(client.getAuthContact()), cellContainer));
                             break;
                         default:
-                            cellContainer.addView(generateTextCell(String.valueOf(R.string.attachment_unale_to_display), attachments.size(), msg.getSender().equals(client.getAuthContact()), cellContainer));
+                            cellContainer.addView(generateTextCell(String.valueOf(R.string.attachment_unable_to_display), attachments.size(), msg.getSender().equals(client.getAuthContact()), cellContainer));
                             break;
                     }
                 }
                 else{
-                    cellContainer.addView(generateTextCell(String.valueOf(R.string.attachment_unale_to_display), attachments.size(), msg.getSender().equals(client.getAuthContact()), cellContainer));
+                    cellContainer.addView(generateTextCell(String.valueOf(R.string.attachment_unable_to_display), attachments.size(), msg.getSender().equals(client.getAuthContact()), cellContainer));
                 }
             }
         }
@@ -233,7 +233,7 @@ public class ZingleListAdapter extends BaseExpandableListAdapter {
         TextView timeField=(TextView) convertView.findViewById(R.id.atlas_view_messages_convert_timebar_time);
 
         String strDay=formatTimeDay(group.getEndDate());
-        String strTime=timeFormat.format(group.getStartDate().getTime());
+        String strTime=sdf.format(group.getStartDate().getTime());
 
         dayField.setText(strDay);
         timeField.setText(strTime);

@@ -1,6 +1,8 @@
 package me.zingle.atlas_adoption.utils;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import me.zingle.atlas_adoption.facade_models.Participant;
@@ -8,13 +10,69 @@ import me.zingle.atlas_adoption.facade_models.Participant;
 /**
  * Created by SLAVA 09 2015.
  */
+
 public class Client {
-    public static final String CONTACT_ID="contact_id";
-    public static final String CONTACT_CH_VALUE="contact_channel_value";
-    public static final String SERVICE_ID="service_id";
-    public static final String SERVICE_NAME="service_name";
-    public static final String SERVICE_CH_VALUE="service_channel_value";
-    public static final String CH_TYPE_ID="channel_type_id";
+
+    public static class ConversationClient{
+        private boolean listVisible;
+        private String token;
+        private String key;
+        private Participant authContact;
+        private Participant connectedService;
+        private Set<String> channelTypeId=new HashSet<String>();
+        synchronized public Set<String> getChannelTypeId() {
+            return channelTypeId;
+        }
+
+        public void setChannelTypeId(Set<String> channelTypeId) {
+            this.channelTypeId = channelTypeId;
+        }
+
+        public void addChannelTypeId(String channelTypeId) {
+            this.channelTypeId.add(channelTypeId);
+        }
+
+        public Participant getAuthContact() {
+            return authContact;
+        }
+
+        public void setAuthContact(Participant authContact) {
+            this.authContact = authContact;
+        }
+
+        public Participant getConnectedService() {
+            return connectedService;
+        }
+
+        public void setConnectedService(Participant connectedService) {
+            this.connectedService = connectedService;
+        }
+
+        public boolean isListVisible() {
+            return listVisible;
+        }
+
+        public void setListVisible(boolean listVisible) {
+            this.listVisible = listVisible;
+        }
+
+        public String getToken() {
+            return token;
+        }
+
+        public void setToken(String token) {
+            this.token = token;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+    }
+
 
     private static Client item;
 
@@ -26,46 +84,13 @@ public class Client {
         return item;
     }
 
-    private Client() {
+    private Map<String,ConversationClient> clients= new HashMap<>();
+
+    synchronized public void addClient(ConversationClient client){
+        clients.put(client.connectedService.getId(),client);
     }
 
-    private boolean listVisible;
-    private Participant authContact;
-    private Participant connectedService;
-    private Set<String> channelTypeId=new HashSet<String>();
-    synchronized public Set<String> getChannelTypeId() {
-        return channelTypeId;
-    }
-
-    synchronized public void setChannelTypeId(Set<String> channelTypeId) {
-        this.channelTypeId = channelTypeId;
-    }
-
-    synchronized public void addChannelTypeId(String channelTypeId) {
-        this.channelTypeId.add(channelTypeId);
-    }
-
-    synchronized public Participant getAuthContact() {
-        return authContact;
-    }
-
-    synchronized public void setAuthContact(Participant authContact) {
-        this.authContact = authContact;
-    }
-
-    synchronized public Participant getConnectedService() {
-        return connectedService;
-    }
-
-    synchronized public void setConnectedService(Participant connectedService) {
-        this.connectedService = connectedService;
-    }
-
-    synchronized public boolean isListVisible() {
-        return listVisible;
-    }
-
-    synchronized public void setListVisible(boolean listVisible) {
-        this.listVisible = listVisible;
+    synchronized public ConversationClient getClient(String id){
+        return clients.get(id);
     }
 }
