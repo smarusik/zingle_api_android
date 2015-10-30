@@ -48,18 +48,12 @@ public class ZingleMessagingActivity extends AppCompatActivity {
 
         String incomingService=getIntent().getStringExtra(BASE_SERVICE_ID);
 
-/*
-        if(incomingService==null){
-
-        }
-*/
-
         client =Client.getItem().getClient(incomingService);
 
         client.setListVisible(true);
 
         messagesList = (MessagesList) findViewById(R.id.atlas_screen_messages_messages_list);
-        //messagesList.init(this);
+        messagesList.init(this);
 
         final DataServices dataGroupServices = DataServices.getItem();
 
@@ -109,15 +103,14 @@ public class ZingleMessagingActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        super.onStop();
         client.setListVisible(false);
+        super.onStop();
     }
 
     @Override
     protected void onStart() {
-        super.onStart();
         client.setListVisible(true);
-        messagesList.init(this);
+        super.onStart();
     }
 
     @Override
@@ -135,60 +128,61 @@ public class ZingleMessagingActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (resultCode != Activity.RESULT_OK) return;
+        if (resultCode == Activity.RESULT_OK) {
 
-        Attachment att=null;
+            Attachment att = null;
 
-        switch (requestCode) {
-            case REQUEST_CODE_CAMERA:
-                if(data.getData()!=null) {
-                    att = new Attachment();
-                    ContentResolver cR = this.getContentResolver();
-                    String type = cR.getType(data.getData());
-                    att.setMimeType(type);
+            switch (requestCode) {
+                case REQUEST_CODE_CAMERA:
+                    if (data.getData() != null) {
+                        att = new Attachment();
+                        ContentResolver cR = this.getContentResolver();
+                        String type = cR.getType(data.getData());
+                        att.setMimeType(type);
 
-                    InputStream stream = null;
-                    UUID cachePath=UUID.randomUUID();
+                        InputStream stream = null;
+                        UUID cachePath = UUID.randomUUID();
 
-                    Bundle extras = data.getExtras();
-                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+                        Bundle extras = data.getExtras();
+                        Bitmap imageBitmap = (Bitmap) extras.get("data");
 
-                    if(imageBitmap!=null) {
-                        Bitmap.CompressFormat format;
-                        format = Bitmap.CompressFormat.JPEG;
+                        if (imageBitmap != null) {
+                            Bitmap.CompressFormat format;
+                            format = Bitmap.CompressFormat.JPEG;
 
-                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        imageBitmap.compress(format, 100, bos);
+                            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                            imageBitmap.compress(format, 100, bos);
 
-                        DataServices dataServices = DataServices.getItem();
+                            DataServices dataServices = DataServices.getItem();
 
-                        dataServices.addCachedItem(cachePath.toString(), bos.toByteArray());
+                            dataServices.addCachedItem(cachePath.toString(), bos.toByteArray());
 
-                        att.setUri(null);
-                        att.setCachePath(cachePath.toString());
-                        att.setTextContent("Image from camera.\n" + att.getUri());
+                            att.setUri(null);
+                            att.setCachePath(cachePath.toString());
+                            att.setTextContent("Image from camera.\n" + att.getUri());
+                        }
                     }
-                }
 
-                break;
-            case REQUEST_CODE_GALLERY:
-                if(data!=null) {
-                    att = new Attachment();
-                    ContentResolver cR = this.getContentResolver();
-                    String type = cR.getType(data.getData());
+                    break;
+                case REQUEST_CODE_GALLERY:
+                    if (data != null) {
+                        att = new Attachment();
+                        ContentResolver cR = this.getContentResolver();
+                        String type = cR.getType(data.getData());
 
-                    att.setMimeType(type);
+                        att.setMimeType(type);
 
-                    att.setUri(data.getData());
-                    att.setCachePath(data.getData().toString());
-                    att.setTextContent("Image from gallery.\n" + att.getUri());
-                }
-               break;
+                        att.setUri(data.getData());
+                        att.setCachePath(data.getData().toString());
+                        att.setTextContent("Image from gallery.\n" + att.getUri());
+                    }
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+            }
+            if (att != null) messageComposer.createdMessage.addAttachment(att);
         }
-        if(att!=null) messageComposer.createdMessage.addAttachment(att);
+        super.onActivityResult(requestCode, resultCode, data);
     }
-
 }
