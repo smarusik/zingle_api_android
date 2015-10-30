@@ -65,8 +65,11 @@ public class MessagesList extends FrameLayout{
 
 
     public void init(ZingleMessagingActivity activity){
-        LayoutInflater.from(getContext()).inflate(R.layout.atlas_messages_list, this);
-        messagesListView = (ExpandableListView) findViewById(R.id.atlas_messages_list);
+
+        if(messagesListView==null) {
+            LayoutInflater.from(getContext()).inflate(R.layout.atlas_messages_list, this);
+            messagesListView = (ExpandableListView) findViewById(R.id.atlas_messages_list);
+        }
 
         client=activity.getClient();
         DataServices dataServices=DataServices.getItem();

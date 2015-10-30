@@ -13,31 +13,36 @@
      See the License for the specific language governing permissions and
      limitations under the License.    
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:columnCount="3"
+    android:rowCount="2">
 
     <TextView 
         android:id="@+id/atlas_message_composer_upload"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_gravity="bottom"
         android:gravity="center"
         android:text="+"
         android:visibility="gone"
+        android:layout_column="0"
+        android:layout_row="0"
         />
     
     <EditText
         android:id="@+id/atlas_message_composer_text"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_gravity="fill_horizontal"
         android:maxLines="4"
         android:textSize="@dimen/atlas_text_size_general"
         android:background="@drawable/atlas_ctl_edit_text"
         android:hint="Hi there! ..."
         android:minHeight="48dp"
+        android:layout_column="1"
+        android:layout_row="0"
         />
     
     <TextView
@@ -46,14 +51,25 @@
         android:layout_height="40dp"
         android:layout_gravity="bottom"
         android:layout_marginRight="4dp"
-        android:gravity="left|center_vertical"
+        android:gravity="center|center_vertical"
         android:maxLines="1"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:textSize="@dimen/atlas_text_size_general" 
         android:textColor="@color/atlas_text_gray"
         android:text="SEND"
+        android:layout_column="2"
+        android:layout_row="0"
         />
 
-</LinearLayout>
+    <ListView
+        android:id="@+id/message_composer_attachments"
+        android:layout_column="0"
+        android:layout_columnSpan="3"
+        android:layout_row="1"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        />
+
+</GridLayout>
     

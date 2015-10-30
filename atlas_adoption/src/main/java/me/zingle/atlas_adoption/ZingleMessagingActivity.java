@@ -53,7 +53,7 @@ public class ZingleMessagingActivity extends AppCompatActivity {
         client.setListVisible(true);
 
         messagesList = (MessagesList) findViewById(R.id.atlas_screen_messages_messages_list);
-        messagesList.init(this);
+
 
         final DataServices dataGroupServices = DataServices.getItem();
 
@@ -110,6 +110,7 @@ public class ZingleMessagingActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         client.setListVisible(true);
+        messagesList.init(this);
         super.onStart();
     }
 
@@ -182,6 +183,7 @@ public class ZingleMessagingActivity extends AppCompatActivity {
                     break;
             }
             if (att != null) messageComposer.createdMessage.addAttachment(att);
+            messageComposer.updateAttachmentsList();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

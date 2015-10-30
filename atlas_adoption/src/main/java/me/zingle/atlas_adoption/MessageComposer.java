@@ -12,25 +12,55 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import me.zingle.atlas_adoption.facade_models.Attachment;
 import me.zingle.atlas_adoption.facade_models.Message;
 import me.zingle.atlas_adoption.utils.Client;
 
 /**
  * Created by SLAVA 09 2015.
  */
+
+class AttachmentListAdapter extends ArrayAdapter<Attachment>{
+
+    Context context;
+    List<Attachment> attachments;
+
+    public AttachmentListAdapter(Context context, List<Attachment> objects) {
+        super(context,-1, objects);
+        this.context=context;
+        attachments=objects;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View rowView=LayoutInflater.from(context).inflate(R.layout.composer_attachment_item,parent,false);
+        TextView attachmentText=(TextView) rowView.findViewById(R.id.composer_attachment_item_text);
+        attachmentText.setText(attachments.get(position).getUri().toString());
+
+        return rowView;
+    }
+}
+
 public class MessageComposer extends FrameLayout {
     private EditText messageText;
     private View btnSend;
     private View btnUpload;
+
+    private ListView attachmentsView;
+    private ArrayAdapter<Attachment> attachmentArrayAdapter;
 
     Message createdMessage=new Message();
 
@@ -82,6 +112,21 @@ public class MessageComposer extends FrameLayout {
 
         LayoutInflater.from(getContext()).inflate(R.layout.atlas_message_composer, this);
 
+        //Init attachments list
+        attachmentsView=(ListView)findViewById(R.id.message_composer_attachments);
+        attachmentArrayAdapter=new AttachmentListAdapter(getContext(),createdMessage.getAttachments());
+        attachmentsView.setAdapter(attachmentArrayAdapter);
+        attachmentsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                createdMessage.getAttachments().remove(position);
+                updateAttachmentsList();
+            }
+        });
+
+
+        //Init attachments add button
         btnUpload = findViewById(R.id.atlas_message_composer_upload);
         btnUpload.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -153,11 +198,19 @@ public class MessageComposer extends FrameLayout {
                     }
                     messageText.setText("");
                     createdMessage=new Message();
+                    attachmentArrayAdapter.notifyDataSetInvalidated();
+                    attachmentArrayAdapter=new AttachmentListAdapter(getContext(),createdMessage.getAttachments());
+                    attachmentsView.setAdapter(attachmentArrayAdapter);
+
                 }
             }
         });
 
         applyStyle();
+    }
+
+    public void updateAttachmentsList(){
+        attachmentArrayAdapter.notifyDataSetChanged();
     }
 
     private void applyStyle() {
