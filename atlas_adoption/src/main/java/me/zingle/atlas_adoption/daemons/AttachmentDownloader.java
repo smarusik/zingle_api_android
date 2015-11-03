@@ -92,25 +92,33 @@ public class AttachmentDownloader extends IntentService {
                         Bitmap unscaledBitmap = ScalingUtilities.decodeResource(attachment.getUrl(),
                                 mDstWidth, mDstHeight, ScalingUtilities.ScalingLogic.FIT);
 
-                        Bitmap scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, mDstWidth,
-                                mDstHeight, ScalingUtilities.ScalingLogic.FIT);
-                        unscaledBitmap.recycle();
+                        if(unscaledBitmap!=null) {
+                            Bitmap scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, mDstWidth,
+                                    mDstHeight, ScalingUtilities.ScalingLogic.FIT);
+                            unscaledBitmap.recycle();
 
-                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        Bitmap.CompressFormat format;
+                            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                            Bitmap.CompressFormat format;
 
-                        switch (attachment.getMimeType()){
-                            case MIME_TYPE_IMAGE_JPEG: format= Bitmap.CompressFormat.JPEG; break;
-                            case MIME_TYPE_IMAGE_PNG: format= Bitmap.CompressFormat.PNG; break;
-                            case MIME_TYPE_IMAGE_WEBP: format= Bitmap.CompressFormat.WEBP; break;
-                            default: format= Bitmap.CompressFormat.JPEG;
+                            switch (attachment.getMimeType()) {
+                                case MIME_TYPE_IMAGE_JPEG:
+                                    format = Bitmap.CompressFormat.JPEG;
+                                    break;
+                                case MIME_TYPE_IMAGE_PNG:
+                                    format = Bitmap.CompressFormat.PNG;
+                                    break;
+                                case MIME_TYPE_IMAGE_WEBP:
+                                    format = Bitmap.CompressFormat.WEBP;
+                                    break;
+                                default:
+                                    format = Bitmap.CompressFormat.JPEG;
+                            }
+
+                            scaledBitmap.compress(format, 100, bos);
+                            byte[] data = bos.toByteArray();
+                            bos.close();
+                            dataServices.addCachedItem(attachment.getUrl().toString(), data);
                         }
-
-                        scaledBitmap.compress(format, 100, bos);
-                        byte[] data=bos.toByteArray();
-                        bos.close();
-                        dataServices.addCachedItem(attachment.getUrl().toString(), data);
-
                     }
                     else {
                         byte[] data = Converters.urlToByteArray(attachment.getUrl());

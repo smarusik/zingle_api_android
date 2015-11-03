@@ -12,8 +12,6 @@ import me.zingle.api.sdk.model.ZingleService;
 import me.zingle.atlas_adoption.ZingleUIInitAndStart;
 import me.zingle.atlas_adoption.daemons.WorkingDataSet;
 
-//import android.util.Log;
-
 public class StartScreen extends AppCompatActivity {
     final String name="viacheslav.marusyk@cyberhull.com";
     final String password="20cheVrolet15";
