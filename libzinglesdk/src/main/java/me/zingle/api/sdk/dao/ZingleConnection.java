@@ -55,8 +55,6 @@ public class ZingleConnection {
 
     public static boolean init (String apiPath, String apiVersion, String token, String key){
 
-        //if(instance!=null) return false;
-
         //System.setProperty("jsse.enableSNIExtension", "false");
 
         ZingleConnection temp = new ZingleConnection(apiPath, apiVersion, generateEncryptedAuthString(token, key));
