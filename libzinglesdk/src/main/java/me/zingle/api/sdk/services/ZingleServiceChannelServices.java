@@ -46,7 +46,7 @@ public class ZingleServiceChannelServices extends ZingleBaseService<ZingleServic
                 result.setCountry(source.optString("country"));
                 result.setIsDefaultForType(source.optBoolean("is_default_for_type"));
 
-                ZingleChannelTypeServices channelTypeServices=new ZingleChannelTypeServices();
+                ZingleChannelTypeServices channelTypeServices=new ZingleChannelTypeServices(parent);
                 result.setType(channelTypeServices.mapper(source.optJSONObject("channel_type")));
 
                 result.setService(parent);

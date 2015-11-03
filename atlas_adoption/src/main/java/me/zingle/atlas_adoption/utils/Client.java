@@ -56,6 +56,7 @@ public class Client {
             this.listVisible = listVisible;
         }
 
+/*
         public String getToken() {
             return token;
         }
@@ -71,6 +72,7 @@ public class Client {
         public void setKey(String key) {
             this.key = key;
         }
+*/
     }
 
 
@@ -89,6 +91,20 @@ public class Client {
     synchronized public void addClient(ConversationClient client){
         clients.put(client.connectedService.getId(),client);
     }
+
+/*
+    synchronized public List<Participant> getContactsList(){
+        List<Participant> result=new LinkedList<>();
+        for (Map.Entry<String,ConversationClient> c:clients.entrySet()) result.add(c.getValue().getAuthContact());
+        return result;
+    }
+
+    synchronized public List<Participant> getServicesList(){
+        List<Participant> result=new LinkedList<>();
+        for (Map.Entry<String,ConversationClient> c:clients.entrySet()) result.add(c.getValue().getConnectedService());
+        return result;
+    }
+*/
 
     synchronized public ConversationClient getClient(String id){
         return clients.get(id);

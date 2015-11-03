@@ -92,7 +92,7 @@ public class ZingleCorrespondent extends ZingleBaseModel{
             if(id!=null)
                 resJS.put("id",id);
 
-            if(!(channel==null || channel.getValue().isEmpty())) {
+            if(!(channel==null || channel.getValue()==null || channel.getValue().isEmpty())) {
                 resJS.put("channel_value", channel.getValue());
             }
 

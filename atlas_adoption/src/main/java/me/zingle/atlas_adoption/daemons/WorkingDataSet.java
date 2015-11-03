@@ -62,6 +62,7 @@ public class WorkingDataSet {
         this.contacts.add(contact);
     }
 
+/*
     synchronized public String getLogin() {
         return login;
     }
@@ -77,4 +78,5 @@ public class WorkingDataSet {
     synchronized public void setPassword(String password) {
         this.password = password;
     }
+*/
 }

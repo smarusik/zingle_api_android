@@ -54,7 +54,7 @@ public class ZingleContactChannelServices extends ZingleBaseService<ZingleContac
             e.printStackTrace();
             throw new MappingErrorEx(this.getClass().getName(),source.toString(),e.getMessage());
         }
-        ZingleChannelTypeServices channelTypeServices=new ZingleChannelTypeServices();
+        ZingleChannelTypeServices channelTypeServices=new ZingleChannelTypeServices(parentService);
         result.setType(channelTypeServices.mapper(source.optJSONObject("channel_type")));
 
         return result;

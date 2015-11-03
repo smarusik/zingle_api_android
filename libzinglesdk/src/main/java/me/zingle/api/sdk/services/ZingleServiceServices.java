@@ -75,7 +75,7 @@ public class ZingleServiceServices extends ZingleBaseService<ZingleService>{
             ZingleServiceChannelServices channelServices = new ZingleServiceChannelServices(mapResult);
             mapResult.setChannels(channelServices.arrayMapper(source.getJSONArray("channels")));
 
-            ZingleChannelTypeServices channelTypeServices = new ZingleChannelTypeServices();
+            ZingleChannelTypeServices channelTypeServices = new ZingleChannelTypeServices(mapResult);
             mapResult.setChannelTypes(channelTypeServices.arrayMapper(source.getJSONArray("channel_types")));
 
             ZingleLabelServices labelServices = new ZingleLabelServices(mapResult);

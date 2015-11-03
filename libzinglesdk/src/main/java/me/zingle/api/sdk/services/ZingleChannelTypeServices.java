@@ -3,26 +3,40 @@ package me.zingle.api.sdk.services;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
-
 import me.zingle.api.sdk.Exceptions.MappingErrorEx;
-import me.zingle.api.sdk.dao.QueryPart;
 import me.zingle.api.sdk.model.ZingleChannelType;
-import me.zingle.api.sdk.model.ZingleList;
+import me.zingle.api.sdk.model.ZingleService;
 
 /**
  * Created by SLAVA 09 2015.
  */
 public class ZingleChannelTypeServices extends ZingleBaseService<ZingleChannelType> {
+
+    final ZingleService parentService;
+
+    public ZingleChannelTypeServices(ZingleService parentService) {
+        this.parentService = parentService;
+    }
+
     @Override
     protected String resourcePath(boolean specific) {
-        return null;
+        String base = String.format("/services/%s/channel-types", parentService.getId());
+
+        if (specific)
+            return base + "/%s";
+        else
+            return base;
     }
 
     @Override
     protected boolean checkModifier(String modifier) {
-        return false;
+        return modifier.equals("page")
+                ||modifier.equals("page_size")
+                ||modifier.equals("sort_field")
+                ||modifier.equals("sort_direction")
+                ;
     }
+
 
     @Override
     public ZingleChannelType mapper(JSONObject source) throws MappingErrorEx {
@@ -36,57 +50,14 @@ public class ZingleChannelTypeServices extends ZingleBaseService<ZingleChannelTy
                 result.setInboundNotificationUrl(source.optString("inbound_notification_url"));
                 result.setOutboundNotificationUrl(source.optString("outbound_notification_url"));
                 result.setAllowCommunications(source.optBoolean("allow_communications"));
+                result.setIsGlobal(source.optBoolean("is_global"));
+                result.setPriority(source.optInt("priority"));
 
                 return result;
             } else
                 return null;
-        }catch(JSONException e){
-            throw new MappingErrorEx(this.getClass().getSimpleName(),source.toString(),source.toString());
+        } catch (JSONException e) {
+            throw new MappingErrorEx(this.getClass().getSimpleName(), source.toString(), source.toString());
         }
-    }
-
-    @Override
-    public ZingleChannelType get(String id) {
-        return null;
-    }
-
-    @Override
-    public boolean getAsync(String id, ServiceDelegate<ZingleChannelType> delegate) {
-        return false;
-    }
-
-    @Override
-    public boolean getAsync(String id) {
-        return false;
-    }
-
-    @Override
-    public ZingleList<ZingleChannelType> list() {
-        return null;
-    }
-
-    @Override
-    public boolean listAsync(ServiceDelegate<ZingleList<ZingleChannelType>> delegate) {
-        return false;
-    }
-
-    @Override
-    public boolean listAsync() {
-        return false;
-    }
-
-    @Override
-    public ZingleList<ZingleChannelType> list(List<QueryPart> conditions) {
-        return null;
-    }
-
-    @Override
-    public boolean listAsync(List<QueryPart> conditions, ServiceDelegate<ZingleList<ZingleChannelType>> delegate) {
-        return false;
-    }
-
-    @Override
-    public boolean listAsync(List<QueryPart> conditions) {
-        return false;
     }
 }

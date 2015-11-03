@@ -24,6 +24,12 @@ public class ZingleServiceChannel extends ZingleBaseModel{
     public ZingleServiceChannel() {
     }
 
+    public ZingleServiceChannel(ZingleChannelType type, String value, String country) {
+        this.type = type;
+        this.value = value;
+        this.country = country;
+    }
+
     public ZingleServiceChannel(String displayName, ZingleChannelType type, Boolean isDefaultForType, String value,String country) {
         this.displayName = displayName;
         this.type = type;
@@ -109,7 +115,7 @@ public class ZingleServiceChannel extends ZingleBaseModel{
             resJS.put("country", getCountry());
 
 
-            if (!getDisplayName().isEmpty())
+            if (getDisplayName()!=null && !getDisplayName().isEmpty())
                 resJS.put("display_name", getDisplayName());
 
             if (getIsDefaultForType() != null)

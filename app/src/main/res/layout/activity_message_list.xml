@@ -18,13 +18,4 @@
 
     </ScrollView>
 
-    <Button
-        android:id="@+id/continue_button"
-        android:layout_above="@id/start_screen_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:clickable="false"
-        android:text="@string/action_continue"/>
-
 </LinearLayout>

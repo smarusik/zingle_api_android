@@ -1,6 +1,10 @@
 package me.zingle.api.sdk.model;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
+import me.zingle.api.sdk.dao.RequestMethods;
 
 /**
  * Created by SLAVA 09 2015.
@@ -13,12 +17,19 @@ public class ZingleChannelType extends ZingleBaseModel{
     private String inboundNotificationUrl;
     private String outboundNotificationUrl;
     private Boolean allowCommunications;
+    private Boolean isGlobal;
+    private Integer priority;
 
     public ZingleChannelType() {
     }
 
     public ZingleChannelType(String id) {
         this.id = id;
+    }
+
+    public ZingleChannelType(String typeclass, String displayName) {
+        this.typeclass = typeclass;
+        this.displayName = displayName;
     }
 
     public String getId() {
@@ -69,24 +80,93 @@ public class ZingleChannelType extends ZingleBaseModel{
         this.allowCommunications = allowCommunications;
     }
 
+    public Boolean getIsGlobal() {
+        return isGlobal;
+    }
+
+    public void setIsGlobal(Boolean isGlobal) {
+        this.isGlobal = isGlobal;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
+    }
+
     @Override
     public JSONObject extractCreationData() {
-        return null;
+        checkForCreate();
+
+        JSONObject resJS=new JSONObject();
+
+        try {
+
+            resJS.put("display_name", getDisplayName());
+
+            if (getInboundNotificationUrl() != null)
+                resJS.put("inbound_notification_url", getInboundNotificationUrl());
+
+            if (getOutboundNotificationUrl() != null)
+                resJS.put("outbound_notification_url", getOutboundNotificationUrl());
+
+            if (getAllowCommunications() != null)
+                resJS.put("allow_communications", getAllowCommunications());
+
+            if (getPriority() != null)
+                resJS.put("priority", getPriority());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return resJS;
     }
 
     @Override
     public JSONObject extractUpdateData() {
-        return null;
+        checkForUpdate();
+
+        JSONObject resJS=new JSONObject();
+
+        try {
+
+            resJS.put("display_name", getDisplayName());
+
+            if (getInboundNotificationUrl() != null)
+                resJS.put("inbound_notification_url", getInboundNotificationUrl());
+
+            if (getOutboundNotificationUrl() != null)
+                resJS.put("outbound_notification_url", getOutboundNotificationUrl());
+
+            if (getAllowCommunications() != null)
+                resJS.put("allow_communications", getAllowCommunications());
+
+            if (getPriority() != null)
+                resJS.put("priority", getPriority());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return resJS;
+
     }
 
     @Override
     public void checkForCreate() {
-
+        if (getDisplayName() == null) {
+            throw new RequestBodyCreationEx(RequestMethods.POST, "display_name", "ZingleChannelType.displayName");
+        }
     }
 
     @Override
     public void checkForUpdate() {
-
+        if (getDisplayName() == null) {
+            throw new RequestBodyCreationEx(RequestMethods.POST, "display_name", "ZingleChannelType.displayName");
+        }
     }
 
     @Override
@@ -98,6 +178,8 @@ public class ZingleChannelType extends ZingleBaseModel{
         sb.append("\n    inboundNotificationUrl='").append(inboundNotificationUrl).append('\'');
         sb.append("\n    outboundNotificationUrl='").append(outboundNotificationUrl).append('\'');
         sb.append("\n    allowCommunications=").append(allowCommunications);
+        sb.append("\n    isGlobal=").append(isGlobal);
+        sb.append("\n    priority=").append(priority);
         sb.append("}\n");
         return sb.toString();
     }

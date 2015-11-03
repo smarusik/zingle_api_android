@@ -1,5 +1,6 @@
 package me.zingle.api.sdk.model;
 
+import org.apache.commons.codec.binary.Base64;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -67,7 +68,7 @@ public class ZingleAttachment extends ZingleBaseModel{
 
         try {
             resJS.put("content_type", mimeType);
-            resJS.put("base64", new String(data));
+            resJS.put("base64", new String(Base64.encodeBase64(data)));
         } catch (JSONException e) {
             e.printStackTrace();
         }

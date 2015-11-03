@@ -28,6 +28,10 @@ public class Log {
         }
     }
 
+    public static void err(String format, Object... args ){
+        err(String.format(format,args));
+    }
+
     public static void err(Class c,String funcName, String msg){
         StringBuilder b=new StringBuilder();
         b.append("In ").append(c.getSimpleName()).append("::").append(funcName);
@@ -45,6 +49,10 @@ public class Log {
                 outputStream.flush();
             }
         }
+    }
+
+    public static void info(String format, Object... args ){
+        info(String.format(format, args));
     }
 
     public static void info(Class c,String funcName, String msg){

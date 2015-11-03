@@ -69,8 +69,8 @@ public class MessageSender extends IntentService{
                         msgForSend.setSent(true);
                         msgForSend.setId(ids.get(0));
                         dataServices.updateItem(msgLocalId, msgForSend);
-                        break;
                     }
+                    break;
 
                 } catch (UnsuccessfullRequestEx e) {
                     Log.err("Error sending message\n" + message + "\n" + e.getResponceCode() + "\n" + e.getResponceStr());
