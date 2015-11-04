@@ -30,7 +30,7 @@ public class Conversation {
         else{
             for(int i=groups.size()-2;i>=0;i--){
                 if(groups.get(i).getEndDate().before(group.getStartDate())){
-                    groups.add(i,group);
+                    groups.add(i+1,group);
                     return;
                 }
             }

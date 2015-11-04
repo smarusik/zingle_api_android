@@ -21,11 +21,9 @@ public class StartScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_list);
         final TextView logText=(TextView) findViewById(R.id.start_screen_text);
-
 
         Log.init(ZingleVerbosityLevel.ZINGLE_VERBOSITY_INFO, System.err);
 
@@ -33,6 +31,7 @@ public class StartScreen extends AppCompatActivity {
         if(ZingleUIInitAndStart.initializeConnection("https://qa3-api.zingle.me", "v1", name, password)) {
 
             //Stage 2 init conversations
+            //First
             ZingleUIInitAndStart.addConversation(serviceIds[0],
                     contactIds[0],
                     contactChannelValue,
@@ -53,7 +52,7 @@ public class StartScreen extends AppCompatActivity {
                             logText.append("\n"+values[0]+" "+values[1]);
                         }
                     });
-
+            //Second
             ZingleUIInitAndStart.addConversation(serviceIds[1],
                     contactIds[1],
                     contactChannelValue,
@@ -99,7 +98,6 @@ public class StartScreen extends AppCompatActivity {
         return true;
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -122,6 +120,4 @@ public class StartScreen extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
 }

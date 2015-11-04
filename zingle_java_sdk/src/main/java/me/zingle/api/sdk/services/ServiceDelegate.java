@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import me.zingle.api.sdk.logger.Log;
 
 /**
- * Created by SLAVA 08 2015.
+ *
  */
 public abstract class ServiceDelegate <ResultType> {
 
