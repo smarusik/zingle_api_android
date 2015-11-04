@@ -49,11 +49,16 @@ static void showConversation(Context context,String serviceId)
 ```
 Starts and shows the UI for required conversation (defined by <b>serviceId</b>)
 
-### Zingle Object Model
+### Zingle AndroidSDK Object Model
 
 Model | Description
 --- | ---
 ZingleUIInitAndStart | Object that holds static methods for quick initialization of SDK and starting messaging.
+
+### Zingle JavaSDK Object Model
+
+Model | Description
+--- | ---
 ZingleAccount | [See Zingle Resource Overview - Account](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#account)
 ZingleService | [See Zingle Resource Overview - Service](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#service)
 ZinglePlan | [See Zingle Resource Overview - Plan](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#plan)
