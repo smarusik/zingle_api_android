@@ -39,10 +39,15 @@ onProgressUpdate(String... values) is triggered 4 times:<br>
 <li>After registering conversation participants: values "4" and "UI ready".</li>
 </bl>
 
-
-ZNGConversationViewController *chatViewController = [[ZNGConversationViewController alloc] initWithChannelTypeName:@"Contact ID" from:@"123456"];
+```java
+static void startMessageReceiver(Context context)
 ```
+Starts message receiving for all registered conversations. Conversations may be added seamlessly before and after triggering this function.
 
+```java
+static void showConversation(Context context,String serviceId)
+```
+Starts and shows the UI for required conversation (defined by <b>serviceId</b>)
 
 ### Zingle Object Model
 
