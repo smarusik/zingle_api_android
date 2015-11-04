@@ -21,8 +21,7 @@ Initializes basic parameters for connecting to API. Doesn't make any verificatio
 ```java
 static void addConversation(String serviceId, String contactId, String contactChannelValue);
 ```
-Registers a new conversation in zingle_android_sdk. If succeed, system begins to receive all messages for ZingleContact with specified ID
-and it's possible to open UI for this conversation with showConversation().
+Registers a new conversation in zingle_android_sdk. If succeed, system begins to receive all messages for ZingleContact with specified ID and it's possible to open UI for this conversation with showConversation(). Can be called as many times as needed to register all conversations.
 
 ```java
 static void addConversation(String serviceId, String contactId, String contactChannelValue, ConversationAdderBase ca)
@@ -48,6 +47,8 @@ Starts message receiving for all registered conversations. Conversations may be 
 static void showConversation(Context context,String serviceId)
 ```
 Starts and shows the UI for required conversation (defined by <b>serviceId</b>)
+
+All thease functions are static members of ZingleUIInitAndStart class. [Here is a simple example  of using them in android Activity.](https://github.com/Zingle/android-sdk/blob/master/app/src/main/java/me/zingle/zingleapiandroid/StartScreen.java)
 
 ### Zingle AndroidSDK Object Model
 
