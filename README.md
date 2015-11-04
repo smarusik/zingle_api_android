@@ -13,7 +13,7 @@ In addition to the standard API conveniences, the Android SDK also provides an e
 ![](https://github.com/Zingle/android-sdk/blob/master/docs/resources/EmulScreenshot.tiff)
 
 UI Examples
-[static boolean initializeConnection(String apiURL, String apiVersion, String token, String password);](https://github.com/Zingle/android-sdk/blob/master/docs/resources/EmulScreenshot.tiff)
+[static boolean initializeConnection(String apiURL, String apiVersion, String token, String password);](https://github.com/Zingle/android-sdk/blob/master/docs/index.html)
 [[ZingleSDK sharedSDK] useServiceWithID:serviceID error:nil];
 ZNGConversationViewController *chatViewController = [[ZNGConversationViewController alloc] initWithChannelTypeName:@"Contact ID" from:@"123456"];
 
