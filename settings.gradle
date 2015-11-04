@@ -1,1 +1,1 @@
-include ':app',':atlas_adoption',':libzinglesdk'
+include ':app',':zingle_android_sdk',':zingle_java_sdk'

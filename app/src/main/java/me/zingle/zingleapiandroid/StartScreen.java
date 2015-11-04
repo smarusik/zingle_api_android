@@ -24,27 +24,62 @@ public class StartScreen extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_list);
-        TextView logText=(TextView) findViewById(R.id.start_screen_text);
+        final TextView logText=(TextView) findViewById(R.id.start_screen_text);
+
 
         Log.init(ZingleVerbosityLevel.ZINGLE_VERBOSITY_INFO, System.err);
 
+        //Stage 1 init connection
         if(ZingleUIInitAndStart.initializeConnection("https://qa3-api.zingle.me", "v1", name, password)) {
 
+            //Stage 2 init conversations
             ZingleUIInitAndStart.addConversation(serviceIds[0],
-                                                contactIds[0],
-                                                contactChannelValue,
-                                                logText);
+                    contactIds[0],
+                    contactChannelValue,
+                    new ZingleUIInitAndStart.ConversationAdderBase() {
+                        @Override
+                        protected void onPreExecute() {
+                            logText.append("\nAdding conversation 1.");
+                        }
+
+                        @Override
+                        protected void onPostExecute(Boolean aBoolean) {
+                            if(aBoolean) logText.append("Conversation 1 added.");
+                            else logText.append("\nConversation 1 failed.");
+                        }
+
+                        @Override
+                        protected void onProgressUpdate(String... values) {
+                            logText.append("\n"+values[0]+" "+values[1]);
+                        }
+                    });
 
             ZingleUIInitAndStart.addConversation(serviceIds[1],
-                                                contactIds[1],
-                                                contactChannelValue,
-                                                logText);
+                    contactIds[1],
+                    contactChannelValue,
+                    new ZingleUIInitAndStart.ConversationAdderBase() {
+                        @Override
+                        protected void onPreExecute() {
+                            logText.append("\nAdding conversation 2.");
+                        }
 
+                        @Override
+                        protected void onPostExecute(Boolean aBoolean) {
+                            if(aBoolean) logText.append("Conversation 2 added.");
+                            else logText.append("\nConversation 2 failed.");
+                        }
+
+                        @Override
+                        protected void onProgressUpdate(String... values) {
+                            logText.append("\n"+values[0]+" "+values[1]);
+                        }
+                    });
+            //Stage 3 start message receiver
             ZingleUIInitAndStart.startMessageReceiver(getApplicationContext());
 
         }
         else{
-            logText.setText("Wrong API URL.");
+            logText.setText("\nWrong API URL.");
         }
     }
 
@@ -80,6 +115,8 @@ public class StartScreen extends AppCompatActivity {
 
         if (id < wds.getAllowedServices().size()) {
             ZingleService service=wds.getAllowedServices().get(id);
+
+            //Activate required UI
             ZingleUIInitAndStart.showConversation(this, service.getId());
         }
 

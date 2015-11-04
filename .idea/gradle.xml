@@ -10,8 +10,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/atlas_adoption" />
-            <option value="$PROJECT_DIR$/libzinglesdk" />
+            <option value="$PROJECT_DIR$/zingle_android_sdk" />
+            <option value="$PROJECT_DIR$/zingle_java_sdk" />
           </set>
         </option>
       </GradleProjectSettings>
