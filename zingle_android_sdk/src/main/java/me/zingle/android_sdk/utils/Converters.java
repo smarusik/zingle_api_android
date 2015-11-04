@@ -1,4 +1,4 @@
-package me.zingle.atlas_adoption.utils;
+package me.zingle.android_sdk.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -19,17 +19,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import me.zingle.android_sdk.R;
+import me.zingle.android_sdk.facade_models.Attachment;
+import me.zingle.android_sdk.facade_models.Message;
+import me.zingle.android_sdk.facade_models.MimeTypes;
+import me.zingle.android_sdk.facade_models.Participant;
+import me.zingle.android_sdk.model_view.DataServices;
 import me.zingle.api.sdk.model.ZingleAttachment;
 import me.zingle.api.sdk.model.ZingleChannelType;
 import me.zingle.api.sdk.model.ZingleCorrespondent;
 import me.zingle.api.sdk.model.ZingleMessage;
 import me.zingle.api.sdk.model.ZingleNewMessage;
-import me.zingle.atlas_adoption.R;
-import me.zingle.atlas_adoption.facade_models.Attachment;
-import me.zingle.atlas_adoption.facade_models.Message;
-import me.zingle.atlas_adoption.facade_models.MimeTypes;
-import me.zingle.atlas_adoption.facade_models.Participant;
-import me.zingle.atlas_adoption.model_view.DataServices;
 
 /**
  * Created by SLAVA 10 2015.

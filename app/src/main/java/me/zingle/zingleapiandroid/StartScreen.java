@@ -6,11 +6,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import me.zingle.android_sdk.ZingleUIInitAndStart;
+import me.zingle.android_sdk.daemons.WorkingDataSet;
 import me.zingle.api.sdk.logger.Log;
 import me.zingle.api.sdk.logger.ZingleVerbosityLevel;
 import me.zingle.api.sdk.model.ZingleService;
-import me.zingle.atlas_adoption.ZingleUIInitAndStart;
-import me.zingle.atlas_adoption.daemons.WorkingDataSet;
 
 public class StartScreen extends AppCompatActivity {
     final String name="viacheslav.marusyk@cyberhull.com";

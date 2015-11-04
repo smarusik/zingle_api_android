@@ -1,11 +1,11 @@
-package me.zingle.atlas_adoption.utils;
+package me.zingle.android_sdk.utils;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import me.zingle.atlas_adoption.facade_models.Participant;
+import me.zingle.android_sdk.facade_models.Participant;
 
 /**
  * Created by SLAVA 09 2015.

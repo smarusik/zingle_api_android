@@ -1,4 +1,4 @@
-package me.zingle.atlas_adoption.daemons;
+package me.zingle.android_sdk.daemons;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -7,6 +7,11 @@ import android.os.Handler;
 import java.util.Date;
 import java.util.List;
 
+import me.zingle.android_sdk.facade_models.Attachment;
+import me.zingle.android_sdk.facade_models.Message;
+import me.zingle.android_sdk.facade_models.Participant;
+import me.zingle.android_sdk.model_view.DataServices;
+import me.zingle.android_sdk.utils.Converters;
 import me.zingle.api.sdk.Exceptions.UnsuccessfullRequestEx;
 import me.zingle.api.sdk.logger.Log;
 import me.zingle.api.sdk.model.ZingleMessage;
@@ -14,11 +19,6 @@ import me.zingle.api.sdk.model.ZingleNewMessage;
 import me.zingle.api.sdk.model.ZingleService;
 import me.zingle.api.sdk.services.ZingleMessageServices;
 import me.zingle.api.sdk.services.ZingleNewMessageService;
-import me.zingle.atlas_adoption.facade_models.Attachment;
-import me.zingle.atlas_adoption.facade_models.Message;
-import me.zingle.atlas_adoption.facade_models.Participant;
-import me.zingle.atlas_adoption.model_view.DataServices;
-import me.zingle.atlas_adoption.utils.Converters;
 
 /**
  * Created by SLAVA 10 2015.

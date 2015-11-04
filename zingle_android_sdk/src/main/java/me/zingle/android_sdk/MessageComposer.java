@@ -1,4 +1,4 @@
-package me.zingle.atlas_adoption;
+package me.zingle.android_sdk;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -25,9 +25,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import me.zingle.atlas_adoption.facade_models.Attachment;
-import me.zingle.atlas_adoption.facade_models.Message;
-import me.zingle.atlas_adoption.utils.Client;
+import me.zingle.android_sdk.facade_models.Attachment;
+import me.zingle.android_sdk.facade_models.Message;
+import me.zingle.android_sdk.utils.Client;
 
 /**
  * Created by SLAVA 09 2015.

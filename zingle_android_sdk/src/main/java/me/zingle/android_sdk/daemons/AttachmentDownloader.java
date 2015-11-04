@@ -1,4 +1,4 @@
-package me.zingle.atlas_adoption.daemons;
+package me.zingle.android_sdk.daemons;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -9,16 +9,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URLConnection;
 
-import me.zingle.atlas_adoption.R;
-import me.zingle.atlas_adoption.facade_models.Attachment;
-import me.zingle.atlas_adoption.facade_models.Message;
-import me.zingle.atlas_adoption.model_view.DataServices;
-import me.zingle.atlas_adoption.utils.Converters;
-import me.zingle.atlas_adoption.utils.ScalingUtilities;
+import me.zingle.android_sdk.R;
+import me.zingle.android_sdk.facade_models.Attachment;
+import me.zingle.android_sdk.facade_models.Message;
+import me.zingle.android_sdk.model_view.DataServices;
+import me.zingle.android_sdk.utils.Converters;
+import me.zingle.android_sdk.utils.ScalingUtilities;
 
-import static me.zingle.atlas_adoption.facade_models.MimeTypes.MIME_TYPE_IMAGE_JPEG;
-import static me.zingle.atlas_adoption.facade_models.MimeTypes.MIME_TYPE_IMAGE_PNG;
-import static me.zingle.atlas_adoption.facade_models.MimeTypes.MIME_TYPE_IMAGE_WEBP;
+import static me.zingle.android_sdk.facade_models.MimeTypes.MIME_TYPE_IMAGE_JPEG;
+import static me.zingle.android_sdk.facade_models.MimeTypes.MIME_TYPE_IMAGE_PNG;
+import static me.zingle.android_sdk.facade_models.MimeTypes.MIME_TYPE_IMAGE_WEBP;
 
 /**
  * Created by SLAVA 10 2015.

@@ -12,7 +12,7 @@
         <!--<include layout="@layout/atlas_actionbar_stub"/>-->
 
 
-        <me.zingle.atlas_adoption.MessagesList
+        <me.zingle.android_sdk.MessagesList
             android:id="@+id/atlas_screen_messages_messages_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -22,7 +22,7 @@
         <!-- separator: 1px line -->
         <View android:layout_width="match_parent" android:layout_height="1px" android:background="@color/atlas_background_blue_dark"/>
 
-        <me.zingle.atlas_adoption.MessageComposer
+        <me.zingle.android_sdk.MessageComposer
             android:id="@+id/atlas_screen_messages_message_composer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

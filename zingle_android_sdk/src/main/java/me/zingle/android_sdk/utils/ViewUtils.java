@@ -1,4 +1,4 @@
-package me.zingle.atlas_adoption.utils;
+package me.zingle.android_sdk.utils;
 
 import android.content.Context;
 import android.util.DisplayMetrics;

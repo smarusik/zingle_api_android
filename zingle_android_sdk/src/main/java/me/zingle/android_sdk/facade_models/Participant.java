@@ -1,4 +1,4 @@
-package me.zingle.atlas_adoption.facade_models;
+package me.zingle.android_sdk.facade_models;
 
 /**
  * Created by SLAVA 09 2015.

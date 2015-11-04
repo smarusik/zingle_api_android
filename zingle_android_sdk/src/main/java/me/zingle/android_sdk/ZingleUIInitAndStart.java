@@ -1,9 +1,13 @@
-package me.zingle.atlas_adoption;
+package me.zingle.android_sdk;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
+import me.zingle.android_sdk.daemons.MessageReceiver;
+import me.zingle.android_sdk.daemons.WorkingDataSet;
+import me.zingle.android_sdk.facade_models.Participant;
+import me.zingle.android_sdk.utils.Client;
 import me.zingle.api.sdk.dao.ZingleConnection;
 import me.zingle.api.sdk.logger.Log;
 import me.zingle.api.sdk.model.ZingleChannelType;
@@ -11,10 +15,6 @@ import me.zingle.api.sdk.model.ZingleContact;
 import me.zingle.api.sdk.model.ZingleService;
 import me.zingle.api.sdk.services.ZingleContactServices;
 import me.zingle.api.sdk.services.ZingleServiceServices;
-import me.zingle.atlas_adoption.daemons.MessageReceiver;
-import me.zingle.atlas_adoption.daemons.WorkingDataSet;
-import me.zingle.atlas_adoption.facade_models.Participant;
-import me.zingle.atlas_adoption.utils.Client;
 
 /**
  * Created by SLAVA 11 2015.

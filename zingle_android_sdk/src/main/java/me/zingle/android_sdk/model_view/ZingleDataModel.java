@@ -1,11 +1,11 @@
-package me.zingle.atlas_adoption.model_view;
+package me.zingle.android_sdk.model_view;
 
 import android.util.LruCache;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import me.zingle.atlas_adoption.facade_models.Message;
+import me.zingle.android_sdk.facade_models.Message;
 
 /**
  * Created by SLAVA 09 2015.

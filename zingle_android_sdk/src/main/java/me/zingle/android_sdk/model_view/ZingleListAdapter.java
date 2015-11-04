@@ -1,4 +1,4 @@
-package me.zingle.atlas_adoption.model_view;
+package me.zingle.android_sdk.model_view;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,12 +23,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import me.zingle.atlas_adoption.R;
-import me.zingle.atlas_adoption.daemons.MessageSender;
-import me.zingle.atlas_adoption.facade_models.Attachment;
-import me.zingle.atlas_adoption.facade_models.Message;
-import me.zingle.atlas_adoption.facade_models.Participant;
-import me.zingle.atlas_adoption.utils.Client;
+import me.zingle.android_sdk.R;
+import me.zingle.android_sdk.daemons.MessageSender;
+import me.zingle.android_sdk.facade_models.Attachment;
+import me.zingle.android_sdk.facade_models.Message;
+import me.zingle.android_sdk.facade_models.Participant;
+import me.zingle.android_sdk.utils.Client;
 
 /**
  * Created by SLAVA 09 2015.

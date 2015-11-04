@@ -1,6 +1,6 @@
-package me.zingle.atlas_adoption.daemons;
+package me.zingle.android_sdk.daemons;
 
-import me.zingle.atlas_adoption.model_view.DataServices;
+import me.zingle.android_sdk.model_view.DataServices;
 
 /**
  * Created by SLAVA 10 2015.

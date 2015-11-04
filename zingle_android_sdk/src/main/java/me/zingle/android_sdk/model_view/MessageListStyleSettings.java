@@ -1,8 +1,8 @@
-package me.zingle.atlas_adoption.model_view;
+package me.zingle.android_sdk.model_view;
 
 import android.graphics.Typeface;
 
-import me.zingle.atlas_adoption.R;
+import me.zingle.android_sdk.R;
 
 /**
  * Created by SLAVA 09 2015.

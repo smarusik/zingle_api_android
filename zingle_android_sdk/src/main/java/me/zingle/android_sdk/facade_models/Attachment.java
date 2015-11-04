@@ -1,15 +1,15 @@
-package me.zingle.atlas_adoption.facade_models;
+package me.zingle.android_sdk.facade_models;
 
 
 import android.net.Uri;
 
 import java.net.URL;
 
-import static me.zingle.atlas_adoption.facade_models.MimeTypes.MIME_TYPE_IMAGE_GIF;
-import static me.zingle.atlas_adoption.facade_models.MimeTypes.MIME_TYPE_IMAGE_JPEG;
-import static me.zingle.atlas_adoption.facade_models.MimeTypes.MIME_TYPE_IMAGE_PNG;
-import static me.zingle.atlas_adoption.facade_models.MimeTypes.MIME_TYPE_TEXT;
-import static me.zingle.atlas_adoption.facade_models.MimeTypes.MIME_TYPE_UNSUPPORTED;
+import static me.zingle.android_sdk.facade_models.MimeTypes.MIME_TYPE_IMAGE_GIF;
+import static me.zingle.android_sdk.facade_models.MimeTypes.MIME_TYPE_IMAGE_JPEG;
+import static me.zingle.android_sdk.facade_models.MimeTypes.MIME_TYPE_IMAGE_PNG;
+import static me.zingle.android_sdk.facade_models.MimeTypes.MIME_TYPE_TEXT;
+import static me.zingle.android_sdk.facade_models.MimeTypes.MIME_TYPE_UNSUPPORTED;
 
 /**
  * Created by SLAVA 09 2015.

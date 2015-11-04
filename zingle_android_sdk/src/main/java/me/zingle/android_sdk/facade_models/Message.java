@@ -1,4 +1,4 @@
-package me.zingle.atlas_adoption.facade_models;
+package me.zingle.android_sdk.facade_models;
 
 import java.util.ArrayList;
 import java.util.Date;

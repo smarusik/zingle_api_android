@@ -1,4 +1,4 @@
-package me.zingle.atlas_adoption.model_view;
+package me.zingle.android_sdk.model_view;
 
 import java.util.LinkedList;
 import java.util.List;

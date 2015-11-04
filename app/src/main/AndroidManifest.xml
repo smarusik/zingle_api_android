@@ -24,22 +24,22 @@
         </activity>
 
         <activity
-            android:name="me.zingle.atlas_adoption.ZingleMessagingActivity"
+            android:name="me.zingle.android_sdk.ZingleMessagingActivity"
             android:label="ZingleMessageList">
 
         </activity>
         <service
-            android:name="me.zingle.atlas_adoption.daemons.MessageSender"
+            android:name="me.zingle.android_sdk.daemons.MessageSender"
             android:exported="false">
 
         </service>
         <service
-            android:name="me.zingle.atlas_adoption.daemons.MessageReceiver"
+            android:name="me.zingle.android_sdk.daemons.MessageReceiver"
             android:exported="false">
 
         </service>
         <service
-            android:name="me.zingle.atlas_adoption.daemons.AttachmentDownloader"
+            android:name="me.zingle.android_sdk.daemons.AttachmentDownloader"
             android:exported="false">
 
         </service>

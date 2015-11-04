@@ -1,4 +1,4 @@
-package me.zingle.atlas_adoption.utils;
+package me.zingle.android_sdk.utils;
 
 import android.content.Context;
 
@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import me.zingle.atlas_adoption.R;
+import me.zingle.android_sdk.R;
 
 /**
  * Created by SLAVA 09 2015.

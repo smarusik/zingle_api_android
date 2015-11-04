@@ -1,4 +1,4 @@
-package me.zingle.atlas_adoption.daemons;
+package me.zingle.android_sdk.daemons;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -11,19 +11,19 @@ import android.support.v4.app.NotificationCompat;
 
 import java.util.List;
 
+import me.zingle.android_sdk.R;
+import me.zingle.android_sdk.ZingleMessagingActivity;
+import me.zingle.android_sdk.facade_models.Attachment;
+import me.zingle.android_sdk.facade_models.Message;
+import me.zingle.android_sdk.facade_models.Participant;
+import me.zingle.android_sdk.model_view.DataServices;
+import me.zingle.android_sdk.utils.Converters;
 import me.zingle.api.sdk.dao.QueryPart;
 import me.zingle.api.sdk.model.ZingleContact;
 import me.zingle.api.sdk.model.ZingleList;
 import me.zingle.api.sdk.model.ZingleMessage;
 import me.zingle.api.sdk.model.ZingleSortOrder;
 import me.zingle.api.sdk.services.ZingleMessageServices;
-import me.zingle.atlas_adoption.R;
-import me.zingle.atlas_adoption.ZingleMessagingActivity;
-import me.zingle.atlas_adoption.facade_models.Attachment;
-import me.zingle.atlas_adoption.facade_models.Message;
-import me.zingle.atlas_adoption.facade_models.Participant;
-import me.zingle.atlas_adoption.model_view.DataServices;
-import me.zingle.atlas_adoption.utils.Converters;
 
 //import android.app.Notification;
 

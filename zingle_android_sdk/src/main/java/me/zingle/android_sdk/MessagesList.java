@@ -1,4 +1,4 @@
-package me.zingle.atlas_adoption;
+package me.zingle.android_sdk;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -10,10 +10,10 @@ import android.widget.FrameLayout;
 
 import java.text.DateFormat;
 
-import me.zingle.atlas_adoption.model_view.DataServices;
-import me.zingle.atlas_adoption.model_view.MessageListStyleSettings;
-import me.zingle.atlas_adoption.model_view.ZingleListAdapter;
-import me.zingle.atlas_adoption.utils.Client;
+import me.zingle.android_sdk.model_view.DataServices;
+import me.zingle.android_sdk.model_view.MessageListStyleSettings;
+import me.zingle.android_sdk.model_view.ZingleListAdapter;
+import me.zingle.android_sdk.utils.Client;
 
 /**
  * Created by SLAVA 09 2015.

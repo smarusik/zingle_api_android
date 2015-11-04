@@ -1,4 +1,4 @@
-package me.zingle.atlas_adoption.model_view;
+package me.zingle.android_sdk.model_view;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -6,9 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import me.zingle.atlas_adoption.MessagesList;
-import me.zingle.atlas_adoption.facade_models.Message;
-import me.zingle.atlas_adoption.utils.Client;
+import me.zingle.android_sdk.MessagesList;
+import me.zingle.android_sdk.facade_models.Message;
+import me.zingle.android_sdk.utils.Client;
 
 /**
  * Created by SLAVA 09 2015.

@@ -25,7 +25,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package me.zingle.atlas_adoption.utils;
+package me.zingle.android_sdk.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;

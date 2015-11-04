@@ -1,4 +1,4 @@
-package me.zingle.atlas_adoption;
+package me.zingle.android_sdk;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -15,11 +15,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.UUID;
 
-import me.zingle.atlas_adoption.daemons.MessageSender;
-import me.zingle.atlas_adoption.facade_models.Attachment;
-import me.zingle.atlas_adoption.facade_models.Message;
-import me.zingle.atlas_adoption.model_view.DataServices;
-import me.zingle.atlas_adoption.utils.Client;
+import me.zingle.android_sdk.daemons.MessageSender;
+import me.zingle.android_sdk.facade_models.Attachment;
+import me.zingle.android_sdk.facade_models.Message;
+import me.zingle.android_sdk.model_view.DataServices;
+import me.zingle.android_sdk.utils.Client;
 
 public class ZingleMessagingActivity extends AppCompatActivity {
 
