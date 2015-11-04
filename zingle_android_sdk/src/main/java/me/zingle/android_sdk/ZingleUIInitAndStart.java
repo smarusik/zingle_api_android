@@ -162,7 +162,7 @@ public class ZingleUIInitAndStart {
 
     /**
      * Registers a new conversation in zingle_android_sdk. If succeed, system begins to receive all messages for ZingleContact with specified ID
-     * and it's possible to open UI for this conversation with showConversation().
+     * and it's possible to open UI for this conversation with showConversation(). Can be called as many times as needed to register all conversations.
      *
      * @param serviceId ID of service, which participate in conversation
      * @param contactId ID of contact, which participate in conversation
