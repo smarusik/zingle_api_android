@@ -12,7 +12,7 @@ In addition to the standard API conveniences, the Android SDK also provides an e
 
 ![](https://github.com/Zingle/android-sdk/blob/master/docs/resources/EmulScreenshot.tiff)
 
-UI Examples
+###UI Starting stages:
 ```java
 static boolean initializeConnection(String apiURL, String apiVersion, String token, String password);
 ```
