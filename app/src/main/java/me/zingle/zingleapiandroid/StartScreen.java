@@ -14,7 +14,7 @@ import me.zingle.api.sdk.model.ZingleService;
 
 public class StartScreen extends AppCompatActivity {
     final String name="viacheslav.marusyk@cyberhull.com";
-    final String password="20cheVrolet15";
+    final String password="123qweasd";
     final String contactChannelValue="viacheslav.marusyk";
     final String[] contactIds={"19197565-6767-4110-951b-610bc7e362fb","27e4198e-1f07-414c-beef-5094916e56c1"};
     final String[] serviceIds={"4bc8bb76-0d19-48ff-815a-14e950fc776a","b1037b83-f2b6-4258-9b62-655c2478a329"};
