@@ -13,10 +13,35 @@ In addition to the standard API conveniences, the Android SDK also provides an e
 ![](https://github.com/Zingle/android-sdk/blob/master/docs/resources/EmulScreenshot.tiff)
 
 UI Examples
-[static boolean initializeConnection(String apiURL, String apiVersion, String token, String password);](https://github.com/Zingle/android-sdk/blob/master/docs/index.html)
-[[ZingleSDK sharedSDK] useServiceWithID:serviceID error:nil];
-ZNGConversationViewController *chatViewController = [[ZNGConversationViewController alloc] initWithChannelTypeName:@"Contact ID" from:@"123456"];
+```java
+static boolean initializeConnection(String apiURL, String apiVersion, String token, String password);
+```
+Initializes basic parameters for connecting to API. Doesn't make any verification (it means true answer doesn't mean that login and password are correct and URL is working).
 
+```java
+static void addConversation(String serviceId, String contactId, String contactChannelValue);
+```
+Registers a new conversation in zingle_android_sdk. If succeed, system begins to receive all messages for ZingleContact with specified ID
+and it's possible to open UI for this conversation with showConversation().
+
+```java
+static void addConversation(String serviceId, String contactId, String contactChannelValue, ConversationAdderBase ca)
+```
+Same as addConversation(String serviceId, String contactId, String contactChannelValue), but allow to customize the process
+through overloading <i>onPreExecute(), onPostExecute(Boolean aBoolean), onProgressUpdate(String... values)</i>.
+See <i>ConversationAdder</i> and <i>AsyncTask<Params,Progress,Result></i> for more information.
+<br>
+onProgressUpdate(String... values) is triggered 4 times:<br>
+<bl>
+<li>After registering service: values "1" and service's DisplayName (see <i>ZingleService</i>) or "Failed"</li>
+<li>After registering contact: values "2" and contact's id (see <i>ZingleContact</i>) of "Failed"</li>
+<li>After trying to find proper channel type: values "3" and allowed channel typeclass (see <i>ZingleChannelType</i>) or "Failed"</li>
+<li>After registering conversation participants: values "4" and "UI ready".</li>
+</bl>
+
+
+ZNGConversationViewController *chatViewController = [[ZNGConversationViewController alloc] initWithChannelTypeName:@"Contact ID" from:@"123456"];
+```
 
 
 ### Zingle Object Model
