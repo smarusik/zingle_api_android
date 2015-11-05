@@ -10,8 +10,8 @@ import me.zingle.android_sdk.facade_models.Participant;
 import me.zingle.android_sdk.utils.Client;
 import me.zingle.api.sdk.dao.ZingleConnection;
 import me.zingle.api.sdk.logger.Log;
-import me.zingle.api.sdk.model.ZingleChannelType;
 import me.zingle.api.sdk.model.ZingleContact;
+import me.zingle.api.sdk.model.ZingleContactChannel;
 import me.zingle.api.sdk.model.ZingleService;
 import me.zingle.api.sdk.services.ZingleContactServices;
 import me.zingle.api.sdk.services.ZingleServiceServices;
@@ -93,9 +93,9 @@ public class ZingleUIInitAndStart {
             String allowedChannelTypeClass = "UserDefinedChannel";
 
             //Check for proper channel type
-            for(ZingleChannelType t:service.getChannelTypes()) {
-                if(t.getTypeclass().equals(allowedChannelTypeClass)) {
-                    client.addChannelTypeId(t.getId());
+            for(ZingleContactChannel ch:contact.getChannels()) {
+                if(ch.getType().getTypeclass().equals(allowedChannelTypeClass)) {
+                    client.addChannelTypeId(ch.getType().getId());
                     break;
                 }
             }

@@ -9,7 +9,8 @@ import me.zingle.api.sdk.model.ZingleAvailablePhoneNumber;
 import me.zingle.api.sdk.model.ZingleList;
 
 /**
- * Created by SLAVA 08 2015.
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/available_phone_numbers>ZingleAvailablePhoneNumber API</a>).
+ * Supports only list() base function and provides some convenience methods.
  */
 public class ZingleAvailablePhoneNumberServices extends ZingleBaseService<ZingleAvailablePhoneNumber> {
     static final String AREA_SEARCH_PATTERN="%s*******";
@@ -40,26 +41,68 @@ public class ZingleAvailablePhoneNumberServices extends ZingleBaseService<Zingle
         }
     }
 
+    /**
+     * Convenience list() modification. Allows searching by country code without manual adding of key-value query pairs
+     *
+     * @param countryCode String ISO 3166-1 alpha-2 country code
+     * @return ZingleList of available phone numbers.
+     * @throws UnsuccessfullRequestEx if http response differs from success.
+     */
     public ZingleList<ZingleAvailablePhoneNumber> searchForCountryCode(String countryCode) throws UnsuccessfullRequestEx{
         return list(createConditions("country",countryCode));
     }
 
+
+    /**
+     * Same as searchForCountryCode(String countryCode), but runs in separate thread. Proper ServiceDelegate must be implemented and
+     * assigned with setListDelegate()
+     */
     public boolean searchForCountryCodeAsync(final String countryCode){
         return listAsync(createConditions("country", countryCode));
     }
 
+    /**
+     * Same as searchForCountryCodeAsync(String countryCode), but ServiceDelegate must be implemented and
+     * provided as argument.
+     * @param countryCode String ISO 3166-1 alpha-2 country code
+     * @param delegate implementation of ServiceDelegate<ZingleList<ZingleAvailablePhoneNumber>>
+     * @return ZingleList of available phone numbers.
+     * @throws UnsuccessfullRequestEx if http response differs from success.
+     */
     public boolean searchForCountryCodeAsync(final String countryCode, ServiceDelegate<ZingleList<ZingleAvailablePhoneNumber>> delegate){
         return listAsync(createConditions("country",countryCode),delegate);
     }
 
+
+    /**
+     * Convenience list() modification. Allows searching by country and area code without manual adding of key-value query pairs
+     *
+     * @param countryCode String ISO 3166-1 alpha-2 country code
+     * @param areaCode country area code (usually 3 digits)
+     * @return ZingleList of available phone numbers.
+     * @throws UnsuccessfullRequestEx if http response differs from success.
+     */
     public ZingleList<ZingleAvailablePhoneNumber> searchForCountryCodeAreaCode(String countryCode, String areaCode) throws UnsuccessfullRequestEx{
         return list(createConditions("country,search", countryCode, String.format(AREA_SEARCH_PATTERN, areaCode)));
     }
 
+    /**
+     * Same as searchForCountryCodeAreaCode(String countryCode, String areaCode), but runs in separate thread. Proper ServiceDelegate must be implemented and
+     * assigned with setListDelegate()
+     */
     public boolean searchForCountryCodeAreaCodeAsync(final String countryCode,final String areaCode){
         return listAsync(createConditions("country,search", countryCode, String.format(AREA_SEARCH_PATTERN, areaCode)));
     }
 
+    /**
+     * Same as searchForCountryCodeAsync(String countryCode,String areaCode), but ServiceDelegate must be implemented and
+     * provided as argument.
+     * @param countryCode String ISO 3166-1 alpha-2 country code
+     * @param areaCode country area code (usually 3 digits)
+     * @param delegate implementation of ServiceDelegate<ZingleList<ZingleAvailablePhoneNumber>>
+     * @return ZingleList of available phone numbers.
+     * @throws UnsuccessfullRequestEx if http response differs from success.
+     */
     public boolean searchForCountryCodeAreaCodeAsync(final String countryCode,final String areaCode, ServiceDelegate<ZingleList<ZingleAvailablePhoneNumber>> delegate){
         return listAsync(createConditions("country,search", countryCode, String.format(AREA_SEARCH_PATTERN, areaCode)),delegate);
     }

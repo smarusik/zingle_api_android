@@ -55,7 +55,7 @@ public class ZingleConnection {
 
     public static boolean init (String apiPath, String apiVersion, String token, String key){
 
-        //System.setProperty("jsse.enableSNIExtension", "false");
+        System.setProperty("jsse.enableSNIExtension", "false");
 
         ZingleConnection temp = new ZingleConnection(apiPath, apiVersion, generateEncryptedAuthString(token, key));
 
@@ -82,16 +82,6 @@ public class ZingleConnection {
     public String getEncryptedAuthString() {
         return encryptedAuthString;
     }
-
-/*
-    public void setEncryptedAuthString (String encryptedAuthString){
-        this.encryptedAuthString = encryptedAuthString;
-    }
-
-    public void setEncryptedAuthString(String token, String key) {
-        this.encryptedAuthString = generateEncryptedAuthString(token, key);
-    }
-*/
 
     public static String generateEncryptedAuthString(String token, String key) {
         String authString = token + ":" + key;

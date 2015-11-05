@@ -8,7 +8,8 @@ import me.zingle.api.sdk.model.ZingleAutomation;
 import me.zingle.api.sdk.model.ZingleService;
 
 /**
- * Created by SLAVA 08 2015.
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/automations>ZingleAutomation API</a>).
+ * Supports all base functions, except creation.
  */
 public class ZingleAutomationServices extends ZingleBaseService<ZingleAutomation>{
 

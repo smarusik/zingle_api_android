@@ -5,7 +5,8 @@ import org.json.JSONObject;
 import me.zingle.api.sdk.logger.Log;
 
 /**
- *
+ *Base class for catching results of asynchronous functions in all classes, which inherits ZingleBaseService.
+ * Provides basic error processing (writes to Log), which can be overloaded by user's choice. Positive result processing by void processResult() must be implemented.
  */
 public abstract class ServiceDelegate <ResultType> {
 

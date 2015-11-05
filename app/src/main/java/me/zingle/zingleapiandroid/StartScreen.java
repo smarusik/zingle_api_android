@@ -16,8 +16,8 @@ public class StartScreen extends AppCompatActivity {
     final String name="viacheslav.marusyk@cyberhull.com";
     final String password="123qweasd";
     final String contactChannelValue="viacheslav.marusyk";
-    final String[] contactIds={"19197565-6767-4110-951b-610bc7e362fb","27e4198e-1f07-414c-beef-5094916e56c1"};
-    final String[] serviceIds={"4bc8bb76-0d19-48ff-815a-14e950fc776a","b1037b83-f2b6-4258-9b62-655c2478a329"};
+    final String[] contactIds={"8120ea45-1af8-4948-9b82-5e69de0bd4cb","cb23cba5-e9de-4eaa-b1c9-85ed56f8b287"};
+    final String[] serviceIds={"e84bec95-b788-45ea-9d64-01db3d8742ac","b1037b83-f2b6-4258-9b62-655c2478a329"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class StartScreen extends AppCompatActivity {
         Log.init(ZingleVerbosityLevel.ZINGLE_VERBOSITY_INFO, System.err);
 
         //Stage 1 init connection
-        if(ZingleUIInitAndStart.initializeConnection("https://qa3-api.zingle.me", "v1", name, password)) {
+        if(ZingleUIInitAndStart.initializeConnection("https://qa-api.zingle.me", "v1", name, password)) {
 
             //Stage 2 init conversations
             //First

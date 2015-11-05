@@ -13,7 +13,9 @@ import me.zingle.api.sdk.model.ZingleAttachment;
 import me.zingle.api.sdk.model.ZingleList;
 
 /**
- * Created by SLAVA 10 2015.
+ * ZingleBaseService derivation for working with ZingleAttachment.
+ * Class haven't any reflection in API, so doesn't implement any API functions.
+ * Serves as helper class for parsing and handling <a href=https://github.com/Zingle/rest-api/tree/master/messages>ZingleMessage</a> attachments.
  */
 public class ZingleAttachmentService extends ZingleBaseService<ZingleAttachment> {
     @Override
@@ -58,17 +60,17 @@ public class ZingleAttachmentService extends ZingleBaseService<ZingleAttachment>
 
     @Override
     public ZingleAttachment get(String id) {
-        return super.get(id);
+        return null;
     }
 
     @Override
     public ZingleList<ZingleAttachment> list() {
-        return super.list();
+        return null;
     }
 
     @Override
     public ZingleList<ZingleAttachment> list(List<QueryPart> conditions) {
-        return super.list(conditions);
+        return null;
     }
 
     @Override

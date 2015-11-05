@@ -7,7 +7,7 @@ import me.zingle.api.sdk.Exceptions.MappingErrorEx;
 import me.zingle.api.sdk.model.ZingleAccount;
 
 /**
- * Created by SLAVA 09 2015.
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/accounts>ZingleAccount API</a>).
  */
 public class ZingleAccountServices extends ZingleBaseService<ZingleAccount> {
 
@@ -46,5 +46,20 @@ public class ZingleAccountServices extends ZingleBaseService<ZingleAccount> {
         }catch(JSONException e){
             throw new MappingErrorEx(this.getClass().getSimpleName(),source.toString(),source.toString());
         }
+    }
+
+    @Override
+    public Boolean delete(String id) {
+        return false;
+    }
+
+    @Override
+    public ZingleAccount create(ZingleAccount object) {
+        return null;
+    }
+
+    @Override
+    public ZingleAccount update(ZingleAccount object) {
+        return null;
     }
 }
