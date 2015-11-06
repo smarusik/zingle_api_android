@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import me.zingle.api.sdk.Exceptions.MappingErrorEx;
 import me.zingle.api.sdk.Exceptions.UndefinedServiceDelegateEx;
-import me.zingle.api.sdk.Exceptions.UnsuccessfullRequestEx;
+import me.zingle.api.sdk.Exceptions.UnsuccessfulRequestEx;
 import me.zingle.api.sdk.dao.ZingleConnection;
 import me.zingle.api.sdk.dao.ZingleQuery;
 import me.zingle.api.sdk.dto.RequestDTO;
@@ -120,7 +120,7 @@ public class ZingleServiceServices extends ZingleBaseService<ZingleService>{
             return mapper(result);
         }
         else
-            throw new UnsuccessfullRequestEx(response.getData(),response.getResponseCode(),response.getResponseStr());
+            throw new UnsuccessfulRequestEx(response.getData(),response.getResponseCode(),response.getResponseStr());
     }
 
     public boolean updateSettingAsync(final ZingleServiceSetting object,final ServiceDelegate<ZingleService> delegate){
@@ -134,7 +134,7 @@ public class ZingleServiceServices extends ZingleBaseService<ZingleService>{
                 try{
                     ZingleService result=updateSetting(object);
                     delegate.processResult(result);
-                }catch (UnsuccessfullRequestEx e){
+                }catch (UnsuccessfulRequestEx e){
                     delegate.processError(e.getErrMessage(),e.getResponceCode(),e.getResponceStr());
                 }
             }

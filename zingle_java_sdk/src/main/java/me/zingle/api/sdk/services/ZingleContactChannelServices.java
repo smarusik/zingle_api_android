@@ -10,8 +10,10 @@ import me.zingle.api.sdk.model.ZingleList;
 import me.zingle.api.sdk.model.ZingleService;
 
 /**
- * Created by SLAVA 09 2015.
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/contact_channels>ZingleContactChannel API</a>).
+ * Supports all base functions, except listing.
  */
+
 public class ZingleContactChannelServices extends ZingleBaseService<ZingleContactChannel>{
 
     final ZingleService parentService;

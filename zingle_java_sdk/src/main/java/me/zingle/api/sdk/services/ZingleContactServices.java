@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import me.zingle.api.sdk.Exceptions.MappingErrorEx;
 import me.zingle.api.sdk.Exceptions.UndefinedServiceDelegateEx;
-import me.zingle.api.sdk.Exceptions.UnsuccessfullRequestEx;
+import me.zingle.api.sdk.Exceptions.UnsuccessfulRequestEx;
 import me.zingle.api.sdk.dao.ZingleConnection;
 import me.zingle.api.sdk.dao.ZingleQuery;
 import me.zingle.api.sdk.dto.RequestDTO;
@@ -19,7 +19,9 @@ import static me.zingle.api.sdk.dao.RequestMethods.DELETE;
 import static me.zingle.api.sdk.dao.RequestMethods.POST;
 
 /**
- * Created by SLAVA 08 2015.
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/contacts>ZingleContact API</a>).
+ * Supports all basic functions. Also complemented by ZingleLabel manipulation (attach, detach), ZingleAutomation triggering and setting ZingleContactFieldValues
+ * functional.
  */
 public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
 
@@ -114,10 +116,18 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
     }
 
 //Label manipulations
+
     private String labelResourcePath(){
         return resourcePath(true) + "/labels/%s";
     }
     //detach
+
+    /**
+     * Sends request for detaching ZingleLabel with provided id from provided ZingleContact
+     * @param contact - ZingleContact to detach label from
+     * @param labelId - ID of detaching label
+     * @return updated ZingleContact (without specified label)
+     */
     public ZingleContact detachLabel(ZingleContact contact, String labelId) {
         ZingleQuery query = new ZingleQuery(DELETE, String.format(labelResourcePath(), contact.getId(), labelId));
 
@@ -132,9 +142,18 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
             }
             return mapper(result);
         } else
-            throw new UnsuccessfullRequestEx(response.getData(), response.getResponseCode(), response.getResponseStr());
+            throw new UnsuccessfulRequestEx(response.getData(), response.getResponseCode(), response.getResponseStr());
     }
 
+
+    /**
+     * Same as <b>ZingleContact detachLabel(ZingleContact contact, String labelId)</b>, but runs request in separate thread. Result of request is sent to proper implementation
+     * of <i>ServiceDelegate</i>, provided as function parameter.
+     * @param contact - ZingleContact to detach label from
+     * @param labelId - ID of detaching label
+     * @param delegate  - implementation of <i>ServiceDelegate</i> to get request results
+     * @return true if request successfully starts
+     */
     public boolean detachLabelAsync(final ZingleContact contact, final String labelId,final ServiceDelegate<ZingleContact> delegate) {
         if(delegate==null){
             throw new UndefinedServiceDelegateEx();
@@ -146,7 +165,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
                 try{
                     ZingleContact result=detachLabel(contact, labelId);
                     delegate.processResult(result);
-                }catch (UnsuccessfullRequestEx e){
+                }catch (UnsuccessfulRequestEx e){
                     delegate.processError(e.getErrMessage(),e.getResponceCode(),e.getResponceStr());
                 }
             }
@@ -157,6 +176,13 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
         return true;
     }
 
+    /**
+     * Same as <b>boolean detachLabelAsync(final ZingleContact contact, final String labelId,final ServiceDelegate<ZingleContact> delegate)</b>, but implementation
+     * of <i>ServiceDelegate</i> is taken from <b>labelDelegate</b> property.
+     * @param contact - ZingleContact to detach label from
+     * @param labelId - ID of detaching label
+     * @return true if request successfully starts
+     */
     public boolean detachLabelAsync(final ZingleContact contact, final String labelId) {
         synchronized (labelDelegate) {
             if (labelDelegate == null) {
@@ -181,7 +207,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
             }
             return mapper(result);
         } else
-            throw new UnsuccessfullRequestEx(response.getData(), response.getResponseCode(), response.getResponseStr());
+            throw new UnsuccessfulRequestEx(response.getData(), response.getResponseCode(), response.getResponseStr());
     }
 
     public boolean attachLabelAsync(final ZingleContact contact, final String labelId,final ServiceDelegate<ZingleContact> delegate) {
@@ -195,7 +221,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
                 try{
                     ZingleContact result=attachLabel(contact, labelId);
                     delegate.processResult(result);
-                }catch (UnsuccessfullRequestEx e){
+                }catch (UnsuccessfulRequestEx e){
                     delegate.processError(e.getErrMessage(),e.getResponceCode(),e.getResponceStr());
                 }
             }
@@ -227,7 +253,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
         if (response.getResponseCode() == 200) {
             return true;
         } else
-            throw new UnsuccessfullRequestEx(response.getData(), response.getResponseCode(), response.getResponseStr());
+            throw new UnsuccessfulRequestEx(response.getData(), response.getResponseCode(), response.getResponseStr());
     }
 
     public boolean triggerAutomationAsync(final ZingleContact contact, final String automationId,final ServiceDelegate<Boolean> delegate) {
@@ -241,7 +267,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
                 try{
                     Boolean result=triggerAutomation(contact, automationId);
                     delegate.processResult(result);
-                }catch (UnsuccessfullRequestEx e){
+                }catch (UnsuccessfulRequestEx e){
                     delegate.processError(e.getErrMessage(),e.getResponceCode(),e.getResponceStr());
                 }
             }
@@ -285,7 +311,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
             }
             return mapper(result);
         } else
-            throw new UnsuccessfullRequestEx(response.getData(), response.getResponseCode(), response.getResponseStr());
+            throw new UnsuccessfulRequestEx(response.getData(), response.getResponseCode(), response.getResponseStr());
     }
 
     public boolean setFieldValueAsync(final ZingleContact contact, final ZingleContactFieldValue fieldValue,final ServiceDelegate<ZingleContact> delegate) {
@@ -299,7 +325,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
                 try{
                     ZingleContact result=setFieldValue(contact, fieldValue);
                     delegate.processResult(result);
-                }catch (UnsuccessfullRequestEx e){
+                }catch (UnsuccessfulRequestEx e){
                     delegate.processError(e.getErrMessage(),e.getResponceCode(),e.getResponceStr());
                 }
             }

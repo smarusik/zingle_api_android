@@ -9,7 +9,8 @@ import me.zingle.api.sdk.model.ZingleContactField;
 import me.zingle.api.sdk.model.ZingleService;
 
 /**
- * Created by SLAVA 08 2015.
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/contact_custom_fields>ZingleContactField API</a>).
+ * Supports all base functions.
  */
 public class ZingleContactFieldServices extends ZingleBaseService<ZingleContactField> {
 

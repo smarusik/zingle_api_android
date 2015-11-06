@@ -12,7 +12,7 @@ import me.zingle.android_sdk.facade_models.Message;
 import me.zingle.android_sdk.facade_models.Participant;
 import me.zingle.android_sdk.model_view.DataServices;
 import me.zingle.android_sdk.utils.Converters;
-import me.zingle.api.sdk.Exceptions.UnsuccessfullRequestEx;
+import me.zingle.api.sdk.Exceptions.UnsuccessfulRequestEx;
 import me.zingle.api.sdk.logger.Log;
 import me.zingle.api.sdk.model.ZingleMessage;
 import me.zingle.api.sdk.model.ZingleNewMessage;
@@ -72,7 +72,7 @@ public class MessageSender extends IntentService{
                     }
                     break;
 
-                } catch (UnsuccessfullRequestEx e) {
+                } catch (UnsuccessfulRequestEx e) {
                     Log.err("Error sending message\n" + message + "\n" + e.getResponceCode() + "\n" + e.getResponceStr());
                 }
                 triesCount++;
@@ -90,7 +90,7 @@ public class MessageSender extends IntentService{
             ZingleMessageServices messageServices=new ZingleMessageServices(new ZingleService(msgForSend.getSender().getId(),msgForSend.getSender().getName()));
             try {
                 messageServices.markRead(new ZingleMessage(msgForSend.getId(), msgForSend.getReadAt().getTime() / 1000));
-            }catch (UnsuccessfullRequestEx e) {
+            }catch (UnsuccessfulRequestEx e) {
                 Log.err("Error putting reaing timestamp on message\n" + msgForSend.getId() + "\n" + e.getResponceCode() + "\n" + e.getResponceStr());
             }
         }

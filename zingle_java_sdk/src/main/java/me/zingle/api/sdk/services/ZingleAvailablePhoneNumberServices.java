@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import me.zingle.api.sdk.Exceptions.MappingErrorEx;
-import me.zingle.api.sdk.Exceptions.UnsuccessfullRequestEx;
+import me.zingle.api.sdk.Exceptions.UnsuccessfulRequestEx;
 import me.zingle.api.sdk.model.ZingleAvailablePhoneNumber;
 import me.zingle.api.sdk.model.ZingleList;
 
@@ -46,9 +46,9 @@ public class ZingleAvailablePhoneNumberServices extends ZingleBaseService<Zingle
      *
      * @param countryCode String ISO 3166-1 alpha-2 country code
      * @return ZingleList of available phone numbers.
-     * @throws UnsuccessfullRequestEx if http response differs from success.
+     * @throws UnsuccessfulRequestEx if http response differs from success.
      */
-    public ZingleList<ZingleAvailablePhoneNumber> searchForCountryCode(String countryCode) throws UnsuccessfullRequestEx{
+    public ZingleList<ZingleAvailablePhoneNumber> searchForCountryCode(String countryCode) throws UnsuccessfulRequestEx{
         return list(createConditions("country",countryCode));
     }
 
@@ -67,7 +67,7 @@ public class ZingleAvailablePhoneNumberServices extends ZingleBaseService<Zingle
      * @param countryCode String ISO 3166-1 alpha-2 country code
      * @param delegate implementation of ServiceDelegate<ZingleList<ZingleAvailablePhoneNumber>>
      * @return ZingleList of available phone numbers.
-     * @throws UnsuccessfullRequestEx if http response differs from success.
+     * @throws UnsuccessfulRequestEx if http response differs from success.
      */
     public boolean searchForCountryCodeAsync(final String countryCode, ServiceDelegate<ZingleList<ZingleAvailablePhoneNumber>> delegate){
         return listAsync(createConditions("country",countryCode),delegate);
@@ -80,9 +80,9 @@ public class ZingleAvailablePhoneNumberServices extends ZingleBaseService<Zingle
      * @param countryCode String ISO 3166-1 alpha-2 country code
      * @param areaCode country area code (usually 3 digits)
      * @return ZingleList of available phone numbers.
-     * @throws UnsuccessfullRequestEx if http response differs from success.
+     * @throws UnsuccessfulRequestEx if http response differs from success.
      */
-    public ZingleList<ZingleAvailablePhoneNumber> searchForCountryCodeAreaCode(String countryCode, String areaCode) throws UnsuccessfullRequestEx{
+    public ZingleList<ZingleAvailablePhoneNumber> searchForCountryCodeAreaCode(String countryCode, String areaCode) throws UnsuccessfulRequestEx{
         return list(createConditions("country,search", countryCode, String.format(AREA_SEARCH_PATTERN, areaCode)));
     }
 
@@ -101,7 +101,7 @@ public class ZingleAvailablePhoneNumberServices extends ZingleBaseService<Zingle
      * @param areaCode country area code (usually 3 digits)
      * @param delegate implementation of ServiceDelegate<ZingleList<ZingleAvailablePhoneNumber>>
      * @return ZingleList of available phone numbers.
-     * @throws UnsuccessfullRequestEx if http response differs from success.
+     * @throws UnsuccessfulRequestEx if http response differs from success.
      */
     public boolean searchForCountryCodeAreaCodeAsync(final String countryCode,final String areaCode, ServiceDelegate<ZingleList<ZingleAvailablePhoneNumber>> delegate){
         return listAsync(createConditions("country,search", countryCode, String.format(AREA_SEARCH_PATTERN, areaCode)),delegate);

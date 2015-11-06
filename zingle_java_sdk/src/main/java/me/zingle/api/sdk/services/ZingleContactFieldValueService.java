@@ -12,7 +12,8 @@ import me.zingle.api.sdk.model.ZingleList;
 import me.zingle.api.sdk.model.ZingleService;
 
 /**
- * Created by SLAVA 09 2015.
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/custom_field_values>ZingleContactFieldValue API</a>).
+ * Supports only creation functions.
  */
 public class ZingleContactFieldValueService extends ZingleBaseService<ZingleContactFieldValue> {
 
@@ -53,26 +54,21 @@ public class ZingleContactFieldValueService extends ZingleBaseService<ZingleCont
 
     @Override
     public ZingleList<ZingleContactFieldValue> list(List<QueryPart> conditions) {
-        return super.list(conditions);
+        return null;
     }
 
     @Override
     public ZingleList<ZingleContactFieldValue> list() {
-        return super.list();
+        return null;
     }
 
     @Override
     public Boolean delete(String id) {
-        return super.delete(id);
-    }
-
-    @Override
-    public ZingleContactFieldValue create(ZingleContactFieldValue object) {
-        return super.create(object);
+        return null;
     }
 
     @Override
     public ZingleContactFieldValue update(ZingleContactFieldValue object) {
-        return super.update(object);
+        return null;
     }
 }

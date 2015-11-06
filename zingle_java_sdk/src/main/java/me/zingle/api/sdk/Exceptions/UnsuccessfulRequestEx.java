@@ -5,12 +5,12 @@ import org.json.JSONObject;
 /**
  * Created by SLAVA 08 2015.
  */
-public class UnsuccessfullRequestEx extends RuntimeException{
+public class UnsuccessfulRequestEx extends RuntimeException{
     private JSONObject errMessage;
     private int responceCode;
     private String responceStr;
 
-    public UnsuccessfullRequestEx(JSONObject message, int responceCode, String responceStr) {
+    public UnsuccessfulRequestEx(JSONObject message, int responceCode, String responceStr) {
         super(message.toString());
         this.errMessage=message;
         this.responceCode = responceCode;

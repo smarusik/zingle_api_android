@@ -8,7 +8,8 @@ import me.zingle.api.sdk.model.ZingleChannelType;
 import me.zingle.api.sdk.model.ZingleService;
 
 /**
- * Created by SLAVA 09 2015.
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/channel_types>ZingleChannelType API</a>).
+ * Supports all base functions.
  */
 public class ZingleChannelTypeServices extends ZingleBaseService<ZingleChannelType> {
 
