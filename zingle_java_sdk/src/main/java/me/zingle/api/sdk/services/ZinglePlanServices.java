@@ -8,7 +8,8 @@ import me.zingle.api.sdk.model.ZingleAccount;
 import me.zingle.api.sdk.model.ZinglePlan;
 
 /**
- * Created by SLAVA 08 2015.
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/plans>ZinglePlan API</a>.
+ * Supports only getting by id and listing.
  */
 public class ZinglePlanServices extends ZingleBaseService<ZinglePlan> {
 
@@ -58,5 +59,20 @@ public class ZinglePlanServices extends ZingleBaseService<ZinglePlan> {
         }catch(JSONException e){
             throw new MappingErrorEx(this.getClass().getSimpleName(),source.toString(),source.toString());
         }
+    }
+
+    @Override
+    public Boolean delete(String id) {
+        return null;
+    }
+
+    @Override
+    public ZinglePlan create(ZinglePlan object) {
+        return null;
+    }
+
+    @Override
+    public ZinglePlan update(ZinglePlan object) {
+        return null;
     }
 }

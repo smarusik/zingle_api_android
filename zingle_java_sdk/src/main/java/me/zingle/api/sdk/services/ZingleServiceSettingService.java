@@ -9,7 +9,8 @@ import me.zingle.api.sdk.model.ZingleService;
 import me.zingle.api.sdk.model.ZingleServiceSetting;
 
 /**
- * Created by SLAVA 09 2015.
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/service_settings>ZingleServiceSetting API</a>.
+ * Supports only create function.
  */
 public class ZingleServiceSettingService extends ZingleBaseService<ZingleServiceSetting> {
 
@@ -60,11 +61,6 @@ public class ZingleServiceSettingService extends ZingleBaseService<ZingleService
     @Override
     public Boolean delete(String id) {
         return false;
-    }
-
-    @Override
-    public ZingleServiceSetting create(ZingleServiceSetting object) {
-        return null;
     }
 
     @Override

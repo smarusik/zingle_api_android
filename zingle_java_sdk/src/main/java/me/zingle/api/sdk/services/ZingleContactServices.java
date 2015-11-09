@@ -147,7 +147,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
 
 
     /**
-     * Same as <b>ZingleContact detachLabel(ZingleContact contact, String labelId)</b>, but runs request in separate thread. Result of request is sent to proper implementation
+     * Same as <b>ZingleContact detachLabel(ZingleContact contact, String labelId)</b>, but runs request in separate thread. Result of request is received by proper implementation
      * of <i>ServiceDelegate</i>, provided as function parameter.
      * @param contact - ZingleContact to detach label from
      * @param labelId - ID of detaching label
@@ -193,6 +193,13 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
     }
 
     //attach
+
+    /**
+     * Sends request for attaching ZingleLabel with provided id to provided ZingleContact
+     * @param contact - ZingleContact to attach label to
+     * @param labelId - ID of attaching label
+     * @return updated ZingleContact (with specified label)
+     */
     public ZingleContact attachLabel(ZingleContact contact, String labelId) {
         ZingleQuery query = new ZingleQuery(POST, String.format(labelResourcePath(), contact.getId(), labelId));
 
@@ -210,6 +217,14 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
             throw new UnsuccessfulRequestEx(response.getData(), response.getResponseCode(), response.getResponseStr());
     }
 
+    /**
+     * Same as <b>ZingleContact attachLabel(ZingleContact contact, String labelId)</b>, but runs request in separate thread. Result of request is received by proper implementation
+     * of <i>ServiceDelegate</i>, provided as function parameter.
+     * @param contact - ZingleContact to attach label to
+     * @param labelId - ID of attaching label
+     * @param delegate  - implementation of <i>ServiceDelegate</i> to get request results
+     * @return true if request successfully starts
+     */
     public boolean attachLabelAsync(final ZingleContact contact, final String labelId,final ServiceDelegate<ZingleContact> delegate) {
         if(delegate==null){
             throw new UndefinedServiceDelegateEx();
@@ -232,6 +247,13 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
         return true;
     }
 
+    /**
+     * Same as <b>boolean attachLabelAsync(final ZingleContact contact, final String labelId,final ServiceDelegate<ZingleContact> delegate)</b>, but implementation
+     * of <i>ServiceDelegate</i> is taken from <b>labelDelegate</b> property.
+     * @param contact - ZingleContact to attach label to
+     * @param labelId - ID of attaching label
+     * @return true if request successfully starts
+     */
     public boolean attachLabelAsync(final ZingleContact contact, final String labelId) {
         synchronized (labelDelegate) {
             if (labelDelegate == null) {
@@ -240,11 +262,19 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
             return attachLabelAsync(contact, labelId, labelDelegate);
         }
     }
+
 //Trigger Automation
+
     private String automationResourcePath(){
         return resourcePath(true) + "/automations/%s";
     }
 
+    /**
+     * Sends request for triggering ZingleAutomation with provided id for provided ZingleContact
+     * @param contact - ZingleContact to trigger automation on
+     * @param automationId - ID of automation
+     * @return true if request return successful response
+     */
     public Boolean triggerAutomation(ZingleContact contact, String automationId) {
         ZingleQuery query = new ZingleQuery(POST, String.format(labelResourcePath(), contact.getId(), automationId));
 
@@ -256,6 +286,14 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
             throw new UnsuccessfulRequestEx(response.getData(), response.getResponseCode(), response.getResponseStr());
     }
 
+    /**
+     * Same as <b>Boolean triggerAutomation(ZingleContact contact, String automationId)</b>, but runs request in separate thread. Result of is received by proper implementation
+     * of <i>ServiceDelegate</i>, provided as function parameter.
+     * @param contact - ZingleContact to trigger automation on
+     * @param automationId - ID of automation
+     * @param delegate - implementation of ServiceDelegate
+     * @return true if request return successful response
+     */
     public boolean triggerAutomationAsync(final ZingleContact contact, final String automationId,final ServiceDelegate<Boolean> delegate) {
         if(delegate==null){
             throw new UndefinedServiceDelegateEx();
@@ -278,6 +316,13 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
         return true;
     }
 
+    /**
+     * Same as boolean triggerAutomationAsync(final ZingleContact contact, final String automationId,final ServiceDelegate<Boolean> delegate), but implementation
+     * of <i>ServiceDelegate</i> is taken from <b>automationDelegate</b> property.
+     * @param contact
+     * @param automationId
+     * @return true if request starts successfully
+     */
     public boolean triggerAutomationAsync(final ZingleContact contact, final String automationId) {
         synchronized (automationDelegate) {
             if (automationDelegate == null) {
@@ -288,10 +333,19 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
     }
 
 //Set custom field value
+
     private String fieldValueResourcePath(){
         return resourcePath(true) + "/custom-field-values/%s";
     }
 
+
+    /**
+     * Sends request for setting specified value to specified contact field (ZingleContactFieldValue) for provided ZingleContact
+     * (see <a href=https://github.com/Zingle/rest-api/blob/master/custom_field_values/POST_create_id.md>Update Contact Custom Field Value</a> in API docs)
+     * @param contact - ZingleContact to set field value on
+     * @param fieldValue - ZingleContactFieldValue object.
+     * @return Updated ZingleContact
+     */
     public ZingleContact setFieldValue(ZingleContact contact, ZingleContactFieldValue fieldValue) {
         ZingleQuery query = new ZingleQuery(POST, String.format(fieldValueResourcePath(), contact.getId(), fieldValue.getContactField().getId()));
 
@@ -314,6 +368,14 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
             throw new UnsuccessfulRequestEx(response.getData(), response.getResponseCode(), response.getResponseStr());
     }
 
+    /**
+     * Same as <b>ZingleContact setFieldValue(ZingleContact contact, ZingleContactFieldValue fieldValue)</b>, but runs request in separate thread. Result is received by proper implementation
+     * of <i>ServiceDelegate</i>, provided as function parameter.
+     * @param contact - ZingleContact to set field value on
+     * @param fieldValue - ZingleContactFieldValue object.
+     * @param delegate - implementation of ServiceDelegate
+     * @return true if request starts successfully
+     */
     public boolean setFieldValueAsync(final ZingleContact contact, final ZingleContactFieldValue fieldValue,final ServiceDelegate<ZingleContact> delegate) {
         if(delegate==null){
             throw new UndefinedServiceDelegateEx();
@@ -336,6 +398,13 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
         return true;
     }
 
+    /**
+     *Same as <b>boolean setFieldValueAsync(final ZingleContact contact, final ZingleContactFieldValue fieldValue,final ServiceDelegate<ZingleContact> delegate)</b>, but implementation
+     * of <i>ServiceDelegate</i> is taken from <b>fieldDelegate</b> property.
+     * @param contact - ZingleContact to set field value on
+     * @param fieldValue - ZingleContactFieldValue object.
+     * @return
+     */
     public boolean setFieldValueAsync(final ZingleContact contact, final ZingleContactFieldValue fieldValue) {
         synchronized (fieldDelegate) {
             if (fieldDelegate == null) {

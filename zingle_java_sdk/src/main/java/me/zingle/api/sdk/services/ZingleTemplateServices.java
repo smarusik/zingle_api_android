@@ -8,8 +8,9 @@ import me.zingle.api.sdk.model.ZingleService;
 import me.zingle.api.sdk.model.ZingleTemplate;
 
 /**
- * Created by SLAVA 10 2015.
- */
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/templates>ZingleTemplate API</a>.
+ * Supports all basic functions.
+ * */
 public class ZingleTemplateServices extends ZingleBaseService<ZingleTemplate> {
     final ZingleService parent;
 

@@ -10,7 +10,10 @@ import me.zingle.api.sdk.model.ZingleCorrespondent;
 import me.zingle.api.sdk.model.ZingleList;
 
 /**
- * Created by SLAVA 10 2015.
+ * ZingleBaseService derivation for working with ZingleCorrespondent.
+ * Hence it is not a part of API, don't supports any basic function. Implemented as helper class for <a href=https://github.com/Zingle/rest-api/tree/master/messages>ZingleMessageService</a>
+ * and ZingleNewMessageService to provide a mapper() for sender and recipient of a message.
+ * functional.
  */
 public class ZingleCorrespondentServices extends ZingleBaseService<ZingleCorrespondent> {
     @Override

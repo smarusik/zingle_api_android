@@ -211,7 +211,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
 
 
     /**
-     * Same as <b>Model get(String id)</b>, but runs request in separate thread. Result of request is sent to proper implementation
+     * Same as <b>Model get(String id)</b>, but runs request in separate thread. Result of request is received by proper implementation
      * of <i>ServiceDelegate</i>, provided as function parameter.
      *
      * @param id - object's id
@@ -275,7 +275,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
     }
 
     /**
-     * Same as <b>ZingleList<Model> list()</b>, but runs request in separate thread. Result of request is sent to proper implementation
+     * Same as <b>ZingleList<Model> list()</b>, but runs request in separate thread. Result of request is received by proper implementation
      * of <i>ServiceDelegate</i>, provided as function parameter.
      *
      * @param delegate - implementation of <i>ServiceDelegate</i> to get request results
@@ -337,7 +337,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
     }
 
     /**
-     * Same as <b>ZingleList<Model> list(List<QueryPart> conditions)</b>, but runs request in separate thread. Result of request is sent to proper implementation
+     * Same as <b>ZingleList<Model> list(List<QueryPart> conditions)</b>, but runs request in separate thread. Result of request is received by proper implementation
      * of <i>ServiceDelegate</i>, provided as function parameter.
      *
      * @param delegate - implementation of <i>ServiceDelegate</i> to get request results
@@ -400,7 +400,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
     }
 
     /**
-     * Same as <b>Boolean delete(String id)</b>, but runs request in separate thread. Result of request is sent to proper implementation
+     * Same as <b>Boolean delete(String id)</b>, but runs request in separate thread. Result of request is received by proper implementation
      * of <i>ServiceDelegate</i>, provided as function parameter.
      *
      * @param id - object's id
@@ -477,7 +477,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
     }
 
     /**
-     * Same as <b>Model create(Model object)</b>, but runs request in separate thread. Result of request is sent to proper implementation
+     * Same as <b>Model create(Model object)</b>, but runs request in separate thread. Result of request is received by implementation
      * of <i>ServiceDelegate</i>, provided as function parameter.
      * @param object - Zingle object. For details about required fields, etc. refer to <a href=https://github.com/Zingle/rest-api>API docs</a>
      * @param delegate - implementation of <i>ServiceDelegate</i> to get request results
@@ -551,7 +551,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
         throw new UnsuccessfulRequestEx(response.getData(),response.getResponseCode(),response.getResponseStr());
 }
     /**
-     * Same as <b>Model update(Model object)</b>, but runs request in separate thread. Result of request is sent to proper implementation
+     * Same as <b>Model update(Model object)</b>, but runs request in separate thread. Result of request is received by proper implementation
      * of <i>ServiceDelegate</i>, provided as function parameter.
      * @param object - Zingle object. For details about required fields, etc. refer to <a href=https://github.com/Zingle/rest-api>API docs</a>
      * @param delegate - implementation of <i>ServiceDelegate</i> to get request results

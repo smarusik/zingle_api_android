@@ -16,7 +16,9 @@ import me.zingle.api.sdk.model.ZingleService;
 import static me.zingle.api.sdk.dao.RequestMethods.POST;
 
 /**
- * Created by SLAVA 08 2015.
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/messages>ZingleMessage API</a> except <i>create</i>. For sending messages
+ * see <i>ZingleNewMessageService</i>
+ * Supports all getting by id and listing. Updating reduced to marking as read and wrapped in separate function.
  */
 public class ZingleMessageServices extends ZingleBaseService<ZingleMessage>{
 
@@ -92,6 +94,12 @@ public class ZingleMessageServices extends ZingleBaseService<ZingleMessage>{
         return result;
     }
 
+
+    /**
+     * Sends request to mark message as read (put <i>read_at</i> timestamp).
+     * @param msg - message to mark read. Must specify id.
+     * @return updated ZingleMessage object
+     */
     public ZingleMessage markRead(ZingleMessage msg){
         ZingleQuery query = new ZingleQuery(POST, String.format(resourcePath(true),msg.getId()));
 
@@ -120,10 +128,23 @@ public class ZingleMessageServices extends ZingleBaseService<ZingleMessage>{
 
     }
 
+    /**
+     * Same as <b>ZingleMessage markRead(ZingleMessage msg)</b>, but runs request in separate thread. Result is received by proper implementation
+     * of <i>ServiceDelegate</i>, provided as function parameter.
+     * @param message - message to mark read. Must specify id.
+     * @param delegate - implementation of ServiceDelegate
+     * @return true if request starts successfully
+     */
     public boolean markReadAsync(ZingleMessage message,ServiceDelegate<ZingleMessage> delegate){
         return updateAsync(message, delegate);
     }
 
+    /**
+     * Same as <b>boolean markReadAsync(ZingleMessage message,ServiceDelegate<ZingleMessage> delegate)</b>, but implementation
+     * of <i>ServiceDelegate</i> is taken from <b>markReadDelegate</b> property.
+     * @param message - message to mark read. Must specify id.
+     * @return true if request starts successfully
+     */
     public boolean markReadAsync(ZingleMessage message){
         synchronized (markReadDelegate) {
             if (markReadDelegate == null) {
@@ -131,5 +152,10 @@ public class ZingleMessageServices extends ZingleBaseService<ZingleMessage>{
             }
             return updateAsync(message, markReadDelegate);
         }
+    }
+
+    @Override
+    public Boolean delete(String id) {
+        return null;
     }
 }

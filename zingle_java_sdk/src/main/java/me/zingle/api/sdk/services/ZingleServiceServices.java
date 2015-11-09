@@ -18,7 +18,8 @@ import me.zingle.api.sdk.model.ZingleTimeZone;
 import static me.zingle.api.sdk.dao.RequestMethods.POST;
 
 /**
- * Created by SLAVA 08 2015.
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/services>ZingleService API</a>.
+ * Supports all basic functions, plus updating service settings.
  */
 public class ZingleServiceServices extends ZingleBaseService<ZingleService>{
 
@@ -100,6 +101,13 @@ public class ZingleServiceServices extends ZingleBaseService<ZingleService>{
     }
 
 //Update settings
+
+
+    /**
+     * Sends request to change specified service setting.
+     * @param object - service setting to update
+     * @return updated service
+     */
     public ZingleService updateSetting(ZingleServiceSetting object){
 
         ZingleQuery query = new ZingleQuery(POST, String.format(resourcePath(true) + "/settings/%s", object.getService().getId(), object.getSettingsField().getId()));
@@ -123,6 +131,13 @@ public class ZingleServiceServices extends ZingleBaseService<ZingleService>{
             throw new UnsuccessfulRequestEx(response.getData(),response.getResponseCode(),response.getResponseStr());
     }
 
+    /**
+     * Same as <b>ZingleService updateSetting(ZingleServiceSetting object)</b>, but runs request in separate thread. Result is received by proper implementation
+     * of <i>ServiceDelegate</i>, provided as function parameter.
+     * @param object - service setting to update
+     * @param delegate - implementation of ServiceDelegate
+     * @return true if request starts successfully
+     */
     public boolean updateSettingAsync(final ZingleServiceSetting object,final ServiceDelegate<ZingleService> delegate){
         if(delegate==null){
             throw new UndefinedServiceDelegateEx();
@@ -146,6 +161,12 @@ public class ZingleServiceServices extends ZingleBaseService<ZingleService>{
 
     }
 
+    /**
+     * Same as <b>boolean updateSettingAsync(final ZingleServiceSetting object,final ServiceDelegate<ZingleService> delegate)</b>, but implementation
+     * of <i>ServiceDelegate</i> is taken from <b>settingsDelegate</b> property.
+     * @param object - service setting to update
+     * @return true if request starts successfully
+     */
     public boolean updateSettingAsync(final ZingleServiceSetting object){
         synchronized (settingsDelegate) {
             if (settingsDelegate == null) {

@@ -4,11 +4,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import me.zingle.api.sdk.Exceptions.MappingErrorEx;
+import me.zingle.api.sdk.model.ZingleList;
 import me.zingle.api.sdk.model.ZingleService;
 import me.zingle.api.sdk.model.ZingleServiceChannel;
 
 /**
- * Created by SLAVA 09 2015.
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/service_channels>ZingleServiceChannel API</a>.
+ * Supports all basic functions, excepl listing.
  */
 public class ZingleServiceChannelServices extends ZingleBaseService<ZingleServiceChannel> {
 
@@ -57,5 +59,10 @@ public class ZingleServiceChannelServices extends ZingleBaseService<ZingleServic
         }catch(JSONException e){
             throw new MappingErrorEx(this.getClass().getSimpleName(),source.toString(),source.toString());
         }
+    }
+
+    @Override
+    public ZingleList<ZingleServiceChannel> list() {
+        return null;
     }
 }

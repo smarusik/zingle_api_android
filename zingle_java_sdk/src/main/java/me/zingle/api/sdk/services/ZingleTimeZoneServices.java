@@ -9,8 +9,9 @@ import me.zingle.api.sdk.model.ZingleList;
 import me.zingle.api.sdk.model.ZingleTimeZone;
 
 /**
- * Created by SLAVA 08 2015.
- */
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/time_zones>ZingleTimeZone API</a>.
+ * Supports only listing.
+ * */
 public class ZingleTimeZoneServices extends ZingleBaseService<ZingleTimeZone> {
 
     @Override
@@ -47,5 +48,25 @@ public class ZingleTimeZoneServices extends ZingleBaseService<ZingleTimeZone> {
         }
 
         return result;
+    }
+
+    @Override
+    public ZingleTimeZone get(String id) {
+        return null;
+    }
+
+    @Override
+    public Boolean delete(String id) {
+        return null;
+    }
+
+    @Override
+    public ZingleTimeZone create(ZingleTimeZone object) {
+        return null;
+    }
+
+    @Override
+    public ZingleTimeZone update(ZingleTimeZone object) {
+        return null;
     }
 }

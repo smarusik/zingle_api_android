@@ -50,6 +50,10 @@ public class ZingleServiceSetting extends ZingleBaseModel {
         this.settingsFieldOptionId = settingsFieldOptionId;
     }
 
+    public String getId() {
+        return settingsField.getId();
+    }
+
     public ZingleSettingsField getSettingsField() {
         return settingsField;
     }

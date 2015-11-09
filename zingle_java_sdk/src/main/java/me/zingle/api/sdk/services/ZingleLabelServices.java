@@ -7,11 +7,10 @@ import me.zingle.api.sdk.Exceptions.MappingErrorEx;
 import me.zingle.api.sdk.model.ZingleLabel;
 import me.zingle.api.sdk.model.ZingleService;
 
-//import android.graphics.Color;
-//import java.awt.Color;
-
 /**
- * Created by SLAVA 08 2015.
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/labels>ZingleLabel API</a>).
+ * Supports all basic functions.
+ * functional.
  */
 public class ZingleLabelServices extends ZingleBaseService<ZingleLabel> {
 

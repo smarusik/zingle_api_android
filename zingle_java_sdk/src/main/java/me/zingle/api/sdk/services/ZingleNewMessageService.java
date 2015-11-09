@@ -22,7 +22,9 @@ import me.zingle.api.sdk.model.ZingleService;
 import static me.zingle.api.sdk.dao.RequestMethods.POST;
 
 /**
- * Created by SLAVA 10 2015.
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/blob/master/messages/POST_create.md>ZingleMessage API</a> create function.
+ * Supports none of basic functions, except creating (sending), which wrapped in separate function.
+
  */
 public class ZingleNewMessageService extends ZingleBaseService<ZingleNewMessage> {
 
@@ -65,6 +67,12 @@ public class ZingleNewMessageService extends ZingleBaseService<ZingleNewMessage>
         return ids;
     }
 
+
+    /**
+     * Sends request to write to database (send) message from sender to recipient(s).
+     * @param msg new message
+     * @return list of newly created messages' ids.
+     */
     public List<String> sendMessage(ZingleNewMessage msg){
         ZingleQuery query = new ZingleQuery(POST, resourcePath(false));
 
@@ -93,6 +101,13 @@ public class ZingleNewMessageService extends ZingleBaseService<ZingleNewMessage>
             throw new UnsuccessfulRequestEx(response.getData(),response.getResponseCode(),response.getResponseStr());
     }
 
+    /**
+     * Same as <b>List<String> sendMessage(ZingleNewMessage msg)</b>, but runs request in separate thread. Result is received by proper implementation
+     * of <i>ServiceDelegate</i>, provided as function parameter.
+     * @param msg new message
+     * @param delegate - implementation of ServiceDelegate
+     * @return true if request starts successfully
+     */
     public boolean sendMessageAsync(final ZingleNewMessage msg, final ServiceDelegate<List<String>> delegate){
         if(delegate==null){
             throw new UndefinedServiceDelegateEx();
@@ -115,6 +130,12 @@ public class ZingleNewMessageService extends ZingleBaseService<ZingleNewMessage>
         return true;
     }
 
+    /**
+     * Same as <b>boolean sendMessageAsync(final ZingleNewMessage msg, final ServiceDelegate<List<String>> delegate)</b>, but implementation
+     * of <i>ServiceDelegate</i> is taken from <b>sendDelegate</b> property.
+     * @param msg new message
+     * @return true if request starts successfully
+     */
     public boolean sendMessageAsync(final ZingleNewMessage msg){
         synchronized (sendDelegate) {
             if (sendDelegate == null) {

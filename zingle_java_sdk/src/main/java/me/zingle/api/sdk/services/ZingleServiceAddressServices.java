@@ -8,7 +8,8 @@ import me.zingle.api.sdk.model.ZingleList;
 import me.zingle.api.sdk.model.ZingleServiceAddress;
 
 /**
- * Created by SLAVA 08 2015.
+ * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/service_addresses>ZingleServiceAddress API</a>.
+ * Supports none of basic functions.
  */
 public class ZingleServiceAddressServices extends ZingleBaseService <ZingleServiceAddress>{
     @Override
