@@ -19,7 +19,7 @@ Edit your AndroidManifest.xml, so it contains
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-feature android:name="android.hardware.camera"
-        android:required="true"/>
+        android:required="false"/>
 ```
 in <i>manifest</i> tag and
 ```xml
