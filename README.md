@@ -23,7 +23,7 @@ Edit your AndroidManifest.xml, so it contains
 ```
 in <i>manifest</i> tag and
 ```xml
-<activity
+        <activity
             android:name="me.zingle.android_sdk.ZingleMessagingActivity"
             android:label="ZingleMessageList">
 
