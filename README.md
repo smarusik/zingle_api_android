@@ -56,13 +56,12 @@ Initializes basic parameters for connecting to API. Doesn't make any verificatio
 ```java
 static void addConversation(String serviceId, String contactId, String contactChannelValue);
 ```
-Registers a new conversation in zingle_android_sdk. If succeed, system begins to receive all messages for ZingleContact with specified ID and it's possible to open UI for this conversation with showConversation(). Can be called as many times as needed to register all conversations.
+Registers a new conversation in zingle_android_sdk. If succeed, after triggering startMessageReceiver(), system will receive all messages for ZingleContact with specified ID and it's possible to open UI for this conversation with showConversation(). Can be called as many times as needed to register all conversations.
 
 ```java
 static void addConversation(String serviceId, String contactId, String contactChannelValue, ConversationAdderBase ca)
 ```
-Same as addConversation(String serviceId, String contactId, String contactChannelValue), but allow to customize the process
-through overloading <i>onPreExecute(), onPostExecute(Boolean aBoolean), onProgressUpdate(String... values)</i>.
+Same as addConversation(String serviceId, String contactId, String contactChannelValue), but allow to customize the process through overloading <i>onPreExecute(), onPostExecute(Boolean aBoolean), onProgressUpdate(String... values)</i>.
 See <i>ConversationAdder</i> and <i>AsyncTask<Params,Progress,Result></i> for more information.
 <br>
 onProgressUpdate(String... values) is triggered 4 times:<br>
