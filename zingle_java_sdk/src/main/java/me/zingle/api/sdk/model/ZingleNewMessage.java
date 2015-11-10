@@ -13,7 +13,7 @@ import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
 import me.zingle.api.sdk.dao.RequestMethods;
 
 /**
- * Created by SLAVA 10 2015.
+ * Support class for creating and sending new messages. See <a href=https://github.com/Zingle/rest-api/blob/master/messages/POST_create.md#send-message>Send Message</a>
  */
 public class ZingleNewMessage extends ZingleBaseModel {
     //Correspondent types

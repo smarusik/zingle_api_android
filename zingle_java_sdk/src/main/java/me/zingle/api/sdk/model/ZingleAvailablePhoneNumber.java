@@ -3,7 +3,7 @@ package me.zingle.api.sdk.model;
 import org.json.JSONObject;
 
 /**
- * Created by SLAVA 08 2015.
+ * <a href=https://github.com/Zingle/rest-api/tree/master/available_phone_numbers#available-phone-number-object>Available Phone Number Object</a>
  */
 public class ZingleAvailablePhoneNumber extends ZingleBaseModel {
 

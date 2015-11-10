@@ -1,10 +1,10 @@
 package me.zingle.api.sdk.logger;
 
 /**
- * Created by SLAVA 08 2015.
+ * Verbosity levels for logger.
  */
 public enum ZingleVerbosityLevel {
     ZINGLE_VERBOSITY_OFF, // No output
-    ZINGLE_VERBOSITY_ERROR, // Gracefully Log ERRORs to the console window.
-    ZINGLE_VERBOSITY_INFO //Gracefully Log SUCCESS and ERRORS to the console window.
+    ZINGLE_VERBOSITY_ERROR, //Log only ERRORs.
+    ZINGLE_VERBOSITY_INFO //Log SUCCESS and ERRORS (all output).
 }

@@ -2,6 +2,9 @@ package me.zingle.api.sdk.model;
 
 import org.json.JSONObject;
 
+/**
+ * Base class for data models.
+ */
 public abstract class ZingleBaseModel {
     private String id=null;
     public String getId(){

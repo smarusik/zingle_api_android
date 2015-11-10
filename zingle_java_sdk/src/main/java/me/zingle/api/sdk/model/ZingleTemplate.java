@@ -10,7 +10,7 @@ import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
 import me.zingle.api.sdk.dao.RequestMethods;
 
 /**
- * Created by SLAVA 10 2015.
+ * <a href=https://github.com/Zingle/rest-api/tree/master/templates#template-object>Template Object</a>
  */
 public class ZingleTemplate extends ZingleBaseModel {
 

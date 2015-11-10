@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by SLAVA 08 2015.
+ * <a href=https://github.com/Zingle/rest-api/tree/master/contacts#contact-object>Contact Object</a>
  */
 public class ZingleContact extends ZingleBaseModel{
 

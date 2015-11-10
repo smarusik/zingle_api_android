@@ -3,7 +3,7 @@ package me.zingle.api.sdk.Exceptions;
 import org.json.JSONObject;
 
 /**
- * Created by SLAVA 08 2015.
+ * Runtime exception. Indicates, that HTTP request to API response returns error (code differs from 200).
  */
 public class UnsuccessfulRequestEx extends RuntimeException{
     private JSONObject errMessage;

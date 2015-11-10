@@ -1,7 +1,7 @@
 package me.zingle.api.sdk.model;
 
 /**
- * Created by SLAVA 08 2015.
+ * Represents communication direction in ZingleMessage. Partially lost it's meaning when correspondents were divided on sender and receiver.
  */
 public enum ZingleDirerction {
     ZINGLE_DIRERCTION_INBOUND("inbound"),

@@ -10,7 +10,7 @@ import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
 import me.zingle.api.sdk.dao.RequestMethods;
 
 /**
- * Created by SLAVA 08 2015.
+ * <a href=https://github.com/Zingle/rest-api/tree/master/messages#message-object>Message Object</a>
  */
 public class ZingleMessage extends ZingleBaseModel{
 

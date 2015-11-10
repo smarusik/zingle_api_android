@@ -1,7 +1,7 @@
 package me.zingle.api.sdk.Exceptions;
 
 /**
- * Created by SLAVA 09 2015.
+ * Runtime exception. Indicates, that error occurred while mapping JSON source to some Zingle model object.
  */
 public class MappingErrorEx extends RuntimeException {
     private String objectName;

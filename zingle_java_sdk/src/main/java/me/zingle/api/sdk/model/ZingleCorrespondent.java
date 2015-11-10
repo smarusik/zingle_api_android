@@ -7,7 +7,7 @@ import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
 import me.zingle.api.sdk.dao.RequestMethods;
 
 /**
- * Created by SLAVA 09 2015.
+ * Support class for ZingleMessage
  */
 public class ZingleCorrespondent extends ZingleBaseModel{
 

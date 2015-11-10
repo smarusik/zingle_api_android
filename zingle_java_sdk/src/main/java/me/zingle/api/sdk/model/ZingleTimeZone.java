@@ -3,7 +3,7 @@ package me.zingle.api.sdk.model;
 import org.json.JSONObject;
 
 /**
- * Created by SLAVA 08 2015.
+ * <a href=https://github.com/Zingle/rest-api/tree/master/time_zones>Time Zone</a>
  */
 public class ZingleTimeZone extends ZingleBaseModel{
     private String displayName;

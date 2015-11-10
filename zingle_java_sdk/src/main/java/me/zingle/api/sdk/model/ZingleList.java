@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by SLAVA 09 2015.
+ * Generic class. Provides container for terminating results of list() functions in classes that inherits ZingleBaseService.
+ * Besides the list of objects keeps additional information about request result (like page number, page size etc.)
  */
 public class ZingleList<Model extends ZingleBaseModel> {
     public String sortField;

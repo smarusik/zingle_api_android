@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by SLAVA 09 2015.
+ * <a href=https://github.com/Zingle/rest-api/tree/master/field_options#field-option-object>Field Option Object</a>
  */
 public class ZingleFieldOption extends ZingleBaseModel {
 

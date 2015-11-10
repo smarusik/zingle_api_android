@@ -6,12 +6,18 @@ import java.util.Date;
 import static me.zingle.api.sdk.logger.ZingleVerbosityLevel.ZINGLE_VERBOSITY_ERROR;
 import static me.zingle.api.sdk.logger.ZingleVerbosityLevel.ZINGLE_VERBOSITY_INFO;
 /**
- * Created by SLAVA 08 2015.
+ * Class for logging. Has 2 verbosity levels (see ZingleVerbosityLevel enum). By default do output to System.err, but can be redirected to any PrintStream.
+ * Don't provide any synchronization, take it into account, when using in multithreaded environments.
  */
 public class Log {
     private static ZingleVerbosityLevel level=ZINGLE_VERBOSITY_ERROR;
     private static PrintStream outputStream=System.err;
 
+    /**
+     * Initialization method
+     * @param level - verbosity level
+     * @param outputStream - required PrintStream for output
+     */
     public static void init(ZingleVerbosityLevel level, PrintStream outputStream){
         Log.level = level;
         Log.outputStream = outputStream;

@@ -1,7 +1,7 @@
 package me.zingle.api.sdk.model;
 
 /**
- * Created by SLAVA 08 2015.
+ * Represents sorting order. Used in list-like requests and ZingleList responses to describe sorting order of required or received lists of objects.
  */
 public enum ZingleSortOrder {
     ZINGLE_ASC("asc"),
@@ -16,5 +16,4 @@ public enum ZingleSortOrder {
     public String toString(){
         return sortOrder;
     }
-
 }

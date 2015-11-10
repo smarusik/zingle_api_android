@@ -7,7 +7,7 @@ import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
 import me.zingle.api.sdk.dao.RequestMethods;
 
 /**
- * Created by SLAVA 09 2015.
+ * <a href=https://github.com/Zingle/rest-api/tree/master/custom_field_values#contact-custom-field-value-object>Contact Custom Field Value Object</a>
  */
 public class ZingleContactFieldValue extends ZingleBaseModel {
 

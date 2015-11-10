@@ -3,7 +3,7 @@ package me.zingle.api.sdk.Exceptions;
 import me.zingle.api.sdk.dao.RequestMethods;
 
 /**
- * Created by SLAVA 09 2015.
+ * Runtime exception. Indicates, that wrong data was provided for creation JSON objects of request body (for example, required field missing).
  */
 public class RequestBodyCreationEx extends RuntimeException{
     private RequestMethods method;

@@ -9,7 +9,7 @@ import me.zingle.api.sdk.dao.RequestMethods;
 //import java.awt.Color;
 
 /**
- * Created by SLAVA 08 2015.
+ * <a href=https://github.com/Zingle/rest-api/tree/master/labels#label-object>Label Object</a>
  */
 public class ZingleLabel extends ZingleBaseModel{
     private String id;

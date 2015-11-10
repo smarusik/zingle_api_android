@@ -7,7 +7,7 @@ import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
 import me.zingle.api.sdk.dao.RequestMethods;
 
 /**
- * Created by SLAVA 09 2015.
+ * <a href=https://github.com/Zingle/rest-api/tree/master/service_channels#service-channels-object>Service Channels Object</a>
  */
 public class ZingleServiceChannel extends ZingleBaseModel{
 

@@ -7,7 +7,7 @@ import me.zingle.api.sdk.Exceptions.RequestBodyCreationEx;
 import me.zingle.api.sdk.dao.RequestMethods;
 
 /**
- * Created by SLAVA 08 2015.
+ * <a href=https://github.com/Zingle/rest-api/tree/master/service_addresses#service-address-object>Service Address Object</a>
  */
 public class ZingleServiceAddress extends ZingleBaseModel{
     private String address;

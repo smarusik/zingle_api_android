@@ -1,7 +1,7 @@
 package me.zingle.api.sdk.Exceptions;
 
 /**
- * Created by SLAVA 08 2015.
+ * Runtime exception. Indicates that HTTP connection to API was not initialized with proper URL, version number etc.
  */
 public class UninitializedConnectionEx extends RuntimeException {
 

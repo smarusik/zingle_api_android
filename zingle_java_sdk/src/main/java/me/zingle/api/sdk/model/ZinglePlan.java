@@ -3,7 +3,7 @@ package me.zingle.api.sdk.model;
 import org.json.JSONObject;
 
 /**
- * Created by SLAVA 09 2015.
+ * <a href=https://github.com/Zingle/rest-api/tree/master/plans#plan-object>Plan Object</a>
  */
 public class ZinglePlan extends ZingleBaseModel{
 

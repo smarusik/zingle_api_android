@@ -3,7 +3,7 @@ package me.zingle.api.sdk.model;
 import org.json.JSONObject;
 
 /**
- *
+ *<a href=https://github.com/Zingle/rest-api/tree/master/accounts#account-object>Account Object</a>
  */
 public class ZingleAccount extends ZingleBaseModel {
     String id;

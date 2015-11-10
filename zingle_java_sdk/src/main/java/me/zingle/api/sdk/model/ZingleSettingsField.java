@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by SLAVA 09 2015.
+ * <a href=https://github.com/Zingle/rest-api/tree/master/settings_fields#settings-field-object>Settings Field Object</a>
  */
 public class ZingleSettingsField extends ZingleBaseModel{
 

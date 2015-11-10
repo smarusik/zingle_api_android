@@ -1,1 +1,4 @@
+me.zingle.api.sdk.Exceptions
+me.zingle.api.sdk.logger
+me.zingle.api.sdk.model
 me.zingle.api.sdk.services
