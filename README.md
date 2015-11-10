@@ -12,7 +12,42 @@ In addition to the standard API conveniences, the Android SDK also provides an e
 
 ![](https://github.com/Zingle/android-sdk/blob/master/zingle_android_sdk/docs/resources/EmulScreenshot.tiff)
 
-###UI Starting stages:
+###UI Integration
+
+Edit your AndroidManifest.xml, so it contains
+```xml
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true"/>
+```
+in <i>manifest</i> tag and
+```xml
+<activity
+            android:name="me.zingle.android_sdk.ZingleMessagingActivity"
+            android:label="ZingleMessageList">
+
+        </activity>
+        <service
+            android:name="me.zingle.android_sdk.daemons.MessageSender"
+            android:exported="false">
+
+        </service>
+        <service
+            android:name="me.zingle.android_sdk.daemons.MessageReceiver"
+            android:exported="false">
+
+        </service>
+        <service
+            android:name="me.zingle.android_sdk.daemons.AttachmentDownloader"
+            android:exported="false">
+
+        </service>
+```
+in <i>application</i> tag.
+
+Then use functions, listed below to initialize connection, add conversations, start services and show UI.
+
 ```java
 static boolean initializeConnection(String apiURL, String apiVersion, String token, String password);
 ```
@@ -50,6 +85,8 @@ Starts and shows the UI for required conversation (defined by <b>serviceId</b>)
 
 All thease functions are static members of ZingleUIInitAndStart class. [Here is a simple example  of using them in android Activity.](https://github.com/Zingle/android-sdk/blob/master/app/src/main/java/me/zingle/zingleapiandroid/StartScreen.java)
 
+For more information refer to javadoc folder (zingle_android_sdk/docs).
+
 ### Zingle AndroidSDK Object Model
 
 Model | Description
@@ -76,3 +113,5 @@ ZingleMessage | [See Zingle Resource Overview - Message](https://github.com/Zing
 ZinglePlan | [See Zingle Resource Overview - Plan](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#plan)
 ZingleService | [See Zingle Resource Overview - Service](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#service)
 ZingleServiceChannel | [See Zingle Resource Overview  - Service Channel](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#service-channel)
+
+For more information refer to javadoc folder (zingle_java_sdk/docs).
