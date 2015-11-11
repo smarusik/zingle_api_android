@@ -92,6 +92,43 @@ Model | Description
 --- | ---
 ZingleUIInitAndStart | Object that holds static methods for quick initialization of Android SDK and starting messaging.
 
+###Pure java SDK usage
+
+If you don't need UI facilities, or want to work with API in some pure java project, the best way is to use Zingle java SDK without integrated Android UI. In this case SDK may be attached to a project as external library. Download zingle_java_sdk.jar, add it to project dependencies and initialize SDK with functions listed below.
+If you want to change default logging settings use 
+```java
+static void Log.init(ZingleVerbosityLevel level, PrintStream outputStream)
+```
+For setting API path and credentials:
+```java
+static boolean ZingleConnection.init (String apiPath, String apiVersion, String token, String key)
+```
+After initialization, if your path and credentials are corect, you may use any API functionality by instantiating the proper Zingle...Services object and using it's methods. For example, this piece of code will list to standard output allowed Zingle services for provided login and password:
+
+```java
+import me.zingle.api.sdk.dao.ZingleConnection;
+import me.zingle.api.sdk.logger.Log;
+import me.zingle.api.sdk.logger.ZingleVerbosityLevel;
+import me.zingle.api.sdk.model.*;
+import me.zingle.api.sdk.services.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        final String name = "viacheslav.marusyk@cyberhull.com";
+        final String password = "123qweasd";
+
+        Log.init(ZingleVerbosityLevel.ZINGLE_VERBOSITY_INFO, System.out);
+
+        if (!ZingleConnection.init("https://qa-api.zingle.me", "v1", name, password)) return;
+
+        ZingleServiceServices serviceServices = new ZingleServiceServices();
+        ZingleList<ZingleService> services = serviceServices.list();
+        System.out.println(services);
+    }
+}
+```
 ### Zingle JavaSDK Object Model
 
 Model | Description
