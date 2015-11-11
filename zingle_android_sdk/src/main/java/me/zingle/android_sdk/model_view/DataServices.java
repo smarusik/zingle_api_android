@@ -185,6 +185,43 @@ public class DataServices {
         }
     }
 
+    public void updateSendingResult(Message msg, boolean isSent, String receivedId){
+        synchronized (dataModel){
+            if(isSent){
+
+                Conversation conversation=dataModel.getConversation();
+                for(DataGroup g:conversation.getGroups()){
+                    int ind=g.messages.indexOf(receivedId);
+                    if(ind>0)
+                        g.messages.remove(ind);
+
+                    ind=g.messages.indexOf(msg.getId());
+                    if(ind>0){
+                        g.messages.set(ind,receivedId);
+                        break;
+                    }
+                }
+
+                dataModel.getStraightList().remove(msg.getId());
+                if(!dataModel.getStraightList().containsKey(receivedId)) {
+                    msg.setId(receivedId);
+                    msg.setSent(true);
+                    dataModel.getStraightList().put(receivedId,msg);
+                }
+            }
+            else {
+                msg.setFailed(true);
+            }
+        }
+    }
+
+    public void updateReadStatus(Message msg){
+        synchronized (dataModel){
+            msg.setRead(true);
+            msg.setReadAt(new Date());
+        }
+    }
+
     private void addMessageToGroup(DataGroup group,Message message) {
 
         List<String> messages=group.getMessages();
@@ -217,6 +254,7 @@ public class DataServices {
         }
     }
 
+/*
     public void updateItem(String oldId,Message msg){
         synchronized (dataModel) {
             Conversation conversation=dataModel.getConversation();
@@ -229,6 +267,7 @@ public class DataServices {
             }
         }
     }
+*/
 
     public byte[] getCachedItem(String key){
         byte[] result;

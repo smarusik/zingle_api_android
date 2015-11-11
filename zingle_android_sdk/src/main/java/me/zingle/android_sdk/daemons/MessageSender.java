@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.os.Handler;
 
-import java.util.Date;
 import java.util.List;
 
 import me.zingle.android_sdk.facade_models.Attachment;
@@ -50,7 +49,7 @@ public class MessageSender extends IntentService{
 
         String msgLocalId=intent.getStringExtra(Message.SEND_INTENT_MSG_ID);
 
-        Message msgForSend=dataServices.popMessage(msgLocalId);
+        final Message msgForSend=dataServices.popMessage(msgLocalId);
 
         if(msgForSend.getSender().getType()== Participant.ParticipantType.CONTACT) {
             ZingleService service = new ZingleService(msgForSend.getRecipient().getId(), msgForSend.getRecipient().getName());
@@ -66,9 +65,7 @@ public class MessageSender extends IntentService{
                 try {
                     List<String> ids = messageService.sendMessage(message);
                     if (!ids.isEmpty()) {
-                        msgForSend.setSent(true);
-                        msgForSend.setId(ids.get(0));
-                        dataServices.updateItem(msgLocalId, msgForSend);
+                        dataServices.updateSendingResult(msgForSend, true, ids.get(0));
                     }
                     break;
 
@@ -78,14 +75,13 @@ public class MessageSender extends IntentService{
                 triesCount++;
             }
             if (triesCount >= MAX_TRIES) {
-                msgForSend.setFailed(true);
+                dataServices.updateSendingResult(msgForSend, false, null);
             }
             updateListView();
         }
         else{
 
-            msgForSend.setRead(true);
-            msgForSend.setReadAt(new Date());
+            dataServices.updateReadStatus(msgForSend);
 
             ZingleMessageServices messageServices=new ZingleMessageServices(new ZingleService(msgForSend.getSender().getId(),msgForSend.getSender().getName()));
             try {
