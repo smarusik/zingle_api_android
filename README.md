@@ -94,7 +94,7 @@ ZingleUIInitAndStart | Object that holds static methods for quick initialization
 
 ###Pure java SDK usage
 
-If you don't need UI facilities, or want to work with API in some pure java project, the best way is to use Zingle java SDK without integrated Android UI. In this case SDK may be attached to a project as external library. Download zingle_java_sdk.jar, add it to project dependencies and initialize SDK with functions listed below.
+If you don't need UI facilities, or want to work with API in some pure java project, the best way is to use Zingle java SDK without integrated Android UI. In this case SDK may be attached to a project as external library. Download zingle_java_sdk.jar, add it to project dependencies and initialize SDK with functions listed below.<br>
 If you want to change default logging settings use 
 ```java
 static void Log.init(ZingleVerbosityLevel level, PrintStream outputStream)
