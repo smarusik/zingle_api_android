@@ -53,7 +53,7 @@ public class StartScreen extends AppCompatActivity {
                         }
                     });
             //Second
-            ZingleUIInitAndStart.addConversation(serviceIds[1],
+            /*ZingleUIInitAndStart.addConversation(serviceIds[1],
                     contactIds[1],
                     contactChannelValue,
                     new ZingleUIInitAndStart.ConversationAdderBase() {
@@ -72,7 +72,7 @@ public class StartScreen extends AppCompatActivity {
                         protected void onProgressUpdate(String... values) {
                             logText.append("\n"+values[0]+" "+values[1]);
                         }
-                    });
+                    });*/
             //Stage 3 start message receiver
             ZingleUIInitAndStart.startMessageReceiver(getApplicationContext());
 
