@@ -3,7 +3,10 @@ package me.zingle.api.sdk.services;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import me.zingle.api.sdk.Exceptions.MappingErrorEx;
+import me.zingle.api.sdk.dao.QueryPart;
 import me.zingle.api.sdk.model.ZingleList;
 import me.zingle.api.sdk.model.ZingleService;
 import me.zingle.api.sdk.model.ZingleServiceSetting;
@@ -53,21 +56,41 @@ public class ZingleServiceSettingService extends ZingleBaseService<ZingleService
         }
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleList<ZingleServiceSetting> list() {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
+    @Override
+    public ZingleList<ZingleServiceSetting> list(List<QueryPart> conditions) {
+        return null;
+    }
+
+    /**
+     * Unsupported method from base class. Overloaded to return <i>false</i>.
+     */
     @Override
     public Boolean delete(String id) {
         return false;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleServiceSetting get(String id) {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleServiceSetting update(ZingleServiceSetting object) {
         return null;

@@ -1,4 +1,6 @@
 me.zingle.api.sdk.Exceptions
+me.zingle.api.sdk.dao
+me.zingle.api.sdk.dto
 me.zingle.api.sdk.logger
 me.zingle.api.sdk.model
 me.zingle.api.sdk.services

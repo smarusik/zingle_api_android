@@ -145,35 +145,56 @@ public class ZingleNewMessageService extends ZingleBaseService<ZingleNewMessage>
         }
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     public ZingleNewMessage mapper(JSONObject source) throws MappingErrorEx {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleNewMessage get(String id) {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleList<ZingleNewMessage> list() {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleList<ZingleNewMessage> list(List<QueryPart> conditions) {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>false</i>.
+     */
     @Override
     public Boolean delete(String id) {
         return false;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleNewMessage create(ZingleNewMessage object) {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleNewMessage update(ZingleNewMessage object) {
         return null;

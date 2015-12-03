@@ -1,7 +1,7 @@
 package me.zingle.api.sdk.dao;
 
 /**
- * Created by SLAVA 08 2015.
+ * Enumeration for working with HTTP request methods.
  */
 public enum RequestMethods {
     PUT("PUT"),

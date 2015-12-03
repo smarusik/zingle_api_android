@@ -43,31 +43,49 @@ public class ZingleCorrespondentServices extends ZingleBaseService<ZingleCorresp
 
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleCorrespondent get(String id) {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleList<ZingleCorrespondent> list() {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleList<ZingleCorrespondent> list(List<QueryPart> conditions) {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>false</i>.
+     */
     @Override
     public Boolean delete(String id) {
         return false;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleCorrespondent create(ZingleCorrespondent object) {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleCorrespondent update(ZingleCorrespondent object) {
         return null;

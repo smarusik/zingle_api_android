@@ -3,7 +3,10 @@ package me.zingle.api.sdk.services;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import me.zingle.api.sdk.Exceptions.MappingErrorEx;
+import me.zingle.api.sdk.dao.QueryPart;
 import me.zingle.api.sdk.model.ZingleContact;
 import me.zingle.api.sdk.model.ZingleContactChannel;
 import me.zingle.api.sdk.model.ZingleList;
@@ -62,8 +65,19 @@ public class ZingleContactChannelServices extends ZingleBaseService<ZingleContac
         return result;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleList<ZingleContactChannel> list() {
+        return null;
+    }
+
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
+    @Override
+    public ZingleList<ZingleContactChannel> list(List<QueryPart> conditions) {
         return null;
     }
 }

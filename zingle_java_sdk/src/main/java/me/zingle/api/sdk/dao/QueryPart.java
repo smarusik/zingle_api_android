@@ -4,7 +4,8 @@ import me.zingle.api.sdk.model.ZingleDirerction;
 import me.zingle.api.sdk.model.ZingleSortOrder;
 
 /**
- * Created by SLAVA 08 2015.
+ * Convenience class for request modifiers. Represents key-value pair of one modifier, which is translated to request modifier.
+ * For example <i>key=page, value=2</i> will add <i>page=2</i> modifier to HTTP request.
  */
 public class QueryPart {
     public String key;

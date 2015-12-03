@@ -57,6 +57,9 @@ public class ZingleAutomationServices extends ZingleBaseService<ZingleAutomation
         return result;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleAutomation create(ZingleAutomation object) {
         return null;

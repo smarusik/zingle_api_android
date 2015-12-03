@@ -1,7 +1,7 @@
 package me.zingle.api.sdk.dao;
 
 /**
- * Created by SLAVA 09 2015.
+ * Enumeration of request modifiers, available in API.
  */
 public enum RequestModifiers {
     //general

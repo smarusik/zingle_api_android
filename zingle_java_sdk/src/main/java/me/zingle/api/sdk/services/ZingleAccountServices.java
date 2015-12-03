@@ -48,16 +48,25 @@ public class ZingleAccountServices extends ZingleBaseService<ZingleAccount> {
         }
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>false</i>.
+     */
     @Override
     public Boolean delete(String id) {
         return false;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleAccount create(ZingleAccount object) {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleAccount update(ZingleAccount object) {
         return null;

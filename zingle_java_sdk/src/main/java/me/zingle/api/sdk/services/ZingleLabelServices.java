@@ -10,7 +10,6 @@ import me.zingle.api.sdk.model.ZingleService;
 /**
  * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/labels>ZingleLabel API</a>).
  * Supports all basic functions.
- * functional.
  */
 public class ZingleLabelServices extends ZingleBaseService<ZingleLabel> {
 

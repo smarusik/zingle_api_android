@@ -403,7 +403,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
      * of <i>ServiceDelegate</i> is taken from <b>fieldDelegate</b> property.
      * @param contact - ZingleContact to set field value on
      * @param fieldValue - ZingleContactFieldValue object.
-     * @return
+     * @return true if success false - otherwise
      */
     public boolean setFieldValueAsync(final ZingleContact contact, final ZingleContactFieldValue fieldValue) {
         synchronized (fieldDelegate) {

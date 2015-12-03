@@ -61,16 +61,25 @@ public class ZinglePlanServices extends ZingleBaseService<ZinglePlan> {
         }
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public Boolean delete(String id) {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZinglePlan create(ZinglePlan object) {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZinglePlan update(ZinglePlan object) {
         return null;

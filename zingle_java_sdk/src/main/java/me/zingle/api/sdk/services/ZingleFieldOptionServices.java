@@ -44,31 +44,49 @@ public class ZingleFieldOptionServices extends ZingleBaseService<ZingleFieldOpti
         }
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleFieldOption get(String id) {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleList<ZingleFieldOption> list() {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>false</i>.
+     */
     @Override
     public Boolean delete(String id) {
-        return null;
+        return false;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleFieldOption create(ZingleFieldOption object) {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleFieldOption update(ZingleFieldOption object) {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleList<ZingleFieldOption> list(List<QueryPart> conditions) {
         return null;

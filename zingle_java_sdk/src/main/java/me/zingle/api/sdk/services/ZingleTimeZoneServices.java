@@ -50,21 +50,33 @@ public class ZingleTimeZoneServices extends ZingleBaseService<ZingleTimeZone> {
         return result;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleTimeZone get(String id) {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>false</i>.
+     */
     @Override
     public Boolean delete(String id) {
-        return null;
+        return false;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleTimeZone create(ZingleTimeZone object) {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleTimeZone update(ZingleTimeZone object) {
         return null;

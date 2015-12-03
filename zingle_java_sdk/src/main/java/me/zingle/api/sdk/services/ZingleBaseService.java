@@ -72,7 +72,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
      * Abstract function. Proper implementation must check if HTTP request modifier, provided as function parameter is supported by API for derived class.
      * (see <a href=https://github.com/Zingle/rest-api#request-modifiers>Request modifiers</a> and specific classes documentation.)
      * @param modifier
-     * @return
+     * @return true if check was successful false - otherwise
      */
     protected abstract boolean checkModifier(String modifier);
 
@@ -321,7 +321,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
      * Same as <b>ZingleList<Model> list()</b>, but can add filters and sorting options to request and override default pagination through <i>conditions</i>
      * parameter list. For list of supported parameters refer to respective class section in <a href=https://github.com/Zingle/rest-api>API docs</a>
      * @param conditions
-     * @return
+     * @return ZingleList of <i>Model</i> objects
      */
     public ZingleList<Model> list(List<QueryPart> conditions){
         ZingleQuery query = new ZingleQuery(GET, resourcePath(false));

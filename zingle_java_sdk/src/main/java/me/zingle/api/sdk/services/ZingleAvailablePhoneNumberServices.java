@@ -107,4 +107,35 @@ public class ZingleAvailablePhoneNumberServices extends ZingleBaseService<Zingle
         return listAsync(createConditions("country,search", countryCode, String.format(AREA_SEARCH_PATTERN, areaCode)),delegate);
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
+    @Override
+    public ZingleAvailablePhoneNumber get(String id) {
+        return null;
+    }
+
+    /**
+     * Unsupported method from base class. Overloaded to return <i>false</i>.
+     */
+    @Override
+    public Boolean delete(String id) {
+        return false;
+    }
+
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
+    @Override
+    public ZingleAvailablePhoneNumber create(ZingleAvailablePhoneNumber object) {
+        return null;
+    }
+
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
+    @Override
+    public ZingleAvailablePhoneNumber update(ZingleAvailablePhoneNumber object) {
+        return null;
+    }
 }

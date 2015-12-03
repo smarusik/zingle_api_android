@@ -52,21 +52,33 @@ public class ZingleContactFieldValueService extends ZingleBaseService<ZingleCont
         return result;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleList<ZingleContactFieldValue> list(List<QueryPart> conditions) {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleList<ZingleContactFieldValue> list() {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public Boolean delete(String id) {
         return null;
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleContactFieldValue update(ZingleContactFieldValue object) {
         return null;

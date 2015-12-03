@@ -154,8 +154,19 @@ public class ZingleMessageServices extends ZingleBaseService<ZingleMessage>{
         }
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public Boolean delete(String id) {
+        return null;
+    }
+
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
+    @Override
+    public ZingleMessage create(ZingleMessage object) {
         return null;
     }
 }

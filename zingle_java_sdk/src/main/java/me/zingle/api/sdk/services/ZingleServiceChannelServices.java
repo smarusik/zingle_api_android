@@ -3,14 +3,17 @@ package me.zingle.api.sdk.services;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import me.zingle.api.sdk.Exceptions.MappingErrorEx;
+import me.zingle.api.sdk.dao.QueryPart;
 import me.zingle.api.sdk.model.ZingleList;
 import me.zingle.api.sdk.model.ZingleService;
 import me.zingle.api.sdk.model.ZingleServiceChannel;
 
 /**
  * ZingleBaseService derivation for working with <a href=https://github.com/Zingle/rest-api/tree/master/service_channels>ZingleServiceChannel API</a>.
- * Supports all basic functions, excepl listing.
+ * Supports all basic functions, except listing.
  */
 public class ZingleServiceChannelServices extends ZingleBaseService<ZingleServiceChannel> {
 
@@ -61,8 +64,19 @@ public class ZingleServiceChannelServices extends ZingleBaseService<ZingleServic
         }
     }
 
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
     @Override
     public ZingleList<ZingleServiceChannel> list() {
+        return null;
+    }
+
+    /**
+     * Unsupported method from base class. Overloaded to return <i>null</i>.
+     */
+    @Override
+    public ZingleList<ZingleServiceChannel> list(List<QueryPart> conditions) {
         return null;
     }
 }
