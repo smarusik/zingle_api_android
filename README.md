@@ -103,7 +103,7 @@ For setting API path and credentials:
 ```java
 static boolean ZingleConnection.init (String apiPath, String apiVersion, String token, String key)
 ```
-After initialization, if your path and credentials are corect, you may use any API functionality by instantiating the proper ZingleXXXXXXServices (XXXXXX stands for object type Service, Label, Contact etc.) object and using it's methods. For example, this piece of code will list to standard output allowed Zingle services for provided login and password:
+After initialization, if your path and credentials are corect, you may use any API functionality by instantiating the proper ZingleXXXXXXServices (XXXXXX stands for object type: Service, Label, Contact etc.) object and using it's methods. For example, this piece of code will list to standard output allowed Zingle services for provided login and password:
 
 ```java
 import me.zingle.api.sdk.dao.ZingleConnection;
