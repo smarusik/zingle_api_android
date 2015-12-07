@@ -192,11 +192,11 @@ public class DataServices {
                 Conversation conversation=dataModel.getConversation();
                 for(DataGroup g:conversation.getGroups()){
                     int ind=g.messages.indexOf(receivedId);
-                    if(ind>0)
+                    if(ind>=0)
                         g.messages.remove(ind);
 
                     ind=g.messages.indexOf(msg.getId());
-                    if(ind>0){
+                    if(ind>=0){
                         g.messages.set(ind,receivedId);
                         break;
                     }
