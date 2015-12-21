@@ -53,7 +53,7 @@ static boolean initializeConnection(String apiURL, String apiVersion, String tok
 ```
 Initializes basic parameters for connecting to API. Doesn't make any verification (it means true answer doesn't mean that login and password are correct and URL is working). Consult Zingle dashboard or support for URL and version strings of current API server. See also [api versioning.](https://github.com/Zingle/rest-api/blob/master/README.md#api-versioning)
 
-After connection initialization you can proceed with registering conversations. Each conversation supports exchanging with messages between specified service and contact. 
+After connection initialization you can proceed with registering of conversations. Each conversation supports message exchanging between specified service and contact. All available services for provided token and password can be obtained from [dashboard](https://dashboard.zingle.me) (link can be different, so contact Zingle support if in trouble) or from [REST API](https://github.com/Zingle/rest-api/blob/master/services/GET_list.md#service-list) with the help of zingle_java_sdk ZingleServiceServices class (see javadocs and [Pure java SDK usage](https://github.com/Zingle/android-sdk/blob/master/README.md#pure-java-sdk-usage) chapter below). 
 
 ```java
 static void addConversation(String serviceId, String contactId, String contactChannelValue);
