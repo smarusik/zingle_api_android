@@ -51,7 +51,9 @@ Then use functions, listed below to initialize connection, add conversations, st
 ```java
 static boolean initializeConnection(String apiURL, String apiVersion, String token, String password);
 ```
-Initializes basic parameters for connecting to API. Doesn't make any verification (it means true answer doesn't mean that login and password are correct and URL is working). Ask Zingle support for URL and version strings of current API server. See also [api versioning docs.](https://github.com/Zingle/rest-api/blob/master/README.md#api-versioning)
+Initializes basic parameters for connecting to API. Doesn't make any verification (it means true answer doesn't mean that login and password are correct and URL is working). Consult Zingle dashboard or support for URL and version strings of current API server. See also [api versioning.](https://github.com/Zingle/rest-api/blob/master/README.md#api-versioning)
+
+After connection initialization you can proceed with registering conversations. Each conversation supports exchanging with messages between specified service and contact. 
 
 ```java
 static void addConversation(String serviceId, String contactId, String contactChannelValue);
