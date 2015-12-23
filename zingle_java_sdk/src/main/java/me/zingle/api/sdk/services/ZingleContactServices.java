@@ -71,7 +71,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
 
     @Override
     public ZingleContact mapper(JSONObject source) throws MappingErrorEx {
-        ZingleContact result=new ZingleContact();
+        ZingleContact result=new ZingleContact(parent);
 
         try {
             result.setId(source.getString("id"));
@@ -106,7 +106,7 @@ public class ZingleContactServices extends ZingleBaseService<ZingleContact> {
                 result.setLabels(labelServices.arrayMapper(labelsJS));
             }
 
-            result.setService(parent);
+            //result.setService(parent);
         }catch (JSONException e) {
             e.printStackTrace();
             throw new MappingErrorEx(this.getClass().getName(),source.toString(),e.getMessage());

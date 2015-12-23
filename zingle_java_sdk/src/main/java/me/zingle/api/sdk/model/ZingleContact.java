@@ -49,7 +49,11 @@ public class ZingleContact extends ZingleBaseModel{
     private Long createdAt;
     private Long updatedAt;
 
-    public ZingleContact() {
+    /*public ZingleContact() {
+    }*/
+
+    public ZingleContact(ZingleService parent) {
+        this.service = parent;
     }
 
     public ZingleContact(ZingleService service, String id) {
@@ -128,6 +132,14 @@ public class ZingleContact extends ZingleBaseModel{
             customFieldValues=new ArrayList<>();
             customFieldValues.add(contactFieldValue);
         }
+    }
+
+    public void addCustomFieldValue(String id, Object value){
+        if(service==null){
+            throw (new RuntimeException("Undefined service."));
+        }
+
+        addCustomFieldValue(new ZingleContactFieldValue(new ZingleContactField(service,id),value));
     }
 
     public List<ZingleLabel> getLabels() {
