@@ -97,6 +97,11 @@ public class ZingleAttachment extends ZingleBaseModel{
     }
 
     @Override
+    public boolean equals(Object o) {
+        return false;
+    }
+
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("\nZingleAttachment{");
         sb.append("\n    mimeType='").append(mimeType).append('\'');

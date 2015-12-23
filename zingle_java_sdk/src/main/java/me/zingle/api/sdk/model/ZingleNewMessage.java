@@ -203,6 +203,11 @@ public class ZingleNewMessage extends ZingleBaseModel {
     }
 
     @Override
+    public boolean equals(Object o) {
+        return false;
+    }
+
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("\nZingleNewMessage{");
         sb.append("\n    sender=").append(sender);

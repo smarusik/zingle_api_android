@@ -121,6 +121,22 @@ public class ZingleServiceAddress extends ZingleBaseModel{
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        ZingleServiceAddress that = (ZingleServiceAddress) o;
+
+        if (!address.equals(that.address)) return false;
+        if (!city.equals(that.city)) return false;
+        if (state != null ? !state.equals(that.state) : that.state != null) return false;
+        if (!country.equals(that.country)) return false;
+        return !(postalCode != null ? !postalCode.equals(that.postalCode) : that.postalCode != null);
+
+    }
+
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("\nZingleServiceAddress{");
         sb.append("\n    address='").append(address).append('\'');

@@ -121,6 +121,28 @@ public class ZingleContactFieldValue extends ZingleBaseModel {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        ZingleContactFieldValue that = (ZingleContactFieldValue) o;
+
+        if (!contactField.equals(that.contactField)) return false;
+        if (value != null ? !value.equals(that.value) : that.value != null) return false;
+        return !(selectedFieldOptionId != null ? !selectedFieldOptionId.equals(that.selectedFieldOptionId) : that.selectedFieldOptionId != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = contactField.hashCode();
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        result = 31 * result + (selectedFieldOptionId != null ? selectedFieldOptionId.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("\nZingleContactFieldValue{");
         sb.append("\n    contactField=").append(contactField);

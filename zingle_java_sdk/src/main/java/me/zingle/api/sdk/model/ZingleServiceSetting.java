@@ -108,6 +108,22 @@ public class ZingleServiceSetting extends ZingleBaseModel {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        ZingleServiceSetting that = (ZingleServiceSetting) o;
+
+        if (!service.equals(that.service)) return false;
+        if (value != null ? !value.equals(that.value) : that.value != null) return false;
+        if (settingsFieldOptionId != null ? !settingsFieldOptionId.equals(that.settingsFieldOptionId) : that.settingsFieldOptionId != null)
+            return false;
+        return settingsField.equals(that.settingsField);
+
+    }
+
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("\nZingleServiceSetting{");
         sb.append("\n    value=").append(value);

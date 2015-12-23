@@ -31,8 +31,16 @@ public class ZingleTimeZone extends ZingleBaseModel{
         return sb.toString();
     }
 
-    public boolean equals(ZingleTimeZone obj) {
-        return this.displayName.equals(obj.displayName);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        ZingleTimeZone that = (ZingleTimeZone) o;
+
+        return displayName.equals(that.displayName);
+
     }
 
     @Override

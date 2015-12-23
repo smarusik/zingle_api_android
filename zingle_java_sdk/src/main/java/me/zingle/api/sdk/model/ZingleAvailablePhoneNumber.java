@@ -43,8 +43,16 @@ public class ZingleAvailablePhoneNumber extends ZingleBaseModel {
         this.country = country;
     }
 
-    public boolean equals(ZingleAvailablePhoneNumber obj) {
-        return obj.phoneNumber.equals(phoneNumber);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        ZingleAvailablePhoneNumber that = (ZingleAvailablePhoneNumber) o;
+
+        return phoneNumber.equals(that.phoneNumber);
+
     }
 
     @Override
