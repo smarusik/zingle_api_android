@@ -155,16 +155,6 @@ public class ZingleContactField extends ZingleBaseModel{
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ZingleContactField that = (ZingleContactField) o;
-
-        return id.equals(that.id);
-    }
-
-    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("\nZingleContactField{");
         sb.append("\n    id='").append(id).append('\'');
