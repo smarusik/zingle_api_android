@@ -46,7 +46,7 @@ in <i>manifest</i> tag and
 ```
 in <i>application</i> tag.
 
-Then use functions, listed below to initialize connection, add conversations, start services and show UI.
+Then use static methods of ZingleUIInitAndStart class, listed below to initialize connection, add conversations, start services and show UI.
 
 ```java
 static boolean initializeConnection(String apiURL, String apiVersion, String token, String password);
@@ -90,7 +90,7 @@ static void showConversation(Context context,String serviceId)
 ```
 Starts and shows the UI for required conversation (defined by <b>serviceId</b>)
 
-All thease functions are static members of ZingleUIInitAndStart class. [Here is a simple example  of using them in android Activity.](https://github.com/Zingle/android-sdk/blob/master/app/src/main/java/me/zingle/zingleapiandroid/StartScreen.java)
+Again, all thease functions are static members of ZingleUIInitAndStart class. [Here is a simple example  of using them in android Activity.](https://github.com/Zingle/android-sdk/blob/master/app/src/main/java/me/zingle/zingleapiandroid/StartScreen.java)
 
 For more information refer to javadoc folder (zingle_android_sdk/docs).
 
