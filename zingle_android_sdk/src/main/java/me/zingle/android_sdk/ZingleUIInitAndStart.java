@@ -8,6 +8,7 @@ import me.zingle.android_sdk.daemons.MessageReceiver;
 import me.zingle.android_sdk.daemons.WorkingDataSet;
 import me.zingle.android_sdk.facade_models.Participant;
 import me.zingle.android_sdk.utils.Client;
+import me.zingle.api.sdk.Exceptions.UnsuccessfulRequestEx;
 import me.zingle.api.sdk.dao.ZingleConnection;
 import me.zingle.api.sdk.logger.Log;
 import me.zingle.api.sdk.model.ZingleContact;
@@ -63,67 +64,71 @@ public class ZingleUIInitAndStart {
 
             WorkingDataSet wds=WorkingDataSet.getItem();
 
-            //Assign service and it's contact
-            ZingleService service=serviceServices.get(serviceId);
-            if(service==null){
-                publishProgress("1", "Failed");
-                Log.err("Failed to add conversation for service with id=%s",serviceId);
-                return false;
-            }
-            wds.addAllowedService(service);
-            publishProgress("1",service.getDisplayName());
-
-            ZingleContactServices contactServices=new ZingleContactServices(service);
-            ZingleContact contact=contactServices.get(contactId);
-            if(contact==null){
-                publishProgress("2", "Failed");
-                Log.err("Failed to add conversation for contact with id=%s",contactId);
-                return false;
-            }
-            wds.addContact(contact);
-            publishProgress("2",contact.getId());
-
-            //Registering conversation UI data
-            Client.ConversationClient client=new Client.ConversationClient();
-
-            /*
-            ChannelTypeClass field value of ZingleChannelType, that will be used for sending messages
-            (see ZingleNewMessage.channelTypes)
-            */
-            String allowedChannelTypeClass = "UserDefinedChannel";
-
-            //Check for proper channel type
-            for(ZingleContactChannel ch:contact.getChannels()) {
-                if(ch.getType().getTypeclass().equals(allowedChannelTypeClass)) {
-                    client.addChannelTypeId(ch.getType().getId());
-                    break;
+            try {
+                //Assign service and it's contact
+                ZingleService service = serviceServices.get(serviceId);
+                if (service == null) {
+                    publishProgress("1", "Failed");
+                    Log.err("Failed to add conversation for service with id=%s", serviceId);
+                    return false;
                 }
-            }
-            if(client.getChannelTypeId().isEmpty()) {
-                publishProgress("3", "Failed");
-                Log.err("Service %s (id=%s) does not support user defined channels.",service.getDisplayName(),service.getId());
+                wds.addAllowedService(service);
+                publishProgress("1", service.getDisplayName());
+
+                ZingleContactServices contactServices = new ZingleContactServices(service);
+                ZingleContact contact = contactServices.get(contactId);
+                if (contact == null) {
+                    publishProgress("2", "Failed");
+                    Log.err("Failed to add conversation for contact with id=%s", contactId);
+                    return false;
+                }
+                wds.addContact(contact);
+                publishProgress("2", contact.getId());
+
+                //Registering conversation UI data
+                Client.ConversationClient client = new Client.ConversationClient();
+
+                /*
+                ChannelTypeClass field value of ZingleChannelType, that will be used for sending messages
+                (see ZingleNewMessage.channelTypes)
+                */
+                String allowedChannelTypeClass = "UserDefinedChannel";
+
+                //Check for proper channel type
+                for (ZingleContactChannel ch : contact.getChannels()) {
+                    if (ch.getType().getTypeclass().equals(allowedChannelTypeClass)) {
+                        client.addChannelTypeId(ch.getType().getId());
+                        break;
+                    }
+                }
+                if (client.getChannelTypeId().isEmpty()) {
+                    publishProgress("3", "Failed");
+                    Log.err("Service %s (id=%s) does not support user defined channels.", service.getDisplayName(), service.getId());
+                    return false;
+                }
+                publishProgress("3", allowedChannelTypeClass);
+
+                //Assign conversation participants.
+                Participant p = new Participant();
+                p.setType(Participant.ParticipantType.CONTACT);
+                p.setId(contactId);
+                p.setChannelValue(contactChannelValue);
+                client.setAuthContact(p);
+
+                p = new Participant();
+                p.setType(Participant.ParticipantType.SERVICE);
+                p.setId(service.getId());
+                p.setName(service.getDisplayName());
+                client.setConnectedService(p);
+
+                Client.getItem().addClient(client);
+
+                publishProgress("4", "UI ready");
+
+                return true;
+            }catch (UnsuccessfulRequestEx ex){
                 return false;
             }
-            publishProgress("3", allowedChannelTypeClass);
-
-            //Assign conversation participants.
-            Participant p=new Participant();
-            p.setType(Participant.ParticipantType.CONTACT);
-            p.setId(contactId);
-            p.setChannelValue(contactChannelValue);
-            client.setAuthContact(p);
-
-            p=new Participant();
-            p.setType(Participant.ParticipantType.SERVICE);
-            p.setId(service.getId());
-            p.setName(service.getDisplayName());
-            client.setConnectedService(p);
-
-            Client.getItem().addClient(client);
-
-            publishProgress("4", "UI ready");
-
-            return true;
         }
     }
 

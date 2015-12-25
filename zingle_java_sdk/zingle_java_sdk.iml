@@ -28,8 +28,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="org.apache.commons.codec-1.8" level="project" />
-    <orderEntry type="library" exported="" name="commons-codec-1.8" level="project" />
     <orderEntry type="library" exported="" name="json-20140107" level="project" />
+    <orderEntry type="library" exported="" name="commons-codec-1.8" level="project" />
     <orderEntry type="library" exported="" name="zingle_java_sdk.zingle_java_sdk" level="project" />
   </component>
 </module>
