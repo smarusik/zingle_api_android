@@ -14,6 +14,9 @@ In addition to the standard API conveniences, the Android SDK also provides an e
 
 ###UI Integration
 
+To support backward compatibility with earlier versions of Android, activities of zingle_android_sdk inherits AppCompatActivity. It requires the application to use
+any derivative of Theme.AppCompat as a theme (android:theme property in application tag of AndroidManifest.xml).
+
 Edit your AndroidManifest.xml, so it contains
 ```xml
     <uses-permission android:name="android.permission.INTERNET"/>

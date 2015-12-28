@@ -27,13 +27,13 @@ public class ZingleUIInitAndStart {
      *
      * @param apiURL URL, that give access to API
      * @param apiVersion API version string in form v{number}
-     * @param token user name for API
+     * @param userName user name for API
      * @param password password for API
      * @return true if apiURL meets URL standards, otherwise - false
      */
-    public static boolean initializeConnection(String apiURL, String apiVersion, String token, String password){
+    public static boolean initializeConnection(String apiURL, String apiVersion, String userName, String password){
 
-        if(!ZingleConnection.init(apiURL, apiVersion, token, password)) {
+        if(!ZingleConnection.init(apiURL, apiVersion, userName, password)) {
             Log.err("Wrong API URL or version.");
             return false;
         }

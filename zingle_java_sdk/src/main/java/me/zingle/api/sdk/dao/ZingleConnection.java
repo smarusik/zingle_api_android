@@ -53,11 +53,11 @@ public class ZingleConnection {
         }
     }
 
-    public static boolean init (String apiPath, String apiVersion, String token, String key){
+    public static boolean init (String apiPath, String apiVersion, String userName, String password){
 
         System.setProperty("jsse.enableSNIExtension", "false");
 
-        ZingleConnection temp = new ZingleConnection(apiPath, apiVersion, generateEncryptedAuthString(token, key));
+        ZingleConnection temp = new ZingleConnection(apiPath, apiVersion, generateEncryptedAuthString(userName, password));
 
         try {
             URL url = new URL(temp.apiPath + temp.apiVersion);

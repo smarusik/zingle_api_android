@@ -448,7 +448,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
 //Creating methods
 
     /**
-     * Sends request to create a new record in database with data and type, provided by <i>object</i>. Throws if request fails.
+     * Sends request to create a new record in database with data and type, provided by <i>object</i>. Throws UnsuccessfulRequestEx if request fails.
      * @param object - Zingle object. For details about required fields, etc. refer to <a href=https://github.com/Zingle/rest-api>API docs</a>
      * @return newly created Zingle object
      */
@@ -523,7 +523,7 @@ public abstract class ZingleBaseService<Model extends ZingleBaseModel> {
 
     //Updating methods
     /**
-     * Sends request to update record in database with data and type, provided by <i>object</i>. Throws if request fails.
+     * Sends request to update record in database with data and type, provided by <i>object</i>. Throws UnsuccessfulRequestEx if request fails.
      * @param object - Zingle object. For details about required fields, etc. refer to <a href=https://github.com/Zingle/rest-api>API docs</a>
      * @return updated Zingle object
      */
