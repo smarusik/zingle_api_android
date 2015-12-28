@@ -58,7 +58,10 @@ After connection initialization you can proceed with registering of conversation
 It supposed, that you already have a set of registered services on Zingle server before starting developing. If you want to use predefined subset of them in your application, you can find information about all available services for provided token and password at [dashboard](https://dashboard.zingle.me) (link can be different, so contact Zingle support if in trouble). To obtain this information programmatically use zingle_java_sdk - ZingleServiceServices class methods (see javadocs and [Pure java SDK usage](https://github.com/Zingle/android-sdk/blob/master/README.md#pure-java-sdk-usage) chapter below).
 
 Contacts can be treated the same way as services with only diference, that they also could be added through dashboard or programmatically with zingle_java_sdk - ZingleContactServices, ZingleContactChannelTypeServices and ZingleContactChannelTypeServices class methods. So, you can give application user a predefined contact to make conversation with service, or supply him with some kind of registration functional based on zingle_java_sdk to let him create it himself.
-For now only UserDefinedChannel type is supported for exchanging messages through rest API, so your contact must have at least one contact channel of this type.
+
+For now only UserDefinedChannel type is supported for exchanging messages through rest API, so your service must support this channel type and contact must have at least one contact channel of this type.
+(See [Service Object channel_types](https://github.com/Zingle/rest-api/tree/master/services#service-object) and [Contact Object channels](https://github.com/Zingle/rest-api/tree/master/contacts#contact-object)
+for more information.)
 
 With service and contact ids in hand you can proceed to registring conversations.
 
