@@ -10,7 +10,7 @@ To view the latest API documentation, please refer to: https://github.com/Zingle
 
 In addition to the standard API conveniences, the Android SDK also provides an easy to use User Interface to automate the conversation between a Contact and a Service.  The UI can be used on behalf of a Zingle Service.
 
-![](https://github.com/Zingle/android-sdk/blob/master/zingle_android_sdk/docs/resources/EmulScreenshot.tiff)
+![](https://github.com/Zingle/android-sdk/blob/master/zingle_android_sdk/docs/resources/EmulScreenshot.jpg)
 
 ###UI Integration
 
