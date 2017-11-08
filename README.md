@@ -12,7 +12,7 @@ In addition to the standard API conveniences, the Android SDK also provides an e
 
 ![](https://github.com/Zingle/android-sdk/blob/master/zingle_android_sdk/docs/resources/EmulScreenshot.jpg)
 
-###UI Integration
+#### UI Integration
 
 To support backward compatibility with earlier versions of Android, activities of zingle_android_sdk inherits AppCompatActivity. It requires the application to use
 any derivative of Theme.AppCompat as a theme (android:theme property in application tag of AndroidManifest.xml).
@@ -101,13 +101,13 @@ Again, all thease functions are static members of ZingleUIInitAndStart class. [H
 
 For more information refer to javadoc folder (zingle_android_sdk/docs).
 
-### Zingle AndroidSDK Object Model
+#### Zingle AndroidSDK Object Model
 
 Model | Description
 --- | ---
 ZingleUIInitAndStart | Object that holds static methods for quick initialization of Android SDK and starting messaging.
 
-###Pure java SDK usage
+### Pure java SDK usage
 
 If you don't need UI facilities, or want to work with API in some pure java project, the best way is to use Zingle java SDK without integrated Android UI. In this case SDK may be attached to a project as external library. Download [zingle_java_sdk.jar](), add it to project dependencies and initialize SDK with functions listed below.<br>
 If you want to change default logging settings use 
