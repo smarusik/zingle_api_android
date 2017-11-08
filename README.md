@@ -58,7 +58,7 @@ Initializes basic parameters for connecting to API. Doesn't make any verificatio
 
 After connection initialization you can proceed with registering of conversations. Each conversation supports message exchanging between specified service and contact.
 
-It supposed, that you already have a set of registered services on Zingle server before starting developing. If you want to use predefined subset of them in your application, you can find information about all available services for provided token and password at [dashboard](https://dashboard.zingle.me) (link can be different, so contact Zingle support if in trouble). To obtain this information programmatically use zingle_java_sdk - ZingleServiceServices class methods (see javadocs and [Pure java SDK usage](https://github.com/Zingle/android-sdk/blob/master/README.md#pure-java-sdk-usage) chapter below).
+It supposed, that you already have a set of registered services on Zingle server before starting developing. If you want to use predefined subset of them in your application, you can find information about all available services for provided token and password at [dashboard](https://dashboard.zingle.me) (link can be different, so contact Zingle support if in trouble). To obtain this information programmatically use zingle_java_sdk - ZingleServiceServices class methods (see javadocs and [Pure java SDK usage](https://github.com/smarusik/zingle_api_android/blob/master/README.md#pure-java-sdk-usage) chapter below).
 
 Contacts can be treated the same way as services with only diference, that they also could be added through dashboard or programmatically with zingle_java_sdk - ZingleContactServices, ZingleContactChannelTypeServices and ZingleContactChannelTypeServices class methods. So, you can give application user a predefined contact to make conversation with service, or supply him with some kind of registration functional based on zingle_java_sdk to let him create it himself.
 
@@ -97,7 +97,7 @@ static void showConversation(Context context,String serviceId)
 ```
 Starts and shows the UI for required conversation (defined by <b>serviceId</b>)
 
-Again, all thease functions are static members of ZingleUIInitAndStart class. [Here is a simple example  of using them in android Activity.](https://github.com/Zingle/android-sdk/blob/master/app/src/main/java/me/zingle/zingleapiandroid/StartScreen.java)
+Again, all thease functions are static members of ZingleUIInitAndStart class. [Here is a simple example  of using them in android Activity.](https://github.com/smarusik/zingle_api_android/blob/master/app/src/main/java/me/zingle/zingleapiandroid/StartScreen.java)
 
 For more information refer to javadoc folder (zingle_android_sdk/docs).
 
